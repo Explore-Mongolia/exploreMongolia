@@ -1,5 +1,6 @@
+import mongoose from "mongoose"
 
+const { Schema } = mongoose;
 
-export const experiencesSchema = {
-    userId
-}
+export const experiencesSchema = new Schema({
+    userId})
