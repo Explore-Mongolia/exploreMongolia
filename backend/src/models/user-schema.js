@@ -1,5 +1,4 @@
-<<<<<<< Updated upstream
-=======
+
 import mongoose from "mongoose";
 
 const { Schema, model } = mongoose;
@@ -18,4 +17,4 @@ userSchema.pre("save", function (next) {
 });
 
 export const userModel = model("User", userSchema);
->>>>>>> Stashed changes
+
