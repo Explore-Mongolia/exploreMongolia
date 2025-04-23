@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const { Schema } = mongoose;
+const { Schema , model } = mongoose;
 
 const experiencesSchema = new Schema({
   name: { type: String },
@@ -13,10 +13,12 @@ const experiencesSchema = new Schema({
   totalCost: { type: Number },
   highlights: { type: String },
   dislikes: { type: String },
+  description : { type: String },
   tips: { type: String },
   vibes: [{ type: String }],
   images: [{ type: String }],
   video: { type: String },
+  
 });
 
 
