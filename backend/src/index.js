@@ -5,6 +5,7 @@ import { connectToDatabase } from './database/index.js';
 import { userRouter } from './routers/user-router.js'; 
 import { aiRouter } from './routers/ai-router.js';
 import { companyRouter } from './routers/company-router.js';
+import { destinationRouter } from './routers/destination-router.js';
 
 
 dotenv.config(); 
@@ -20,6 +21,7 @@ connectToDatabase();
 app.use('/user', userRouter);
 app.use('/ai', aiRouter)
 app.use('/company', companyRouter)
+app.use('/destination', destinationRouter)
 
 app.listen(PORT, () => {
     console.log(`Server is running on port http://localhost:${PORT}`);
