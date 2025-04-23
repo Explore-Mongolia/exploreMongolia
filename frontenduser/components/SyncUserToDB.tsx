@@ -10,9 +10,14 @@ export default function SyncUserToDB() {
   useEffect(() => {
     const syncUser = async () => {
       if (isSignedIn && user) {
+        console.log(user.username);
+        
         const name =
-          user.username ||
+          user.username ??
           `${user.firstName || ""} ${user.lastName || ""}`.trim();
+
+          console.log(name);
+          
         try {
           await sendRequest.post("/clerk-user/create", {
             name,
