@@ -6,6 +6,7 @@ import { userRouter } from './routers/user-router.js';
 import { aiRouter } from './routers/ai-router.js';
 import { companyRouter } from './routers/company-router.js';
 import { destinationRouter } from './routers/destination-router.js';
+import { clerkUserRouter } from './routers/clerk-user.js';
 
 
 dotenv.config(); 
@@ -22,6 +23,7 @@ app.use('/user', userRouter);
 app.use('/ai', aiRouter)
 app.use('/company', companyRouter)
 app.use('/destination', destinationRouter)
+app.use("/clerk-user", clerkUserRouter);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port http://localhost:${PORT}`);
