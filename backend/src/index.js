@@ -2,7 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { connectToDatabase } from './database/index.js';
-import { userRouter } from './models/router/user-router.js';
+import { userRouter } from './routers/user-router.js'; 
+import { aiRouter } from './routers/ai-router.js';
+import { companyRouter } from './routers/company-router.js';
 
 
 dotenv.config(); 
@@ -16,6 +18,8 @@ app.use(express.json());
 connectToDatabase();
 
 app.use('/user', userRouter);
+app.use('/ai', aiRouter)
+app.use('/company', companyRouter)
 
 app.listen(PORT, () => {
     console.log(`Server is running on port http://localhost:${PORT}`);

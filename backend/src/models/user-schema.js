@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 
 const { Schema, model } = mongoose;
 
+
 const userSchema = new Schema(
   {
     name: { type: String, required: true, unique: true },
@@ -10,6 +11,7 @@ const userSchema = new Schema(
   },
   { timestamps: true }
 );
+
 
 userSchema.pre("save", function (next) {
   this.updatedAt = Date.now();
