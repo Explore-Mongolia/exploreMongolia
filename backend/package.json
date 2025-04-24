@@ -10,12 +10,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "clsx": "^2.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "mongoose": "^8.13.2",
+    "motion": "^12.8.0",
     "nodemon": "^3.1.9",
-    "openai": "^4.95.1"
+    "openai": "^4.95.1",
+    "tailwind-merge": "^3.2.0"
   },
   "description": ""
 }
