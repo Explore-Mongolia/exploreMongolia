@@ -3,10 +3,10 @@ import { CompanyModel } from "../../models/company-schema.js";
 
 export const createCompany = async (req, res) => {
     try {
-        const { name, description, contact } = req.body;
+        const { name, description, contact, profileImage } = req.body;
 
         const newCompany = await CompanyModel.create({
-            name, description, contact
+            name, description, contact, profileImage
         });
 
         res.status(201).json({

@@ -5,6 +5,7 @@ const isPublicRoute = createRouteMatcher([
   "/",         // public landing page
   "/sign-in",  // sign-in pagexw
   "/sign-up",  // sign-up page
+  "/open-ai",
 ]);
 
 export default clerkMiddleware((auth, req) => {

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { sendRequest } from "@/lib/SendRequest";
 
 
-export default function TripPlannerForm() {
+const TripPlannerForm=()=> {
   const [tripPlan, setTripPlan] = useState("");
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
@@ -33,6 +33,7 @@ export default function TripPlannerForm() {
 
   return (
     <div>
+      <p>hi</p>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input name="origin" placeholder="Origin" onChange={handleChange} />
         <input name="age" placeholder="Age" onChange={handleChange} />
@@ -66,3 +67,5 @@ export default function TripPlannerForm() {
     </div>
   );
 }
+
+export default TripPlannerForm;
