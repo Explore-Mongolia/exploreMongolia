@@ -6,7 +6,7 @@ import { userRouter } from './routers/user-router.js';
 import { aiRouter } from './routers/ai-router.js';
 import { companyRouter } from './routers/company-router.js';
 import { destinationRouter } from './routers/destination-router.js';
-import { experienceRouter } from './routers/experiences-router.js';
+import { experienceRouter } from './routers/experience-router.js';
 import { clerkUserRouter } from './routers/clerk-user.js';
 
 
