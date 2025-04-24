@@ -2,11 +2,15 @@ import { DestinationModel } from "../../models/destination-schema.js";
 
 export const createDestination = async (req, res) => {
   try {
-    const { name, company, description } = req.body;
+    const { name, company, description, cost, vibesAvailable, image, destination } = req.body;
     const newDestination = await DestinationModel.create({
       name,
       company,
+      destination,
       description,
+      cost,
+      vibesAvailable,
+      image
     });
 
     res.status(201).json({
