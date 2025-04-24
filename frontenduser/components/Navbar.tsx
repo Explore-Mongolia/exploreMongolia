@@ -15,7 +15,7 @@ import { useState } from "react";
 
 import HomeSection from "@/app/home/HomeSection";
 import ExperienceSection from "@/app/experience/ExperienceSection";
-import TravelSection from "@/app/travel/TravelSection";
+
 
 import {
   SignInButton,
@@ -24,12 +24,13 @@ import {
   SignedOut,
   UserButton,
 } from "@clerk/nextjs";
+import TripSection from "@/app/trip/TripSection";
 
 export function NavbarDemo() {
   const navItems = [
     { name: "Home", link: "#Home" },
     { name: "Experience", link: "#Experience" },
-    { name: "Travel", link: "#Travel" },
+    { name: "Trip", link: "#Trip" },
   ];
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -106,7 +107,7 @@ export function NavbarDemo() {
       <div className="pt-24">
         <HomeSection />
         <ExperienceSection />
-        <TravelSection />
+         <TripSection/>
       </div>
     </div>
   );

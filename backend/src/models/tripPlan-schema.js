@@ -3,11 +3,9 @@ import mongoose from "mongoose";
 import { Schema, model } from "mongoose";
 
 const tripPlanSchema = new Schema({
-    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    // user: { type: Schema.Types.ObjectId, ref: "User", required: true },
     title: { type: String, default: "My Trip" },
-    destinations: [{ type: Schema.Types.ObjectId, ref: "Destination" }],
-    startDate: { type: Date },
-    endDate: { type: Date },
+    destinations: [{ type: String}],
     plan: [
       {
         day: Number,

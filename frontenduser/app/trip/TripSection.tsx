@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-export default function TravelSection() {
+export default function TripSection() {
   return (
     <section id="Travel" className="py-16">
       <div className="container mx-auto">
