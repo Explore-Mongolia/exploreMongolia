@@ -143,7 +143,7 @@ const CreateCompany = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-gray-900 mb-1">Image Upload</label>
+          <label className="block text-sm font-semibold text-gray-900 mb-1">Img Upload</label>
           <CldUploadWidget
             uploadPreset="ml_default"
             onSuccess={(results: any) => {
