@@ -5,6 +5,7 @@ const { Schema, model } = mongoose;
 const companySchema = new Schema({
   name: { type: String, required: true },
   destinations: [{ type: Schema.Types.ObjectId, ref: "Destination" }],
+
   description: { type: String, required: true },
   contact: {
     phoneNumber: { type: String, required: true },
@@ -18,3 +19,6 @@ const companySchema = new Schema({
 });
 
 export const CompanyModel = model("Company", companySchema);
+
+
+  // destinations: [{ type: Schema.Types.ObjectId, ref: "Destination" }],
