@@ -1,5 +1,5 @@
 import { NavbarDemo} from "@/components/Navbar";
-import TripPlannerForm from "./open-ai/page";
+import TripPlannerForm from "@/components/GenerateTrip";
 
 
 export default function Home() {

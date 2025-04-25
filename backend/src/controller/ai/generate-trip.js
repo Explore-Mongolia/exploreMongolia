@@ -1,5 +1,4 @@
 import openai from "../../openAi.js";
-import { TripPlanModel } from "../../models/tripPlan-schema.js";
 
 export const generateTrip = async (req, res) => {
   const { origin, age, groupType, budget, preferences, days } = req.body;
@@ -30,36 +29,21 @@ Make sure the response is ONLY valid JSON.
 
   try {
     const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo", 
+      model: "gpt-3.5-turbo",
       messages: [{ role: "user", content: prompt }],
       max_tokens: 1000,
     });
 
     const tripJSON = completion.choices[0].message.content;
-    console.log("GPT Response:", tripJSON); 
 
     let parsedTrip;
     try {
       parsedTrip = JSON.parse(tripJSON);
     } catch (parseError) {
-      console.error("JSON Parse Error:", parseError);
       return res.status(500).json({ error: "Invalid AI response format" });
     }
 
-    // Convert dates to JS Date objects
-    parsedTrip.startDate = new Date(parsedTrip.startDate);
-    parsedTrip.endDate = new Date(parsedTrip.endDate);
-
-    // Assume anonymous if no user middleware is attached
-    const userId = req.user?.id || "anonymous";
-
-    const tripPlan = await TripPlanModel.create({
-      ...parsedTrip,
-      user: userId,
-      createdByAI: true,
-    });
-
-    res.status(200).json({ tripPlan });
+    res.status(200).json({ tripPlan: parsedTrip });
   } catch (error) {
     console.error("GPT or DB Error:", error);
     res.status(500).json({ error: "Failed to generate or save trip plan" });

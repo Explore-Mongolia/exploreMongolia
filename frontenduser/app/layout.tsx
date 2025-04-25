@@ -5,6 +5,7 @@ import {
   ClerkProvider,
 } from "@clerk/nextjs";
 import SyncUserToDB from "@/components/SyncUserToDB";
+import { UserProvider } from "@/lib/UserContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,15 +28,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
-          <SyncUserToDB />
-          {children}
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en">
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <ClerkProvider>
+          <UserProvider>
+            <SyncUserToDB />
+            {children}
+          </UserProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   );
 }
+

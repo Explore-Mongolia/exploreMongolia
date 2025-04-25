@@ -1,70 +1,132 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import { AiInput } from "./AiInput";
+import { TripPlan } from "@/lib/types";
 import { sendRequest } from "@/lib/SendRequest";
+import { useUserContext } from "@/lib/UserContext";
 
+const TripPlannerForm = () => {
+  const [tripPlan, setTripPlan] = useState<TripPlan | null>(null);
+  const tripRef = useRef<HTMLDivElement>(null);
+  const { userId, email } = useUserContext();
 
-const TripPlannerForm=()=> {
-  const [tripPlan, setTripPlan] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({
-    origin: "",
-    age: "",
-    groupType: "",
-    budget: "",
-    preferences: "",
-    days: "",
-  });
+  const handleDownloadPDF = async () => {
+    const element = tripRef.current;
+    if (!element) return;
 
-  const handleChange = (e: any) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const canvas = await html2canvas(element, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: "#ffffff",
+    });
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    setLoading(true);
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF("p", "mm", "a4");
+    const imgProps = pdf.getImageProperties(imgData);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
-    const res = await sendRequest.post(
-      "/ai/generate-trip",
-      form
-    );
-    setTripPlan(res.data.tripPlan);
-    setLoading(false);
+    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save("trip-plan.pdf");
+  };
+
+  const handleSaveToAccount = async () => {
+    if (!tripPlan) return;
+
+    try {
+      const res = await sendRequest.post("/ai/save-trip", {
+        tripPlan,
+        user: email,
+      });
+
+      if (res.status !== 201 && res.status !== 200) {
+        throw new Error(res.data.error || "Something went wrong");
+      }
+
+      alert("Trip saved to your account!");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to save trip.");
+    }
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input name="origin" placeholder="Origin" onChange={handleChange} />
-        <input name="age" placeholder="Age" onChange={handleChange} />
-        <input
-          name="groupType"
-          placeholder="Group Type"
-          onChange={handleChange}
-        />
-        <input
-          name="budget"
-          placeholder="Budget (USD)"
-          onChange={handleChange}
-        />
-        <input name="days" placeholder="days" onChange={handleChange} />
-        <textarea
-          name="preferences"
-          placeholder="Preferences"
-          onChange={handleChange}
-        />
+    <div className="max-w-xl mx-auto mt-12 p-6 bg-white rounded-2xl shadow-md">
+      <h1 className="text-2xl font-bold mb-6 text-center">Trip Planner</h1>
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Generating..." : "Generate Trip"}
-        </button>
-      </form>
+      <AiInput setTripPlan={setTripPlan} />
+
       {tripPlan && (
-        <div className="mt-6 p-4 border">
-          <h2 className="text-xl font-bold">Trip Plan:</h2>
-          <pre className="whitespace-pre-wrap">{tripPlan}</pre>
-        </div>
+        <>
+          <div
+            ref={tripRef}
+            className="mt-8 p-6 bg-white rounded-2xl shadow space-y-4"
+          >
+            <h2 className="text-2xl font-bold">{tripPlan.title}</h2>
+            <div>
+              <strong>Destinations:</strong>{" "}
+              <span className="text-gray-800">
+                {tripPlan.destinations.join(", ")}
+              </span>
+            </div>
+
+            <div>
+              <strong>Transportation:</strong>{" "}
+              <span className="text-gray-800">{tripPlan.transportation}</span>
+            </div>
+
+            <div>
+              <strong>Accommodations:</strong>
+              <ul className="list-disc list-inside text-gray-700">
+                {tripPlan.accommodations.map((acc, idx) => (
+                  <li key={idx}>
+                    {acc.name} – {acc.address}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <strong>Notes:</strong>
+              <p className="text-gray-700">{tripPlan.notes}</p>
+            </div>
+
+            <div>
+              <strong>Daily Plan:</strong>
+              <ul className="space-y-2">
+                {tripPlan.plan.map((day) => (
+                  <li key={day.day} className="border-l-4 border-blue-500 pl-4">
+                    <p className="font-semibold">Day {day.day}</p>
+                    <ul className="list-disc list-inside text-gray-700">
+                      {day.activities.map((activity, i) => (
+                        <li key={i}>{activity}</li>
+                      ))}
+                    </ul>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <button
+            onClick={handleDownloadPDF}
+            className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition cursor-pointer"
+          >
+            Download PDF
+          </button>
+          <button
+            onClick={handleSaveToAccount}
+            className="bg-green-600 text-white px-4 py-2 rounded-xl cursor-pointer hover:bg-green-700 transition"
+          >
+            Save to Account
+          </button>
+        </>
       )}
     </div>
   );
-}
+};
 
 export default TripPlannerForm;
