@@ -1,14 +1,15 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "",
+  "license": "ISC",
+  "author": "",
   "type": "module",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon src/index.js"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "clsx": "^2.1.1",
     "cors": "^2.8.5",
@@ -20,5 +21,5 @@
     "openai": "^4.95.1",
     "tailwind-merge": "^3.2.0"
   },
-  "description": ""
+  "devDependencies": {}
 }
