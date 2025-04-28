@@ -2,11 +2,11 @@ import { DestinationModel } from "../../models/destination-schema.js";
 
 export const createDestination = async (req, res) => {
   try {
-    const { name, company, description, cost, vibesAvailable, image, destination } = req.body;
+    const { name, company, description, cost, vibesAvailable, image } = req.body;
+
     const newDestination = await DestinationModel.create({
       name,
       company,
-      destination,
       description,
       cost,
       vibesAvailable,
@@ -18,7 +18,7 @@ export const createDestination = async (req, res) => {
       destination: newDestination,
     });
   } catch (error) {
-    console.log(error);
+    console.log("Error while creating destination:", error);
     res.status(500).json({ message: "Failed to create destination", error });
   }
 };
