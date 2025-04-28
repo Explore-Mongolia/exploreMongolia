@@ -69,6 +69,9 @@ const CreateCompany = () => {
         setPriceRange("");
         setTags("");
         setProfileImage("");
+
+  
+        window.location.reload();
       }
     } catch (err) {
       console.error("Create company error:", err);
