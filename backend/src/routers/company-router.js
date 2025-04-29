@@ -8,5 +8,4 @@ export const companyRouter = Router();
 
 companyRouter.post('/create', createCompany);
 companyRouter.get('/company/:id', getCompany)
-
 companyRouter.get("/companies", getAllCompanies);
