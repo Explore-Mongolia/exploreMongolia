@@ -6,6 +6,7 @@ import CreateDestination from "./createDestination/page";
 import { CldUploadWidget } from "next-cloudinary";
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
+import { sendRequest } from "@/lib/SendRequest";
 
 const CreateCompany = () => {
   const [name, setName] = useState("");
@@ -44,7 +45,7 @@ const CreateCompany = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:9000/company/create", {
+      const response = await sendRequest.post("/company/create", {
         name,
         description,
         contact: {
@@ -115,7 +116,7 @@ const CreateCompany = () => {
             <PhoneInput
               international
               value={phoneNumber}
-              onChange={setPhoneNumber}
+              onChange={(value) => setPhoneNumber(value || "")}
               placeholder="Enter phone number"
               className="w-full border rounded-md px-3 py-2 mt-1 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
             />
