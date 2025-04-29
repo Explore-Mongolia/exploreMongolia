@@ -1,194 +1,147 @@
 "use client";
+import {
+  Navbar,
+  NavBody,
+  NavItems,
+  MobileNav,
+  NavbarLogo,
+  NavbarButton,
+  MobileNavHeader,
+  MobileNavToggle,
+  MobileNavMenu,
+} from "@/components/ui/resizable-navbar";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useCompanies } from "@/hooks/useCompanies";
 
-import React, { useState } from "react";
-import axios from "axios";
-import CreateDestination from "./createDestination/page";
-import { CldUploadWidget } from "next-cloudinary";
-import PhoneInput from 'react-phone-number-input';
-import 'react-phone-number-input/style.css';
-import { sendRequest } from "@/lib/SendRequest";
+export default function NavbarDemo() {
+  const router = useRouter();
+  const navItems = [
+    { name: "Companies", link: "#companies" },
+    { name: "Destinations", link: "#destinations" },
+    { name: "Users", link: "#users" },
+  ];
 
-const CreateCompany = () => {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [email, setEmail] = useState("");
-  const [website, setWebsite] = useState("");
-  const [rating, setRating] = useState("");
-  const [priceRange, setPriceRange] = useState("");
-  const [tags, setTags] = useState("");
-  const [profileImage, setProfileImage] = useState("");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-
-  const validateEmail = (email: string) => /\S+@\S+\.\S+/.test(email);
-  const validatePhone = (phone: string) => phone && phone.length > 0;
-
-  const handleCreateCompany = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-    setSuccess("");
-
-    if (!validateEmail(email)) {
-      setError("Please enter a valid email address.");
-      setLoading(false);
-      return;
-    }
-
-    if (!validatePhone(phoneNumber)) {
-      setError("Please enter a valid phone number.");
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const response = await sendRequest.post("/company/create", {
-        name,
-        description,
-        contact: {
-          phoneNumber,
-          email,
-          website,
-        },
-        rating: rating ? Number(rating) : undefined,
-        priceRange,
-        tags: tags.split(",").map(tag => tag.trim()),
-        profileImage,
-      });
-
-      if (response.status === 200 || response.status === 201) {
-        setSuccess("Company created successfully!");
-        setName("");
-        setDescription("");
-        setPhoneNumber("");
-        setEmail("");
-        setWebsite("");
-        setRating("");
-        setPriceRange("");
-        setTags("");
-        setProfileImage("");
-
-  
-        window.location.reload();
-      }
-    } catch (err) {
-      console.error("Create company error:", err);
-      setError("Failed to create company.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { data: companies = [], isLoading, error } = useCompanies();
 
   return (
-    <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-md rounded-md">
-      <h2 className="text-3xl font-bold mb-6 text-gray-900">Create New Company</h2>
-      <form onSubmit={handleCreateCompany} className="space-y-5">
-        <div>
-          <label className="block text-sm font-semibold text-gray-900">Company Name *</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            placeholder="Enter the company name"
-            className="w-full border rounded-md px-3 py-2 mt-1 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-semibold text-gray-900">Description *</label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-            rows={4}
-            placeholder="Enter a brief description of the company"
-            className="w-full border rounded-md px-3 py-2 mt-1 resize-none text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-          />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-semibold text-gray-900">Phone Number *</label>
-            <PhoneInput
-              international
-              value={phoneNumber}
-              onChange={(value) => setPhoneNumber(value || "")}
-              placeholder="Enter phone number"
-              className="w-full border rounded-md px-3 py-2 mt-1 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-            />
+    <div className="relative w-full">
+      <Navbar>
+        <NavBody>
+          <NavbarLogo />
+          <NavItems items={navItems} />
+          <div className="flex items-center gap-4">
+            <NavbarButton variant="secondary" onClick={() => router.push("/createDestination")}>
+              Create Destination
+            </NavbarButton>
+            <NavbarButton variant="primary" onClick={() => router.push("/createCompany")}>
+              Create Company
+            </NavbarButton>
           </div>
+        </NavBody>
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-900">Email *</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              placeholder="Enter your email address"
-              className="w-full border rounded-md px-3 py-2 mt-1 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+        <MobileNav>
+          <MobileNavHeader>
+            <NavbarLogo />
+            <MobileNavToggle
+              isOpen={isMobileMenuOpen}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             />
-          </div>
-        </div>
+          </MobileNavHeader>
 
-        <div>
-          <label className="block text-sm font-semibold text-gray-900">Website</label>
-          <input
-            type="text"
-            value={website}
-            onChange={(e) => setWebsite(e.target.value)}
-            placeholder="Enter company website URL"
-            className="w-full border rounded-md px-3 py-2 mt-1 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-semibold text-gray-900 mb-1">Img Upload</label>
-          <CldUploadWidget
-            uploadPreset="ml_default"
-            onSuccess={(results: any) => {
-              if (results.info?.secure_url) {
-                setProfileImage(results.info?.secure_url); 
-              }
-            }}
-          >
-            {({ open }) => (
-              <button
-                type="button"
-                onClick={() => open()}
-                className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-gray-300 shadow-md hover:opacity-80 transition"
+          <MobileNavMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)}>
+            {navItems.map((item, idx) => (
+              <a
+                key={`mobile-link-${idx}`}
+                href={item.link}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="relative text-neutral-600 dark:text-neutral-300"
               >
-                <div className="flex items-center justify-center w-full h-full bg-gray-100 text-gray-500 text-sm">
-                  Upload
+                <span className="block">{item.name}</span>
+              </a>
+            ))}
+            <div className="flex w-full flex-col gap-4">
+              <NavbarButton
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  router.push("/createDestination");
+                }}
+                variant="primary"
+                className="w-full"
+              >
+                Create Destination
+              </NavbarButton>
+              <NavbarButton
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  router.push("/createCompany");
+                }}
+                variant="primary"
+                className="w-full"
+              >
+                Create Company
+              </NavbarButton>
+            </div>
+          </MobileNavMenu>
+        </MobileNav>
+      </Navbar>
+
+      <DummyContent companies={companies} isLoading={isLoading} error={error?.message || null} />
+    </div>
+  );
+}
+
+interface Company {
+  id: number;
+  name: string;
+  description: string;
+  profileImage: string;
+}
+
+interface DummyContentProps {
+  companies: Company[];
+  isLoading: boolean;
+  error: string | null;
+}
+
+export const DummyContent = ({ companies, isLoading, error }: DummyContentProps) => {
+  return (
+    <div className="container mx-auto p-8 pt-24">
+      {isLoading && <p>Loading...</p>}
+      {error && <p className="text-red-600">{error}</p>}
+
+      {!isLoading && !error && (
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+          {companies.length > 0 ? (
+            companies.map((company: Company) => (
+              <div
+                key={company.id}
+                className="md:col-span-1 h-60 bg-neutral-100 dark:bg-neutral-800 flex flex-col p-4 rounded-lg shadow-sm relative"
+              >
+               
+                {company.profileImage && (
+                  <img
+                    src={company.profileImage}
+                    alt={`${company.name} logo`}
+                    className="w-12 h-12 object-cover rounded-full absolute top-4 left-4 border border-neutral-300"
+                  />
+                )}
+                <div className="mt-16 px-2">
+                  <h2 className="text-xl font-medium">Company: {company.name}</h2>
+                  <h2 className="text-md text-neutral-600 dark:text-neutral-300">
+                    Description: {company.description}
+                  </h2>
                 </div>
-              </button>
+              </div>
+            ))
+          )
+            : (
+              <p className="text-center col-span-full text-neutral-500">No companies found.</p>
             )}
-          </CldUploadWidget>
         </div>
-
-        <div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-200"
-          >
-            {loading ? "Creating..." : "Create Company"}
-          </button>
-        </div>
-
-        {error && <p className="text-red-600 font-medium mt-2">{error}</p>}
-        {success && <p className="text-green-600 font-medium mt-2">{success}</p>}
-      </form>
-
-      <div className="mt-10">
-        <CreateDestination />
-      </div>
+      )}
     </div>
   );
 };
-
-export default CreateCompany;
