@@ -7,6 +7,5 @@ import { getAllCompanies } from "../controller/company/get-all-companies.js";
 export const companyRouter = Router();
 
 companyRouter.post('/create', createCompany);
-companyRouter.get('/company/:id', getCompany)
-
-companyRouter.get("/companies", getAllCompanies);
+companyRouter.get('/:id', getCompany)
+companyRouter.get("/", getAllCompanies);
