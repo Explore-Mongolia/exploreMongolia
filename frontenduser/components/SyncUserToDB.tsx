@@ -3,29 +3,34 @@
 import { useUser } from "@clerk/nextjs";
 import { useEffect } from "react";
 import { sendRequest } from "@/lib/SendRequest";
+import { useRouter } from "next/navigation";
 
 export default function SyncUserToDB() {
   const { user, isSignedIn } = useUser();
+  const router = useRouter();
 
   useEffect(() => {
     const syncUser = async () => {
       if (isSignedIn && user) {
-        console.log(user.username);
+        const role = user.publicMetadata?.role;
         
-        const name =
-          user.username ??
-          `${user.firstName || ""} ${user.lastName || ""}`.trim();
+        
+        if (role !== "admin") {
+          const name =
+            user.username ??
+            `${user.firstName || ""} ${user.lastName || ""}`.trim();
 
-          console.log(name);
-          
-        try {
-          await sendRequest.post("/clerk-user/create", {
-            name,
-            email: user.primaryEmailAddress?.emailAddress,
-          });
-          console.log("User synced to DB successfully");
-        } catch (error) {
-          console.error("Failed to sync user to DB", error);
+          try {
+            await sendRequest.post("/clerk-user/create", {
+              name,
+              email: user.primaryEmailAddress?.emailAddress,
+            });
+            console.log("User synced to DB successfully");
+          } catch (error) {
+            console.error("Failed to sync user to DB", error);
+          }
+        } else {
+          console.log("Admin detected. No need to sync to DB.");
         }
       }
     };
