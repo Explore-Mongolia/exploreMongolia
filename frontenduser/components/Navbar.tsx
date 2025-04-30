@@ -1,5 +1,11 @@
 "use client";
 
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import HomeSection from "@/components/HomeSection";
+import ExperienceSection from "@/components/ExperienceSection";
+import TripSection from "@/components/TripSection";
+
 import {
   Navbar,
   NavBody,
@@ -11,11 +17,6 @@ import {
   MobileNavToggle,
   MobileNavMenu,
 } from "@/components/ui/resizable-navbar";
-import { useState } from "react";
-
-import HomeSection from "@/app/home/HomeSection";
-import ExperienceSection from "@/app/experience/ExperienceSection";
-
 
 import {
   SignInButton,
@@ -24,23 +25,42 @@ import {
   SignedOut,
   UserButton,
 } from "@clerk/nextjs";
-import TripSection from "@/app/trip/TripSection";
 
 export function NavbarDemo() {
   const navItems = [
-    { name: "Home", link: "#Home" },
-    { name: "Experience", link: "#Experience" },
-    { name: "Trip", link: "#Trip" },
+    { name: "Home", key: "home" },
+    { name: "Experience", key: "experience" },
+    { name: "Trip", key: "trip" },
   ];
 
+  const [activeSection, setActiveSection] = useState<null | string>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const renderSection = () => {
+    switch (activeSection) {
+      case "home":
+        return <HomeSection />;
+      case "experience":
+        return <ExperienceSection />;
+      case "trip":
+        return <TripSection />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="relative w-full">
       <Navbar>
         <NavBody>
           <NavbarLogo />
-          <NavItems items={navItems} />
+          <NavItems
+            items={navItems.map(({ name, key }) => ({
+              name,
+              link: "#",
+              onClick: () => setActiveSection(key),
+            }))}
+          />
           <div className="flex items-center gap-4">
             <SignedOut>
               <SignInButton>
@@ -69,15 +89,17 @@ export function NavbarDemo() {
             isOpen={isMobileMenuOpen}
             onClose={() => setIsMobileMenuOpen(false)}
           >
-            {navItems.map((item, idx) => (
-              <a
+            {navItems.map(({ name, key }, idx) => (
+              <button
                 key={`mobile-link-${idx}`}
-                href={item.link}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="relative text-neutral-600 dark:text-neutral-300"
+                onClick={() => {
+                  setActiveSection(key);
+                  setIsMobileMenuOpen(false);
+                }}
+                className="relative text-left text-neutral-600 dark:text-neutral-300"
               >
-                <span className="block">{item.name}</span>
-              </a>
+                <span className="block">{name}</span>
+              </button>
             ))}
 
             <div className="flex w-full flex-col gap-4 mt-4">
@@ -105,9 +127,19 @@ export function NavbarDemo() {
       </Navbar>
 
       <div className="pt-24">
-        <HomeSection />
-        <ExperienceSection />
-         <TripSection/>
+        <AnimatePresence mode="wait">
+          {activeSection && (
+            <motion.div
+              key={activeSection}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.4 }}
+            >
+              {renderSection()}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

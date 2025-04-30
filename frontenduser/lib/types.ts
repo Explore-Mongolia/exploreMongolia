@@ -12,4 +12,22 @@ export interface TripPlan {
       activities: string[];
     }[];
   }
+
+
+  export interface Experience {
+    _id: string;
+    name: string;
+    description: string;
+    visitedPlaces: string[];
+    images: string[];
+  }
+
+  export interface Destination {
+    _id: string;
+    name: string;
+    description: string;
+    cost: number;
+    vibesAvailable: string[];
+    image: string;
+  }
   
