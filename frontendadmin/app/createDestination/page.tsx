@@ -20,7 +20,7 @@ const CreateDestination = () => {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const response = await axios.get("http://localhost:9000/company/companies");
+        const response = await axios.get("http://localhost:9000/company");
         setCompanies(response.data.companies || []);
       } catch (error) {
         setError("Failed to fetch companies.");
