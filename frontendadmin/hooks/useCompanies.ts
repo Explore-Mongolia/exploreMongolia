@@ -9,7 +9,7 @@ interface Company {
 }
 
 const fetchCompanies = async (): Promise<Company[]> => {
-  const response = await axios.get("http://localhost:9000/company/companies");
+  const response = await axios.get("http://localhost:9000/company");
   return response.data.companies || [];
 };
 
