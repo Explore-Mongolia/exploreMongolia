@@ -16,7 +16,6 @@ import { useRouter } from "next/navigation";
 import { useCompanies } from "@/hooks/useCompanies";
 import axios from "axios";
 
-// Updated interface to match backend structure
 interface Company {
   id: number;
   name: string;
@@ -28,8 +27,9 @@ interface Destination {
   _id: string;
   name: string;
   description: string;
-  image?: string;
-  cost?: string;
+  cost: string;
+  vibesAvailable: string[];
+  image: string;
 }
 
 export default function NavbarDemo() {
@@ -47,17 +47,13 @@ export default function NavbarDemo() {
 
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [loadingDestinations, setLoadingDestinations] = useState(false);
-  const [destinationsError, setDestinationsError] = useState<string | null>(
-    null
-  );
+  const [destinationsError, setDestinationsError] = useState<string | null>(null);
 
   const fetchDestinations = async () => {
     setLoadingDestinations(true);
     setDestinationsError(null);
     try {
       const response = await axios.get("http://localhost:9000/destination");
-
-      // Correctly extract the destinations array
       setDestinations(response.data.destinations);
     } catch (err: any) {
       setDestinationsError("Failed to load destinations.");
@@ -66,9 +62,7 @@ export default function NavbarDemo() {
     }
   };
 
-  const handleNavItemClick = (
-    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
-  ) => {
+  const handleNavItemClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     const name = e.currentTarget.textContent;
     if (!name) return;
 
@@ -84,26 +78,12 @@ export default function NavbarDemo() {
       <Navbar>
         <NavBody>
           <NavbarLogo />
-          <NavItems
-            items={navItems}
-            onItemClick={() =>
-              handleNavItemClick({
-                currentTarget: { textContent: "SomeName" },
-              } as any)
-            }
-          />
-
+          <NavItems items={navItems} onItemClick={handleNavItemClick} />
           <div className="flex items-center gap-4">
-            <NavbarButton
-              variant="secondary"
-              onClick={() => router.push("/admin/createDestination")}
-            >
+            <NavbarButton variant="secondary" onClick={() => router.push("/admin/createDestination")}>
               Create Destination
             </NavbarButton>
-            <NavbarButton
-              variant="primary"
-              onClick={() => router.push("/admin/createCompany")}
-            >
+            <NavbarButton variant="primary" onClick={() => router.push("/admin/createCompany")}>
               Create Company
             </NavbarButton>
           </div>
@@ -118,10 +98,7 @@ export default function NavbarDemo() {
             />
           </MobileNavHeader>
 
-          <MobileNavMenu
-            isOpen={isMobileMenuOpen}
-            onClose={() => setIsMobileMenuOpen(false)}
-          >
+          <MobileNavMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)}>
             {navItems.map((item, idx) => (
               <a
                 key={`mobile-link-${idx}`}
@@ -168,11 +145,7 @@ export default function NavbarDemo() {
           error={destinationsError}
         />
       ) : (
-        <DummyContent
-          companies={companies}
-          isLoading={isLoading}
-          error={error?.message || null}
-        />
+        <DummyContent companies={companies} isLoading={isLoading} error={error?.message || null} />
       )}
     </div>
   );
@@ -189,50 +162,36 @@ const DummyContent = ({
 }) => {
   return (
     <div className="container mx-auto p-8 pt-24">
-      {isLoading ? (
+      {isLoading && <p>Loading...</p>}
+      {error && <p className="text-red-600">{error}</p>}
+
+      {!isLoading && !error && (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-          {Array.from({ length: 4 }).map((_, idx) => (
-            <div
-              key={`company-skeleton-${idx}`}
-              className="h-60 bg-neutral-200 dark:bg-neutral-700 p-4 rounded-lg animate-pulse"
-            >
-              <div className="w-12 h-12 bg-neutral-400 rounded-full mb-4" />
-              <div className="mt-8 space-y-2">
-                <div className="h-4 bg-neutral-400 rounded w-3/4" />
-                <div className="h-3 bg-neutral-400 rounded w-full" />
+          {companies.length > 0 ? (
+            companies.map((company) => (
+              <div
+                key={company.id}
+                className="md:col-span-1 h-60 bg-neutral-100 dark:bg-neutral-800 flex flex-col p-4 rounded-lg shadow-sm relative"
+              >
+                {company.profileImage && (
+                  <img
+                    src={company.profileImage}
+                    alt={`${company.name} logo`}
+                    className="w-12 h-12 object-cover rounded-full absolute top-4 left-4 border border-neutral-300"
+                  />
+                )}
+                <div className="mt-16 px-2">
+                  <h2 className="text-xl font-medium">Company: {company.name}</h2>
+                  <p className="text-md text-neutral-600 dark:text-neutral-300 line-clamp-2">
+                    Description: {company.description}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p className="text-center col-span-full text-neutral-500">No companies found.</p>
+          )}
         </div>
-      ) : error ? (
-        <p className="text-red-600">{error}</p>
-      ) : companies.length > 0 ? (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-          {companies.map((company) => (
-            <div
-              key={company.id}
-              className="h-60 bg-neutral-100 dark:bg-neutral-800 flex flex-col p-4 rounded-lg shadow-sm relative"
-            >
-              {company.profileImage && (
-                <img
-                  src={company.profileImage}
-                  alt={`${company.name} logo`}
-                  className="w-12 h-12 object-cover rounded-full absolute top-4 left-4 border border-neutral-300"
-                />
-              )}
-              <div className="mt-16 px-2">
-                <h2 className="text-xl font-medium">Company: {company.name}</h2>
-                <p className="text-md text-neutral-600 dark:text-neutral-300">
-                  Description: {company.description}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <p className="text-center col-span-full text-neutral-500">
-          No companies found.
-        </p>
       )}
     </div>
   );
@@ -249,46 +208,47 @@ const DestinationContent = ({
 }) => {
   return (
     <div className="container mx-auto p-8 pt-24">
-      {isLoading ? (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-          {Array.from({ length: 4 }).map((_, idx) => (
-            <div
-              key={`destination-skeleton-${idx}`}
-              className="h-60 bg-neutral-200 dark:bg-neutral-700 p-4 rounded-lg animate-pulse"
-            >
-              <div className="h-4 bg-neutral-400 dark:bg-neutral-600 rounded w-3/4 mb-2" />
-              <div className="h-3 bg-neutral-400 dark:bg-neutral-600 rounded w-full" />
-            </div>
-          ))}
-        </div>
-      ) : error ? (
-        <p className="text-red-600">{error}</p>
-      ) : destinations.length > 0 ? (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-          {destinations.map((destination) => (
-            <div
-              key={destination._id}
-              className="h-60 bg-neutral-100 dark:bg-neutral-800 p-4 rounded-lg shadow-sm flex flex-col gap-2"
-            >
-              {destination.image && (
+      {isLoading && <p>Loading destinations...</p>}
+      {error && <p className="text-red-600">{error}</p>}
+
+      {!isLoading && !error && (
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
+          {destinations.length > 0 ? (
+            destinations.map((destination) => (
+              <div
+                key={destination._id}
+                className="bg-neutral-100 dark:bg-neutral-800 p-4 rounded-lg shadow-sm flex flex-col"
+              >
                 <img
                   src={destination.image}
                   alt={destination.name}
-                  className="w-full h-32 object-cover rounded"
+                  className="h-32 w-full object-cover rounded-md mb-4"
                 />
-              )}
-              <h2 className="text-lg font-semibold">{destination.name}</h2>
-              <p className="text-sm text-neutral-600 dark:text-neutral-300">
-                {destination.description}
-              </p>
-            </div>
-          ))}
+                <h2 className="text-lg font-semibold">{destination.name}</h2>
+                <p className="text-sm text-neutral-700 dark:text-neutral-300">
+                  {destination.description}
+                </p>
+                <p className="mt-2 text-sm text-neutral-800 dark:text-neutral-200 font-medium">
+                  Cost: {destination.cost}
+                </p>
+                <div className="mt-2 flex flex-wrap gap-1">
+                  {destination.vibesAvailable.slice(0, 3).map((vibe, index) => (
+                    <span
+                      key={index}
+                      className="bg-white dark:bg-neutral-700 text-xs text-neutral-800 dark:text-neutral-100 px-2 py-1 rounded-full"
+                    >
+                      {vibe}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="text-center col-span-full text-neutral-500">No destinations found.</p>
+          )}
         </div>
-      ) : (
-        <p className="text-center col-span-full text-neutral-500">
-          No destinations found.
-        </p>
       )}
     </div>
   );
 };
+
