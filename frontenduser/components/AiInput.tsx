@@ -11,7 +11,6 @@ export const AiInput = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
-    origin: "",
     age: "",
     groupType: "",
     budget: "",
@@ -20,7 +19,7 @@ export const AiInput = ({
   });
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLSelectElement | HTMLTextAreaElement>
   ) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -33,41 +32,69 @@ export const AiInput = ({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <input
-        name="origin"
-        placeholder="Your Origin"
-        onChange={handleChange}
-        className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <input
+      <select
         name="age"
-        placeholder="Your Age"
         onChange={handleChange}
-        className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <input
+        className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500"
+        defaultValue=""
+      >
+        <option value="" disabled>
+          Select Age Group
+        </option>
+        <option value="under 18">Under 18</option>
+        <option value="18-30">18-30</option>
+        <option value="31-50">31-50</option>
+        <option value="51+">51+</option>
+      </select>
+
+      <select
         name="groupType"
-        placeholder="Group Type (e.g. solo, couple, family)"
         onChange={handleChange}
-        className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <input
+        className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500"
+        defaultValue=""
+      >
+        <option value="" disabled>
+          Select Group Type
+        </option>
+        <option value="solo">Solo</option>
+        <option value="couple">Couple</option>
+        <option value="family">Family</option>
+        <option value="friends">Friends</option>
+      </select>
+
+      <select
         name="budget"
-        placeholder="Budget in USD"
         onChange={handleChange}
-        className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <input
+        className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500"
+        defaultValue=""
+      >
+        <option value="" disabled>
+          Select Budget
+        </option>
+        <option value="low">Under $500</option>
+        <option value="medium">$500–$1500</option>
+        <option value="high">Over $1500</option>
+      </select>
+
+      <select
         name="days"
-        placeholder="Number of Days"
         onChange={handleChange}
-        className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
+        className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500"
+        defaultValue=""
+      >
+        <option value="" disabled>
+          Number of Days
+        </option>
+        <option value="1-3">1–3 days</option>
+        <option value="4-7">4–7 days</option>
+        <option value="8+">8+ days</option>
+      </select>
+
       <textarea
         name="preferences"
         placeholder="Preferences (e.g. adventure, relaxation, history)"
         onChange={handleChange}
-        className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+        className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 resize-none"
         rows={4}
       />
 
