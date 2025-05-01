@@ -31,3 +31,12 @@ export interface TripPlan {
     image: string;
   }
   
+
+  
+export interface Company {
+  id: number;
+  name: string;
+  description: string;
+  profileImage: string;
+}
+
