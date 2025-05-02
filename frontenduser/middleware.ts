@@ -8,11 +8,11 @@ const isPublicRoute = createRouteMatcher([
   "/admin",
   "/admin/createDestination",
   "/admin/createCompany",
+  "/test"
 ]);
 
 export default clerkMiddleware((auth, req) => {
   const { userId }: any = auth;
-  // const { userId } = await auth();
   const { pathname } = req.nextUrl;
 
   if (!userId && !isPublicRoute(req)) {

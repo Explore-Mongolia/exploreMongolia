@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import HomeSection from "@/components/HomeSection";
 import ExperienceSection from "@/components/ExperienceSection";
 import TripSection from "@/components/TripSection";
-
+import Link from "next/link";
 import {
   Navbar,
   NavBody,
@@ -115,10 +115,15 @@ export function NavbarDemo() {
                   </NavbarButton>
                 </SignUpButton>
               </SignedOut>
-
+              import Link from "next/link"; // Import Link
               <SignedIn>
                 <div className="w-full flex justify-center">
-                  <UserButton afterSignOutUrl="/" />
+                  <Link href="/profile">
+                    {" "}
+                    <a>
+                      <UserButton afterSignOutUrl="/" />
+                    </a>
+                  </Link>
                 </div>
               </SignedIn>
             </div>

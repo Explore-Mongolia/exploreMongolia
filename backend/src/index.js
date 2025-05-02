@@ -8,7 +8,7 @@ import { companyRouter } from './routers/company-router.js';
 import { destinationRouter } from './routers/destination-router.js';
 import { experienceRouter } from './routers/experience-router.js';
 import { clerkUserRouter } from './routers/clerk-user.js';
-import { processRecords } from "./utils/algoliaSync.js"
+
 
 
 

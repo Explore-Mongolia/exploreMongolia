@@ -21,4 +21,3 @@ const companySchema = new Schema({
 export const CompanyModel = model("Company", companySchema);
 
 
-  // destinations: [{ type: Schema.Types.ObjectId, ref: "Destination" }],

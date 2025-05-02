@@ -1,13 +1,31 @@
 import { ExperiencesModel } from "../../models/experience-schema.js";
 
 export const createExperience = async (req, res) => {
-  const { name, visitedPlaces, description ,user } = req.body;
+  const {
+    name,
+    visitedPlaces,
+    description,
+    user,
+    images = [],
+    tips,
+    totalCost,
+    highlights,
+    tripDates,
+    vibes,
+  } = req.body;
+
   try {
     const newExperience = await ExperiencesModel.create({
       name,
       visitedPlaces,
       description,
-      user
+      user,
+      images, 
+      tips,
+      totalCost,
+      highlights,
+      tripDates,
+      vibes,
     });
 
     res.status(201).json({
