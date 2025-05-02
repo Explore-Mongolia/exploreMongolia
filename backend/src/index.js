@@ -8,6 +8,7 @@ import { companyRouter } from './routers/company-router.js';
 import { destinationRouter } from './routers/destination-router.js';
 import { experienceRouter } from './routers/experience-router.js';
 import { clerkUserRouter } from './routers/clerk-user.js';
+import { processRecords } from "./utils/algoliaSync.js"
 
 
 
@@ -20,6 +21,9 @@ app.use(cors());
 app.use(express.json());
 
 connectToDatabase();
+// processRecords()
+//   .then(() => console.log('Successfully indexed objects!'))
+//   .catch((err) => console.error("hey", err));
 
 app.use('/user', userRouter);
 app.use('/ai', aiRouter)
