@@ -8,8 +8,18 @@ import { TripPlan } from "@/lib/types";
 import { sendRequest } from "@/lib/SendRequest";
 import { useUserContext } from "@/lib/UserContext";
 
+const travelTypes = [
+  "Nature & Scenery",
+  "Historical & Cultural",
+  "Adventure (Hiking, Trekking)",
+  "Nomadic Lifestyle",
+  "Desert Experience",
+  "Luxury & Relaxation",
+];
+
 const TripPlannerForm = () => {
   const [tripPlan, setTripPlan] = useState<TripPlan | null>(null);
+  const [selectedTravelType, setSelectedTravelType] = useState("");
   const tripRef = useRef<HTMLDivElement>(null);
   const { userId, email } = useUserContext();
 
@@ -56,6 +66,25 @@ const TripPlannerForm = () => {
   return (
     <div className="max-w-xl mx-auto mt-12 p-6 bg-white rounded-2xl shadow-md">
       <h1 className="text-2xl font-bold mb-6 text-center">Trip Planner</h1>
+
+      <div className="mb-6">
+        <label htmlFor="travelType" className="block font-medium">
+          Travel Type
+        </label>
+        <select
+          id="travelType"
+          value={selectedTravelType}
+          onChange={(e) => setSelectedTravelType(e.target.value)}
+          className="w-full p-2 border rounded-md"
+        >
+          <option value="">-- Select Travel Type --</option>
+          {travelTypes.map((type) => (
+            <option key={type} value={type}>
+              {type}
+            </option>
+          ))}
+        </select>
+      </div>
 
       <AiInput setTripPlan={setTripPlan} />
 
