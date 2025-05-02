@@ -1,10 +1,8 @@
 "use client";
 
-
-import React, { useState } from "react";
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { useState, useEffect } from "react";
 import { CldUploadWidget } from "next-cloudinary";
+import { sendRequest } from "@/lib/SendRequest";
 
 const CreateDestination = () => {
   const [name, setName] = useState("");
@@ -23,7 +21,7 @@ const CreateDestination = () => {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const response = await axios.get("http://localhost:9000/company");
+        const response = await sendRequest.get("/company");
         setCompanies(response.data.companies || []);
       } catch (error) {
         setError("Failed to fetch companies.");
@@ -40,7 +38,7 @@ const CreateDestination = () => {
     setSuccess("");
 
     try {
-      const response = await axios.post("http://localhost:9000/destination/create", {
+      const response = await sendRequest.post("/destination/create", {
         name,
         company,
         description,

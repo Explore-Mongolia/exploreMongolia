@@ -1,5 +1,6 @@
+import { sendRequest } from '@/lib/SendRequest';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+
 
 interface Company {
   id: number;
@@ -9,7 +10,7 @@ interface Company {
 }
 
 const fetchCompanies = async (): Promise<Company[]> => {
-  const response = await axios.get("http://localhost:9000/company");
+  const response = await sendRequest.get("/company");
   return response.data.companies || [];
 };
 
