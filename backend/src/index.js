@@ -21,9 +21,6 @@ app.use(cors());
 app.use(express.json());
 
 connectToDatabase();
-// processRecords()
-//   .then(() => console.log('Successfully indexed objects!'))
-//   .catch((err) => console.error("hey", err));
 
 app.use('/user', userRouter);
 app.use('/ai', aiRouter)

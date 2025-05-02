@@ -22,14 +22,12 @@ interface NavBodyProps {
   visible?: boolean;
 }
 
-interface NavItemsProps {
-  items: {
-    name: string;
-    link: string;
-  }[];
+export interface NavItemsProps {
+  items: { name: string; link: string }[];
+  onItemClick?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
   className?: string;
-  onItemClick?: () => void;
 }
+
 
 interface MobileNavProps {
   children: React.ReactNode;

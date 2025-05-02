@@ -14,7 +14,7 @@ import {
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCompanies } from "@/hooks/useCompanies";
-import axios from "axios";
+import { sendRequest } from "@/lib/SendRequest";
 
 interface Company {
   id: number;
@@ -53,7 +53,7 @@ export default function NavbarDemo() {
     setLoadingDestinations(true);
     setDestinationsError(null);
     try {
-      const response = await axios.get("http://localhost:9000/destination");
+      const response = await sendRequest.get("/destination");
       setDestinations(response.data.destinations);
     } catch (err: any) {
       setDestinationsError("Failed to load destinations.");
