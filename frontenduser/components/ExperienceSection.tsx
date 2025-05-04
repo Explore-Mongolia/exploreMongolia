@@ -2,9 +2,11 @@
 
 import { useExperiences } from "@/hooks/useExperiences";
 import { Experience } from "@/lib/types";
+import { useRouter } from "next/navigation";
 
 export default function ExperienceList() {
   const { data: experiences, isLoading, error } = useExperiences();
+  const router = useRouter();
 
   if (isLoading)
     return (
@@ -30,7 +32,8 @@ export default function ExperienceList() {
           {experiences.map((experience: Experience) => (
             <div
               key={experience._id}
-              className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow overflow-hidden"
+              onClick={() => router.push(`/experience/${experience._id}`)}
+              className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow overflow-hidden cursor-pointer"
             >
               
               {experience.images.length > 0 ? (

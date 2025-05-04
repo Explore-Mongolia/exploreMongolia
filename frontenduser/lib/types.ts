@@ -20,6 +20,7 @@ export interface TripPlan {
     description: string;
     visitedPlaces: string[];
     images: string[];
+    reactions: Record<string, number>;
   }
 
   export interface Destination {

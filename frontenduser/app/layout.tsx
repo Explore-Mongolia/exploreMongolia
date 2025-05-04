@@ -5,6 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import SyncUserToDB from "@/components/SyncUserToDB";
 import { UserProvider } from "@/lib/UserContext";
 import { Providers } from "./providers";
+import { Toaster, toast } from 'sonner';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,6 +35,7 @@ export default function RootLayout({
         <ClerkProvider>
           <UserProvider>
             <SyncUserToDB />
+            <Toaster/>
             <Providers>{children}</Providers>
           </UserProvider>
         </ClerkProvider>
