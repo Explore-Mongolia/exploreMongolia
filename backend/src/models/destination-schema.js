@@ -8,7 +8,16 @@ const destinationSchema = new Schema({
   description: { type: String, required: true },
   cost: { type: String, required: true },
   vibesAvailable: [{ type: String }],
-  image: { type: String, required: true }
+  ratings: [
+    {
+      user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+      rating: { type: Number, required: true, min: 1, max: 5 },
+      ratedAt: { type: Date, default: Date.now },
+    },
+  ],
+  averageRating: { type: Number, default: 0 },
+
+  image: { type: String, required: true },
 });
 
 export const DestinationModel = model("Destination", destinationSchema);
