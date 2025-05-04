@@ -87,7 +87,8 @@ export const AiInput = ({
         </option>
         <option value="1-3">1–3 days</option>
         <option value="4-7">4–7 days</option>
-        <option value="8+">8+ days</option>
+        <option value="8-16">8-16 days</option>
+        <option value="16-32">16-32 days</option>
       </select>
 
       <textarea
