@@ -8,7 +8,7 @@ import { companyRouter } from './routers/company-router.js';
 import { destinationRouter } from './routers/destination-router.js';
 import { experienceRouter } from './routers/experience-router.js';
 import { clerkUserRouter } from './routers/clerk-user.js';
-
+import { ratingRouter } from './routers/rating-router.js';
 
 
 
@@ -28,6 +28,7 @@ app.use('/company', companyRouter)
 app.use('/destination', destinationRouter)
 app.use('/experience', experienceRouter)
 app.use("/clerk-user", clerkUserRouter);
+app.use('/rating', ratingRouter);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port http://localhost:${PORT}`);
