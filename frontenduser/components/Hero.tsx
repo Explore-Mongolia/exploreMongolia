@@ -1,8 +1,21 @@
 // components/Hero.tsx
+"use client"; // Add this directive at the top
 
 import Image from "next/image";
+import { useEffect } from "react";
 
 export default function Hero() {
+  // Function to handle smooth scrolling
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  };
+
   return (
     <section className="w-full bg-white py-20">
       <div className="container mx-auto flex flex-col-reverse md:flex-row items-center px-6 md:px-12 lg:px-24 gap-10">
@@ -15,18 +28,18 @@ export default function Hero() {
             Discover hidden gems, plan meaningful trips, and share real travel experiences.
           </p>
           <div className="mt-6 flex justify-center md:justify-start gap-4">
-            <a
-              href="#planner"
+            <button
+              onClick={() => scrollToSection("planner")}
               className="px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
             >
               Plan a Trip
-            </a>
-            <a
-              href="#experiences"
+            </button>
+            <button
+              onClick={() => scrollToSection("experiences")}
               className="px-6 py-3 border border-gray-300 rounded-full hover:bg-gray-100 text-gray-700"
             >
               View Experiences
-            </a>
+            </button>
           </div>
         </div>
 

@@ -1,18 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import HomeSection from "@/components/HomeSection";
 import ExperienceSection from "@/components/ExperienceSection";
 import TripSection from "@/components/TripSection";
-import Link from "next/link";
 import {
   Navbar,
   NavBody,
   NavItems,
-  MobileNav,
   NavbarLogo,
   NavbarButton,
+  MobileNav,
   MobileNavHeader,
   MobileNavToggle,
   MobileNavMenu,
@@ -30,7 +29,7 @@ export function NavbarDemo() {
   const navItems = [
     { name: "Home", key: "home" },
     { name: "Experience", key: "experience" },
-    { name: "Trip", key: "trip" },
+    { name: "Destination", key: "trip" },
   ];
 
   const [activeSection, setActiveSection] = useState<null | string>(null);
@@ -58,9 +57,13 @@ export function NavbarDemo() {
             items={navItems.map(({ name, key }) => ({
               name,
               link: "#",
-              onClick: () => setActiveSection(key),
+              onClick: () => {
+                setActiveSection(key);
+              },
             }))}
+            className="cursor-pointer" 
           />
+
           <div className="flex items-center gap-4">
             <SignedOut>
               <SignInButton>
@@ -115,16 +118,8 @@ export function NavbarDemo() {
                   </NavbarButton>
                 </SignUpButton>
               </SignedOut>
-              import Link from "next/link"; // Import Link
               <SignedIn>
-                <div className="w-full flex justify-center">
-                  <Link href="/profile">
-                    {" "}
-                    <a>
-                      <UserButton afterSignOutUrl="/" />
-                    </a>
-                  </Link>
-                </div>
+                <div className="w-full flex justify-center"></div>
               </SignedIn>
             </div>
           </MobileNavMenu>

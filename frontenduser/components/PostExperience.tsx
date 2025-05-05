@@ -1,53 +1,76 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import { sendRequest } from "@/lib/SendRequest";
 import { useUserStore } from "@/store/userStore";
 import { toast } from "sonner";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+
+
+const schema = yup.object().shape({
+  name: yup.string().required("Experience name is required"),
+  visitedPlaces: yup.string().required("Visited places are required"),
+  description: yup.string().required("Description is required"),
+  tips: yup.string().required("Travel tips are required"),
+  totalCost: yup.number().positive().required("Total cost is required"),
+  highlights: yup.string().required("Trip highlights are required"),
+  vibes: yup.string().required("Vibes are required"), 
+  tripDates: yup.string().optional(), 
+});
 
 interface PostExperienceDialogProps {
   open: boolean;
   onClose: () => void;
 }
 
-const PostExperienceDialog: React.FC<PostExperienceDialogProps> = ({
-  open,
-  onClose,
-}) => {
+const PostExperienceDialog: React.FC<PostExperienceDialogProps> = ({ open, onClose }) => {
   const { mongoUserId } = useUserStore();
-  const [name, setName] = useState("");
-  const [visitedPlaces, setVisitedPlaces] = useState("");
-  const [description, setDescription] = useState("");
-  const [tips, setTips] = useState("");
-  const [totalCost, setTotalCost] = useState("");
-  const [highlights, setHighlights] = useState("");
-  const [tripDates, setTripDates] = useState("");
-  const [vibes, setVibes] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [images, setImages] = useState<string[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // React Hook Form setup with validation
+  const { control, handleSubmit, formState: { errors }, setValue } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "ml_default");
+
+    try {
+      const res = await fetch("https://api.cloudinary.com/v1_1/dkaymkcly/image/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (data.secure_url) {
+        setImages((prev) => [...prev, data.secure_url]);
+        toast.success("Image uploaded!");
+      } else {
+        toast.error("Upload failed");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Error uploading image");
+    }
+  };
+
+  const onSubmit = async (data: any) => {
     setIsSubmitting(true);
 
     try {
       const response = await sendRequest.post("/experience/create", {
-        name,
-        visitedPlaces,
-        description,
+        ...data,
         user: mongoUserId,
-        tips,
-        totalCost,
-        highlights,
-        tripDates,
-        vibes,
-        images: images,
+        images,
       });
 
       if (response.status === 201) {
@@ -57,7 +80,7 @@ const PostExperienceDialog: React.FC<PostExperienceDialogProps> = ({
       }
       onClose();
     } catch (error) {
-      toast.error("Error submitting experience:");
+      toast.error("Error submitting experience");
     } finally {
       setIsSubmitting(false);
     }
@@ -70,43 +93,15 @@ const PostExperienceDialog: React.FC<PostExperienceDialogProps> = ({
         <DialogDescription className="mb-4 text-sm text-muted-foreground">
           Give other travelers helpful insights by sharing your real journey.
         </DialogDescription>
+
+        {/* Image Upload */}
         <input
           type="file"
           accept="image/*"
-          onChange={async (e) => {
-            const file = e.target.files?.[0];
-            if (!file) return;
-
-            const formData = new FormData();
-            formData.append("file", file);
-            formData.append("upload_preset", "ml_default");
-
-            try {
-              const res = await fetch(
-                "https://api.cloudinary.com/v1_1/dkaymkcly/image/upload",
-                {
-                  method: "POST",
-                  body: formData,
-                }
-              );
-
-              const data = await res.json();
-              if (data.secure_url) {
-                setImages((prev) => [...prev, data.secure_url]);
-                toast.success("Image uploaded!");
-              } else {
-                toast.error("Upload failed");
-              }
-            } catch (err) {
-              console.error(err);
-              toast.error("Error uploading image");
-            }
-          }}
+          onChange={handleFileChange}
           className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4
-         file:rounded-full file:border-0
-         file:text-sm file:font-semibold
-         file:bg-blue-50 file:text-blue-700
-         hover:file:bg-blue-100"
+           file:rounded-full file:border-0 file:text-sm file:font-semibold
+           file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
         />
         <div className="flex gap-2 mt-2 flex-wrap">
           {images.map((url, index) => (
@@ -119,56 +114,42 @@ const PostExperienceDialog: React.FC<PostExperienceDialogProps> = ({
           ))}
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <InputField
-            label="Experience Name"
-            placeholder="Ex: Camel Trekking in the Gobi"
-            value={name}
-            setValue={setName}
-          />
-          <InputField
-            label="Visited Places"
-            placeholder="Ex: Gobi Desert, Yol Valley, Khongor Dunes"
-            value={visitedPlaces}
-            setValue={setVisitedPlaces}
-          />
-          <TextareaField
-            label="Description"
-            placeholder="Describe what you did, saw, and felt."
-            value={description}
-            setValue={setDescription}
-          />
-          <TextareaField
-            label="Travel Tips"
-            placeholder="Any useful advice for future travelers?"
-            value={tips}
-            setValue={setTips}
-          />
-          <InputField
-            label="Total Cost (USD)"
-            placeholder="Ex: 320"
-            value={totalCost}
-            setValue={setTotalCost}
-          />
-          <InputField
-            label="Trip Highlights"
-            placeholder="Ex: Riding camels, stargazing, sand dunes"
-            value={highlights}
-            setValue={setHighlights}
-          />
-          <InputField
-            label="Trip Dates"
-            placeholder="Ex: July 10 - July 20, 2024"
-            value={tripDates}
-            setValue={setTripDates}
-          />
-          <InputField
-            label="Overall Vibe"
-            placeholder="Ex: Peaceful, adventurous, inspiring"
-            value={vibes}
-            setValue={setVibes}
-          />
+        {/* Form */}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <InputField label="Experience Name" name="name" control={control} error={errors.name?.message} />
+          <InputField label="Visited Places" name="visitedPlaces" control={control} error={errors.visitedPlaces?.message} />
+          <TextareaField label="Description" name="description" control={control} error={errors.description?.message} />
+          <TextareaField label="Travel Tips" name="tips" control={control} error={errors.tips?.message} />
+          <InputField label="Total Cost (USD)" name="totalCost" control={control} error={errors.totalCost?.message} />
+          <InputField label="Trip Highlights" name="highlights" control={control} error={errors.highlights?.message} />
+          
+          {/* Vibes Select */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Overall Vibe</label>
+            <Controller
+              name="vibes"
+              control={control}
+              render={({ field }) => (
+                <select
+                  {...field}
+                  className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                >
+                  <option value="">Select a vibe...</option>
+                  <option value="Adventure">Adventure</option>
+                  <option value="Cultural">Cultural</option>
+                  <option value="Relaxing">Relaxing</option>
+                  <option value="Nature-filled">Nature-filled</option>
+                  <option value="Luxury">Luxury</option>
+                </select>
+              )}
+            />
+            {errors.vibes && <p className="text-sm text-red-500 mt-1">{errors.vibes.message}</p>}
+          </div>
 
+          {/* Trip Dates */}
+          <InputField label="Trip Dates (optional)" name="tripDates" control={control} error={errors.tripDates?.message} />
+
+          {/* Submit */}
           <div className="mt-6 flex justify-end gap-4">
             <button
               type="button"
@@ -192,50 +173,60 @@ const PostExperienceDialog: React.FC<PostExperienceDialogProps> = ({
   );
 };
 
-// Reusable components
+// Reusable Input Field
 const InputField = ({
   label,
-  value,
-  setValue,
-  placeholder = "",
+  name,
+  control,
+  error,
 }: {
   label: string;
-  value: string;
-  setValue: (val: string) => void;
-  placeholder?: string;
+  name: string;
+  control: any;
+  error?: string;
 }) => (
   <div>
     <label className="block text-sm font-medium mb-1">{label}</label>
-    <input
-      type="text"
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
-      className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-      placeholder={placeholder}
+    <Controller
+      name={name}
+      control={control}
+      render={({ field }) => (
+        <input
+          {...field}
+          className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+      )}
     />
+    {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
   </div>
 );
 
+// Reusable Textarea Field
 const TextareaField = ({
   label,
-  value,
-  setValue,
-  placeholder = "",
+  name,
+  control,
+  error,
 }: {
   label: string;
-  value: string;
-  setValue: (val: string) => void;
-  placeholder?: string;
+  name: string;
+  control: any;
+  error?: string;
 }) => (
   <div>
     <label className="block text-sm font-medium mb-1">{label}</label>
-    <textarea
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
-      className="w-full p-2 border border-gray-300 rounded resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
-      rows={4}
-      placeholder={placeholder}
+    <Controller
+      name={name}
+      control={control}
+      render={({ field }) => (
+        <textarea
+          {...field}
+          className="w-full p-2 border border-gray-300 rounded resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
+          rows={4}
+        />
+      )}
     />
+    {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
   </div>
 );
 
