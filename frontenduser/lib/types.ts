@@ -30,6 +30,7 @@ export interface TripPlan {
     cost: number;
     vibesAvailable: string[];
     image: string;
+    averageRating?: number;
   }
   
 
