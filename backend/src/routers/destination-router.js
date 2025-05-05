@@ -10,7 +10,7 @@ import { deleteDestination } from "../controller/destination/delete-destination.
 export const destinationRouter = Router(); 
 
 destinationRouter.post("/create", createDestination);
-destinationRouter.get("/get/:id", getDestination);
-destinationRouter.put("/:id", updateDestination);
 destinationRouter.get("/" , getAllDestinations)
+destinationRouter.get("/:id", getDestination);
+destinationRouter.put("/:id", updateDestination);
 destinationRouter.delete("/:id", deleteDestination)

@@ -1,27 +1,32 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { clerkMiddleware } from "@clerk/nextjs/server";
 
-const isPublicRoute = createRouteMatcher([
-  "/",
-  "/sign-in",
-  "/experience",
-  "/trip",
-  "/admin",
-  "/admin/createDestination",
-  "/admin/createCompany",
-  "/test"
-]);
-
-export default clerkMiddleware((auth, req) => {
-  const { userId }: any = auth;
+export default clerkMiddleware(async (auth, req) => {
   const { pathname } = req.nextUrl;
+  const { userId } = await auth();
 
-  if (!userId && !isPublicRoute(req)) {
+  const publicRoutes = [
+    "/",
+    "/sign-in",
+    "/trip",
+    "/admin",
+    "/admin/createDestination",
+    "/admin/createCompany",
+    "/test",
+  ];
+
+  // Check if the current path is public
+  const isPublic =
+    publicRoutes.includes(pathname) || pathname.startsWith("/experiences");
+
+  // Redirect unauthenticated users from private routes
+  if (!userId && !isPublic) {
     const signInUrl = new URL("/sign-in", req.url);
     return Response.redirect(signInUrl);
   }
 
-  if (userId && ["/", "/sign-in", "/sign-up"].includes(pathname)) {
-    const mainUrl = new URL("/main", req.url);
+  // Redirect authenticated users from public auth routes (sign-in, sign-up) to homepage
+  if (userId && ["/sign-in", "/sign-up"].includes(pathname)) {
+    const mainUrl = new URL("/", req.url);  // Redirect authenticated users to home
     return Response.redirect(mainUrl);
   }
 });

@@ -2,9 +2,12 @@
 import React from "react";
 import useTrips from "@/hooks/useTrips";
 import { Destination } from "@/lib/types";
+import { useRouter } from "next/navigation";
 
 export default function TripSection() {
+
   const { data: destinations, isLoading, error } = useTrips();
+  const router = useRouter();
 
   if (isLoading)
     return (
@@ -33,7 +36,8 @@ export default function TripSection() {
             {destinations?.map((destination: Destination) => (
             <div
               key={destination._id}
-              className="p-6 bg-white dark:bg-neutral-800 rounded-lg shadow"
+              className="p-6 bg-white dark:bg-neutral-800 rounded-lg shadow cursor-pointer"
+              onClick={() => router.push(`/destination/${destination._id}`)}
             >
               <img
               src={destination.image}

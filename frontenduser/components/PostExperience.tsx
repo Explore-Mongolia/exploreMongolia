@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { sendRequest } from "@/lib/SendRequest";
 import { useUserStore } from "@/store/userStore";
+import { toast } from "sonner";
 
 interface PostExperienceDialogProps {
   open: boolean;
@@ -47,10 +48,14 @@ const PostExperienceDialog: React.FC<PostExperienceDialogProps> = ({
         vibes,
       });
 
-      console.log("Submitted:", response.data);
+      if (response.status === 200) {
+        toast.success("Experience submitted successfully");
+      } else {
+        toast.error("Failed to submit experience");
+      }
       onClose();
     } catch (error) {
-      console.error("Error submitting experience:", error);
+      toast.error("Error submitting experience:");
     } finally {
       setIsSubmitting(false);
     }
