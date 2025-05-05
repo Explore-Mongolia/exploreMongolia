@@ -42,4 +42,5 @@ export const reactToExperience = async (req, res) => {
     console.error("Error saving experience reaction:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
+
 };

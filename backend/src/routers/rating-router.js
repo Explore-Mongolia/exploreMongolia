@@ -8,3 +8,4 @@ export const ratingRouter = express.Router();
 ratingRouter.post('/company/:id', createCompanyRating);
 ratingRouter.post('/destination/:id', createDestinationRating);
 ratingRouter.post('/experience/:experienceId', reactToExperience);
+
