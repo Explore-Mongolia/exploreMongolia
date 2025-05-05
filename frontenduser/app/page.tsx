@@ -9,14 +9,15 @@ export default function Home() {
   return (
     <div className="relative min-h-screen">
       <NavbarDemo />
-      <Hero/>
-      <TripPlannerForm />
-      <ExperienceList />
-      <TripSection />
-
-      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 md:left-4 md:translate-x-0 p-4 z-50">
-        <PostIcon />
+      <Hero />
+      <div id="experiences">
+        <ExperienceList />
       </div>
+      <div id="planner">
+        <TripPlannerForm />
+      </div>
+      <TripSection />
+      <PostIcon />
     </div>
   );
 }

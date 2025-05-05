@@ -1,93 +1,77 @@
 "use client";
 
-import { useState } from "react";
-import { toast } from "sonner";
+import { useState, useMemo } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { sendRequest } from "@/lib/SendRequest";
 import { useUserStore } from "@/store/userStore";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
-const emojis = ["😲", "🔥", "💖", "✨", "🌟"];
-const emojiLabels = ["Wow", "Fire", "Love", "Shiny", "Star"];
+const emojis = ["🔥", "💖", "😲", "🌟"];
 
 export default function InlineEmojiRating({
   experienceId,
+  reactions,
 }: {
   experienceId: string;
+  reactions: any[];
 }) {
-  const [selected, setSelected] = useState<number | null>(null);
-  const { mongoUserId } = useUserStore();
+  const userId = useUserStore((state) => state.mongoUserId);
+  const queryClient = useQueryClient();
 
-  const handleRating = async (index: number) => {
-    if (!mongoUserId) {
-      toast.error("Please login to rate.");
-      return;
+  const userReaction = reactions.find((r) => r.user === userId)?.emoji || null;
+
+  const [localEmoji, setLocalEmoji] = useState<string | null>(null); 
+
+  const currentReaction = localEmoji || userReaction;
+
+  const combinedCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+
+    for (const r of reactions) {
+      counts[r.emoji] = (counts[r.emoji] || 0) + 1;
     }
 
-    setSelected(index);
-
-    try {
-      await sendRequest.post(`/rating/experience/${experienceId}`, {
-        userId: mongoUserId,
-        emoji: emojis[index],
-      });
-      toast.success(`You rated: ${emojiLabels[index]}`);
-    } catch (error) {
-      toast.error("Failed to submit rating.");
-      console.error(error);
+    
+    if (localEmoji && localEmoji !== userReaction) {
+      if (userReaction) counts[userReaction] = Math.max((counts[userReaction] || 1) - 1, 0);
+      counts[localEmoji] = (counts[localEmoji] || 0) + 1;
     }
+
+    return counts;
+  }, [reactions, localEmoji, userReaction]);
+
+  const mutation = useMutation({
+    mutationFn: (emoji: string) =>
+      sendRequest.post(`/rating/experience/${experienceId}`, { userId, emoji }),
+    onMutate: (emoji) => {
+      if (emoji !== currentReaction) {
+        setLocalEmoji(emoji);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["experience", experienceId] });
+    },
+  });
+
+  const handleClick = (emoji: string) => {
+    if (emoji === currentReaction) return; 
+    mutation.mutate(emoji);
   };
 
   return (
-    <TooltipProvider>
-      <div className="flex gap-5 mt-5 justify-center items-center">
-        {emojis.map((emoji, index) => {
-          const isSelected = selected === index;
-
-          return (
-            <Tooltip key={index}>
-              <TooltipTrigger asChild>
-                <motion.button
-                  onClick={() => handleRating(index)}
-                  whileHover={{ scale: 1.2 }}
-                  whileTap={{ scale: 0.9 }}
-                  className={`text-3xl md:text-4xl p-3 rounded-full focus:outline-none relative transition-colors duration-200
-                    ${
-                      isSelected
-                        ? "bg-yellow-200 shadow-xl ring-2 ring-yellow-400"
-                        : "hover:bg-gray-100"
-                    }`}
-                  aria-label={emojiLabels[index]}
-                >
-                  {emoji}
-
-                  <AnimatePresence>
-                    {isSelected && (
-                      <motion.div
-                        className="absolute -top-3 -right-3 text-xs bg-green-500 text-white px-1.5 py-0.5 rounded-full shadow"
-                        initial={{ scale: 0, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        exit={{ scale: 0, opacity: 0 }}
-                        transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                      >
-                        ✓
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.button>
-              </TooltipTrigger>
-              <TooltipContent side="top" className="text-sm font-medium shadow border">
-                {emojiLabels[index]}
-              </TooltipContent>
-            </Tooltip>
-          );
-        })}
-      </div>
-    </TooltipProvider>
+    <div className="flex gap-3 mt-4 flex-wrap">
+      {emojis.map((emoji) => {
+        const isUserReaction = emoji === currentReaction;
+        return (
+          <button
+            key={emoji}
+            onClick={() => handleClick(emoji)}
+            className={`px-3 py-1 rounded-full text-xl border transition 
+              ${isUserReaction ? "bg-green-200 border-green-500" : "bg-gray-100 border-gray-300 hover:scale-105"}`}
+          >
+            {emoji} {combinedCounts[emoji] || 0}
+          </button>
+        );
+      })}
+    </div>
   );
 }
