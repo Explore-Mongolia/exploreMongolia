@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import axios from "axios";
 import { CldUploadWidget } from "next-cloudinary";
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';

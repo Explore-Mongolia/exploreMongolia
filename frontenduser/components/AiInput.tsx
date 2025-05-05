@@ -90,14 +90,6 @@ export const AiInput = ({
         <option value="8+">8+ days</option>
       </select>
 
-      <textarea
-        name="preferences"
-        placeholder="Preferences (e.g. adventure, relaxation, history)"
-        onChange={handleChange}
-        className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 resize-none"
-        rows={4}
-      />
-
       <button
         type="submit"
         disabled={loading}

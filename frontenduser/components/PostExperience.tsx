@@ -30,6 +30,7 @@ const PostExperienceDialog: React.FC<PostExperienceDialogProps> = ({
   const [tripDates, setTripDates] = useState("");
   const [vibes, setVibes] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [images, setImages] = useState<string[]>([]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,9 +47,10 @@ const PostExperienceDialog: React.FC<PostExperienceDialogProps> = ({
         highlights,
         tripDates,
         vibes,
+        images: images,
       });
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         toast.success("Experience submitted successfully");
       } else {
         toast.error("Failed to submit experience");
@@ -68,6 +70,54 @@ const PostExperienceDialog: React.FC<PostExperienceDialogProps> = ({
         <DialogDescription className="mb-4 text-sm text-muted-foreground">
           Give other travelers helpful insights by sharing your real journey.
         </DialogDescription>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={async (e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("upload_preset", "ml_default");
+
+            try {
+              const res = await fetch(
+                "https://api.cloudinary.com/v1_1/dkaymkcly/image/upload",
+                {
+                  method: "POST",
+                  body: formData,
+                }
+              );
+
+              const data = await res.json();
+              if (data.secure_url) {
+                setImages((prev) => [...prev, data.secure_url]);
+                toast.success("Image uploaded!");
+              } else {
+                toast.error("Upload failed");
+              }
+            } catch (err) {
+              console.error(err);
+              toast.error("Error uploading image");
+            }
+          }}
+          className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4
+         file:rounded-full file:border-0
+         file:text-sm file:font-semibold
+         file:bg-blue-50 file:text-blue-700
+         hover:file:bg-blue-100"
+        />
+        <div className="flex gap-2 mt-2 flex-wrap">
+          {images.map((url, index) => (
+            <img
+              key={index}
+              src={url}
+              alt={`upload-${index}`}
+              className="w-24 h-24 object-cover rounded border"
+            />
+          ))}
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <InputField
