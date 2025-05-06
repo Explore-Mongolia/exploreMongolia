@@ -1,11 +1,9 @@
-// components/Hero.tsx
-"use client"; // Add this directive at the top
+"use client";
 
 import Image from "next/image";
-import { useEffect } from "react";
+
 
 export default function Hero() {
-  // Function to handle smooth scrolling
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -49,7 +47,7 @@ export default function Hero() {
             src="https://images.unsplash.com/photo-1571821807771-62cf66ac3f14?w=800&auto=format&fit=crop&q=60"
             alt="Mongolia hero"
             width={600}
-            height={400}
+            height={200}
             className="rounded-xl shadow-lg object-cover w-full h-auto"
             priority
           />

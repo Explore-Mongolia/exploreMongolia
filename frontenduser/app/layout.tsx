@@ -5,7 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import SyncUserToDB from "@/components/SyncUserToDB";
 import { UserProvider } from "@/lib/UserContext";
 import { Providers } from "./providers";
-import { Toaster, toast } from 'sonner';
+import { Toaster, toast } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,7 +35,23 @@ export default function RootLayout({
         <ClerkProvider>
           <UserProvider>
             <SyncUserToDB />
-            <Toaster/>
+            <Toaster
+              position="top-center"
+              richColors 
+              toastOptions={{
+                classNames: {
+                  toast: "rounded-xl shadow-lg px-4 py-3 font-medium",
+                  success: "bg-green-600 text-white",
+                  error: "bg-red-600 text-white",
+                },
+                style: {
+                  borderRadius: "12px",
+                  padding: "12px 16px",
+                },
+                duration: 3000,
+              }}
+            />
+
             <Providers>{children}</Providers>
           </UserProvider>
         </ClerkProvider>

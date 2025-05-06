@@ -4,7 +4,7 @@ import { userModel } from "../models/user-schema.js";
 export const clerkUserRouter = express.Router();
 
 clerkUserRouter.post("/create", async (req, res) => {
-  const { name, email } = req.body;
+  const { name, email, profileImage } = req.body;  
 
   try {
     let user = await userModel.findOne({ email });
@@ -13,7 +13,11 @@ clerkUserRouter.post("/create", async (req, res) => {
       user = new userModel({
         name,
         email,
+        profileImage, 
       });
+      await user.save();
+    } else {
+      user.profileImage = profileImage;
       await user.save();
     }
 

@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
-
 import { Schema, model } from "mongoose";
 
+
 const tripPlanSchema = new Schema({
-  user: { type: String, required: true },
+  user: { type: Schema.Types.ObjectId, ref: "User", required: true }, // Reference to User model
   title: { type: String, default: "My Trip" },
   destinations: [{ type: String }],
   plan: [

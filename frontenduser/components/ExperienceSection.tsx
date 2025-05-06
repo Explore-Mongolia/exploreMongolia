@@ -4,6 +4,7 @@ import { useExperiences } from "@/hooks/useExperiences";
 import { Experience } from "@/lib/types";
 import { useRouter } from "next/navigation";
 
+
 export default function ExperienceList() {
   const { data: experiences, isLoading, error } = useExperiences();
   const router = useRouter();
@@ -33,9 +34,9 @@ export default function ExperienceList() {
             <div
               key={experience._id}
               onClick={() => router.push(`/experience/${experience._id}`)}
-              className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow overflow-hidden cursor-pointer"
+              className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow overflow-hidden cursor-pointer flex flex-col justify-between"
             >
-              
+              {/* Image */}
               {experience.images.length > 0 ? (
                 <img
                   src={experience.images[0]}
@@ -48,18 +49,43 @@ export default function ExperienceList() {
                 </div>
               )}
 
-              {/* Text Content */}
-              <div className="p-4">
+              {/* Content */}
+              <div className="p-4 flex flex-col flex-1">
                 <h2 className="text-xl font-semibold text-blue-600 mb-2">
                   {experience.name}
                 </h2>
-                <p className="text-gray-700 mb-2">{experience.description}</p>
-                <p className="text-sm text-gray-500">
+
+                <p className="text-gray-700 mb-2 line-clamp-3">
+                  {experience.description}
+                </p>
+
+                <p className="text-sm text-gray-500 mb-4">
                   Visited Places:{" "}
                   <span className="italic">
                     {experience.visitedPlaces.join(", ")}
                   </span>
                 </p>
+
+                {/* Spacer to push reactions + creator to bottom */}
+                <div className="flex-grow" />
+
+                {/* Reactions just above creator */}
+                <div className="flex items-center gap-1 text-sm text-gray-600 mb-2">
+                  <span className="text-lg">💬</span>
+                  <span>{experience.reactionsCount} reactions</span>
+                </div>
+
+                {/* Created by at the bottom */}
+                <div className="flex items-center border-t pt-2 border-gray-100">
+                  <img
+                    src={experience.user.profileImage}
+                    alt={experience.user.name}
+                    className="w-8 h-8 rounded-full mr-3"
+                  />
+                  <h4 className="text-sm font-medium text-gray-800">
+                    {experience.user.name}
+                  </h4>
+                </div>
               </div>
             </div>
           ))}

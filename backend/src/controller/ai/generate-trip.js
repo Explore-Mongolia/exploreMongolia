@@ -1,10 +1,10 @@
 import openai from "../../openAi.js";
 
-export const generateTrip = async (req, res) => {
-  const { groupType, budget, preferences } = req.body;
+export  async function generateTrip(req, res) {
+  const { groupType, budget, type } = req.body;
 
   const prompt = `
-You are a travel assistant. Generate a 3-day trip plan in Mongolia for a ${groupType} with a budget of ${budget} USD. Their preferences include: ${preferences}.
+You are a travel assistant. Generate trip plan in Mongolia for a ${groupType} with a budget of ${budget} USD with the ${type}. 
 
 Return only valid JSON in the following format:
 {
@@ -26,7 +26,7 @@ Return only valid JSON in the following format:
     const completion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [{ role: "user", content: prompt }],
-      max_tokens: 800, 
+      max_tokens: 800,
     });
 
     const tripJSON = completion.choices[0].message.content;
@@ -43,4 +43,4 @@ Return only valid JSON in the following format:
     console.error("GPT Error:", error);
     res.status(500).json({ error: "Failed to generate trip plan" });
   }
-};
+}

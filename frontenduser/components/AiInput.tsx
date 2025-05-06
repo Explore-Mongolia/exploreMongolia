@@ -6,14 +6,16 @@ import { Loader2 } from "lucide-react";
 
 export const AiInput = ({
   setTripPlan,
+  travelType,
 }: {
   setTripPlan: (value: any) => void;
+  travelType: string;
 }) => {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     groupType: "",
     budget: "",
-    preferences: "",
+    type: "",
   });
 
   const handleChange = (
@@ -23,10 +25,19 @@ export const AiInput = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const res = await sendRequest.post("/ai/generate-trip", form);
-    setTripPlan(res.data.tripPlan);
-    setLoading(false);
+    try {
+      const res = await sendRequest.post("/ai/generate-trip", {
+        ...form,
+        type: travelType,
+      });
+      setTripPlan(res.data.tripPlan);
+    } catch (err) {
+      console.error("Trip generation failed:", err);
+    } finally {
+      setLoading(false);
+    }
   };
+  
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -61,14 +72,6 @@ export const AiInput = ({
         <option value="high">Over $1500</option>
       </select>
 
-      <textarea
-        name="preferences"
-        onChange={handleChange}
-        placeholder="What kind of experiences do you want? (e.g., nature, adventure, culture)"
-        rows={4}
-        className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500"
-        required
-      />
 
       <button
         type="submit"
