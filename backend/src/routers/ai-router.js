@@ -10,4 +10,4 @@ export const aiRouter = Router();
 
 
 aiRouter.post("/generate-trip", generateTrip);
-aiRouter.post("/save-trip", saveTrip);
+aiRouter.post("/save-trip/:userId", saveTrip);

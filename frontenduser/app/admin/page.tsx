@@ -63,11 +63,12 @@ export default function NavbarDemo() {
   };
 
   const handleNavItemClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    const name = e.currentTarget.textContent;
+    const target = e.currentTarget;
+    const name = target.querySelector('span')?.textContent || target.textContent;
     if (!name) return;
-
+  
     setSelectedSection(name);
-
+  
     if (name === "Destinations") {
       fetchDestinations();
     }

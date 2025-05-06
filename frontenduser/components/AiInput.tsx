@@ -11,11 +11,9 @@ export const AiInput = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
-    age: "",
     groupType: "",
     budget: "",
     preferences: "",
-    days: "",
   });
 
   const handleChange = (
@@ -33,25 +31,11 @@ export const AiInput = ({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <select
-        name="age"
-        onChange={handleChange}
-        className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500"
-        defaultValue=""
-      >
-        <option value="" disabled>
-          Select Age Group
-        </option>
-        <option value="under 18">Under 18</option>
-        <option value="18-30">18-30</option>
-        <option value="31-50">31-50</option>
-        <option value="51+">51+</option>
-      </select>
-
-      <select
         name="groupType"
         onChange={handleChange}
         className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500"
         defaultValue=""
+        required
       >
         <option value="" disabled>
           Select Group Type
@@ -67,6 +51,7 @@ export const AiInput = ({
         onChange={handleChange}
         className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500"
         defaultValue=""
+        required
       >
         <option value="" disabled>
           Select Budget
@@ -76,19 +61,14 @@ export const AiInput = ({
         <option value="high">Over $1500</option>
       </select>
 
-      <select
-        name="days"
+      <textarea
+        name="preferences"
         onChange={handleChange}
+        placeholder="What kind of experiences do you want? (e.g., nature, adventure, culture)"
+        rows={4}
         className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500"
-        defaultValue=""
-      >
-        <option value="" disabled>
-          Number of Days
-        </option>
-        <option value="1-3">1–3 days</option>
-        <option value="4-7">4–7 days</option>
-        <option value="8+">8+ days</option>
-      </select>
+        required
+      />
 
       <button
         type="submit"

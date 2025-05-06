@@ -1,23 +1,17 @@
-
-
 import { TripPlanModel } from "../../models/tripPlan-schema.js";
 
-
-
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method Not Allowed" });
-  }
-
   try {
-    const { email } = req.user; 
-
-
+    const { userId } = req.params; 
     const tripData = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ error: "Missing userId in params" });
+    }
 
     const tripPlan = await TripPlanModel.create({
       ...tripData,
-      user: email,
+      user: userId,
       createdByAI: true,
     });
 
