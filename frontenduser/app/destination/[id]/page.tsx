@@ -3,6 +3,7 @@
 import { useDestination } from "@/hooks/useDestination";
 import RateDestinationDialog from "./_components/RateDestination";
 import { useParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 export default function ExperienceList() {
   const { id } = useParams();
@@ -34,7 +35,17 @@ export default function ExperienceList() {
       />
       <div className="mt-4">
         <RateDestinationDialog destinationId={destination._id} />
+        <Button className="ml-4">
+          <a
+            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+              destination?.name || ""
+            )}`}
+          >
+            See on Map
+          </a>
+        </Button>
       </div>
+
       <div>
         <h1 className="text-3xl font-bold text-gray-900">{destination.name}</h1>
         <p className="text-gray-700 mt-2">{destination.description}</p>
