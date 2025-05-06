@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+import jsPDF from "jspdf"
 import { AiInput } from "./AiInput";
 import { TripPlan } from "@/lib/types";
 import { sendRequest } from "@/lib/SendRequest";

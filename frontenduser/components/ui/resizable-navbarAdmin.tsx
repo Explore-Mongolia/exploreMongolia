@@ -16,11 +16,8 @@ interface NavBodyProps {
 }
 
 interface NavItemsProps {
-  items: {
-    name: string;
-    link?: string;
-    onClick?: () => void;
-  }[];
+  items: { name: string; link?: string }[];
+  onItemClick?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
   className?: string;
 }
 
@@ -102,7 +99,7 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
   );
 };
 
-export const NavItems = ({ items, className }: NavItemsProps) => {
+export const NavItems = ({ items, onItemClick, className }: NavItemsProps) => {
   const [hovered, setHovered] = useState<number | null>(null);
 
   return (
@@ -114,10 +111,16 @@ export const NavItems = ({ items, className }: NavItemsProps) => {
       )}
     >
       {items.map((item, idx) => (
-        <button
+        <a
           key={`link-${idx}`}
+          href={item.link || '#'}
           onMouseEnter={() => setHovered(idx)}
-          onClick={item.onClick}
+          onClick={(e) => {
+            e.preventDefault();
+            if (onItemClick) {
+              onItemClick(e);
+            }
+          }}
           className="relative px-4 py-2 text-neutral-600 dark:text-neutral-300"
         >
           {hovered === idx && (
@@ -127,7 +130,7 @@ export const NavItems = ({ items, className }: NavItemsProps) => {
             />
           )}
           <span className="relative z-20">{item.name}</span>
-        </button>
+        </a>
       ))}
     </motion.div>
   );
