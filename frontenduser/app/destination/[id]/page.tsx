@@ -3,6 +3,8 @@
 import { useDestination } from "@/hooks/useDestination";
 import RateDestinationDialog from "./_components/RateDestination";
 import { useParams } from "next/navigation";
+import Image from "next/image";
+import { SkeletonDes } from "./_components/Skeleton";
 
 export default function ExperienceList() {
   const { id } = useParams();
@@ -12,7 +14,7 @@ export default function ExperienceList() {
     ? useDestination(destinationId)
     : { data: null, isLoading: false, error: "Invalid destination ID" };
 
-  if (isLoading) return <p className="text-center mt-10">Loading...</p>;
+  if (isLoading) return <SkeletonDes/>;
   if (error)
     return (
       <p className="text-center text-red-500 mt-10">
@@ -27,11 +29,16 @@ export default function ExperienceList() {
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white rounded-xl shadow-md space-y-6 mt-10">
-      <img
-        src={destination.image}
-        alt={destination.name}
-        className="w-full h-64 object-cover rounded-lg"
-      />
+      <div className="relative w-full h-64 rounded-lg overflow-hidden">
+        <Image
+          src={destination.image}
+          alt={destination.name}
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 50vw"
+          priority
+        />
+      </div>
       <div className="mt-4">
         <RateDestinationDialog destinationId={destination._id} />
       </div>

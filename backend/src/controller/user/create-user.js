@@ -1,11 +1,26 @@
-import { userModel } from "../../models/user-schema.js";
+import { UserModel } from "../../models/user-schema.js";
 
 export const createUser = async (req, res) => {
+  const { name, email, profileImage, bio, location, socialLinks } = req.body;
+
   try {
-    const { name, email } = req.body;
-    const user = await userModel.create({ name, email });
-    res.status(201).json(user);
-  } catch (error) {
-    console.log(error);
+    const newUser = new UserModel({
+      name,
+      email,
+      profileImage,
+      bio,
+      location,
+      socialLinks,
+    });
+
+    await newUser.save();
+
+    res.status(201).json({
+      message: "User created successfully",
+      user: newUser,
+    });
+  } catch (err) {
+    console.error("Error creating user:", err);
+    res.status(500).json({ message: "An error occurred while creating user" });
   }
 };

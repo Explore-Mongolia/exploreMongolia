@@ -1,19 +1,22 @@
-import { userModel } from "../../models/user-schema.js";
+import { UserModel } from "../../models/user-schema.js";
 
 export const updateUser = async (req, res) => {
   const { id } = req.params;
-  const { name, email } = req.body;
+  const updates = req.body;
 
   try {
-    const updateUser = await userModel.findByIdAndUpdate(id, {
-      name,
-      email,
+    const updatedUser = await UserModel.findByIdAndUpdate(id, updates, { new: true });
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({
+      message: "User updated successfully",
+      user: updatedUser,
     });
-    res.json({message : "user updated succesfully",user: updateUser })
-  } catch(err) {
-    console.log(err);
-    
-    res.json({message : "error occured while updating user"})
-    
+  } catch (err) {
+    console.error("Error updating user:", err);
+    res.status(500).json({ message: "An error occurred while updating user" });
   }
 };

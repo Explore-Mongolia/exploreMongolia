@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import InlineEmojiRating from "./_components/EmojiRating";
 import { SkeletonExp } from "./_components/Skeleton";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function ExperienceList() {
   const { id } = useParams();
@@ -23,26 +24,34 @@ export default function ExperienceList() {
         key={experience._id}
         className="border rounded-2xl overflow-hidden shadow-md"
       >
-        <img
-          src={experience.images?.[0] || "/placeholder.jpg"}
-          alt={experience.name}
-          className="w-full h-64 object-cover"
-        />
+        <div className="relative w-full h-64">
+          <Image
+            src={experience.images?.[0] || "/placeholder.jpg"}
+            alt={experience.name}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 50vw"
+            priority
+          />
+        </div>
 
         <div className="p-6">
           <h2 className="text-2xl font-semibold mb-2">{experience.name}</h2>
           <p className="text-gray-700 mb-4">{experience.description}</p>
 
-          {/* Creator Section */}
           <div
             className="flex items-center mb-6 cursor-pointer"
             onClick={() => router.push(`/profile/${experience.user._id}`)}
           >
-            <img
-              src={experience.user.profileImage || "/default-profile.png"}
-              alt={experience.user.name}
-              className="w-10 h-10 rounded-full object-cover mr-3"
-            />
+            <div className="relative w-10 h-10 mr-3">
+              <Image
+                src={experience.user.profileImage || "/default-profile.png"}
+                alt={experience.user.name}
+                fill
+                className="rounded-full object-cover"
+                sizes="40px"
+              />
+            </div>
             <div>
               <h3 className="font-medium text-gray-800">
                 {experience.user.name}
