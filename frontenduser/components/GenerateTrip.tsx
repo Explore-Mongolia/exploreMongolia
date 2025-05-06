@@ -6,7 +6,8 @@ import jsPDF from "jspdf";
 import { AiInput } from "./AiInput";
 import { TripPlan } from "@/lib/types";
 import { sendRequest } from "@/lib/SendRequest";
-import { useUserContext } from "@/lib/UserContext";
+import { useUserStore } from "@/store/userStore";
+import { toast } from "sonner";
 
 const travelTypes = [
   "Nature & Scenery",
@@ -21,7 +22,7 @@ const TripPlannerForm = () => {
   const [tripPlan, setTripPlan] = useState<TripPlan | null>(null);
   const [selectedTravelType, setSelectedTravelType] = useState("");
   const tripRef = useRef<HTMLDivElement>(null);
-  const { userId, email } = useUserContext();
+  const userId = useUserStore((state) => state.mongoUserId);
 
   const handleDownloadPDF = async () => {
     const element = tripRef.current;
@@ -44,22 +45,22 @@ const TripPlannerForm = () => {
   };
 
   const handleSaveToAccount = async () => {
-    if (!tripPlan) return;
+    if (!userId) {
+      toast.error("User not logged in.");
+      return;
+    }
 
     try {
-      const res = await sendRequest.post("/ai/save-trip", {
-        tripPlan,
-        user: email,
-      });
+      const res = await sendRequest.post(`/ai/save-trip/${userId}`, tripPlan);
 
       if (res.status !== 201 && res.status !== 200) {
         throw new Error(res.data.error || "Something went wrong");
       }
 
-      alert("Trip saved to your account!");
+      toast.success("Trip saved to your account!");
     } catch (err) {
       console.error(err);
-      alert("Failed to save trip.");
+      toast.error("Failed to save trip.");
     }
   };
 
