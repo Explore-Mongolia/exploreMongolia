@@ -18,9 +18,13 @@ export interface TripPlan {
     _id: string;
     name: string;
     description: string;
-    visitedPlaces: string[];
     images: string[];
-    reactions: Record<string, number>;
+    visitedPlaces: string[];
+    reactionsCount: number;
+    user: {
+      profileImage: string;
+      name: string;
+    };
   }
 
   export interface Destination {

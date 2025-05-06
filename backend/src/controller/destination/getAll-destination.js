@@ -2,7 +2,7 @@ import { DestinationModel } from "../../models/destination-schema.js";
 
 export const getAllDestinations = async (req, res) => {
   try {
-    const destinations = await DestinationModel.find();
+    const destinations = await DestinationModel.find().populate("company");
 
     return res.status(200).json({
       message: "All destinations fetched successfully.",

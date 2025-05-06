@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import html2canvas from "html2canvas";
-import jsPDF from "jspdf"
+import jsPDF from "jspdf";
 import { AiInput } from "./AiInput";
 import { TripPlan } from "@/lib/types";
 import { sendRequest } from "@/lib/SendRequest";
@@ -23,12 +23,18 @@ const TripPlannerForm = () => {
   const [selectedTravelType, setSelectedTravelType] = useState("");
   const tripRef = useRef<HTMLDivElement>(null);
   const userId = useUserStore((state) => state.mongoUserId);
+  const [isDownloading, setIsDownloading] = useState(false);
 
-  const handleDownloadPDF = async () => {
-    const element = tripRef.current;
-    if (!element) return;
+const handleDownloadPDF = async () => {
+  if (!tripRef.current) {
+    toast.error("Trip plan is not ready to download.");
+    return;
+  }
 
-    const canvas = await html2canvas(element, {
+  try {
+    setIsDownloading(true); 
+
+    const canvas = await html2canvas(tripRef.current, {
       scale: 2,
       useCORS: true,
       backgroundColor: "#ffffff",
@@ -42,7 +48,16 @@ const TripPlannerForm = () => {
 
     pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
     pdf.save("trip-plan.pdf");
-  };
+
+    toast.success("Trip PDF downloaded successfully!");
+  } catch (err) {
+    console.error("PDF download error:", err);
+    toast.error("Failed to download PDF. Please try again.");
+  } finally {
+    setIsDownloading(false); // reset loading
+  }
+};
+
 
   const handleSaveToAccount = async () => {
     if (!userId) {
@@ -52,6 +67,7 @@ const TripPlannerForm = () => {
 
     try {
       const res = await sendRequest.post(`/ai/save-trip/${userId}`, tripPlan);
+
 
       if (res.status !== 201 && res.status !== 200) {
         throw new Error(res.data.error || "Something went wrong");
@@ -87,7 +103,7 @@ const TripPlannerForm = () => {
         </select>
       </div>
 
-      <AiInput setTripPlan={setTripPlan} />
+      <AiInput setTripPlan={setTripPlan} travelType={selectedTravelType} />
 
       {tripPlan && (
         <>

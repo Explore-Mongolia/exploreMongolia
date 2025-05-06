@@ -3,12 +3,15 @@
 import { useExperience } from "@/hooks/useExperience";
 import { useParams } from "next/navigation";
 import InlineEmojiRating from "./_components/EmojiRating";
+import { SkeletonExp } from "./_components/Skeleton";
+import { useRouter } from "next/navigation";
 
 export default function ExperienceList() {
   const { id } = useParams();
   const { data: experience, isLoading, error } = useExperience(id as string);
+  const router = useRouter();
 
-  if (isLoading) return <p className="text-center text-gray-500">Loading...</p>;
+  if (isLoading) return <SkeletonExp />;
   if (error)
     return (
       <p className="text-center text-red-500">Error loading experiences</p>
@@ -16,8 +19,6 @@ export default function ExperienceList() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6 text-center">Experience</h1>
-
       <div
         key={experience._id}
         className="border rounded-2xl overflow-hidden shadow-md"
@@ -31,6 +32,24 @@ export default function ExperienceList() {
         <div className="p-6">
           <h2 className="text-2xl font-semibold mb-2">{experience.name}</h2>
           <p className="text-gray-700 mb-4">{experience.description}</p>
+
+          {/* Creator Section */}
+          <div
+            className="flex items-center mb-6 cursor-pointer"
+            onClick={() => router.push(`/profile/${experience.user._id}`)}
+          >
+            <img
+              src={experience.user.profileImage || "/default-profile.png"}
+              alt={experience.user.name}
+              className="w-10 h-10 rounded-full object-cover mr-3"
+            />
+            <div>
+              <h3 className="font-medium text-gray-800">
+                {experience.user.name}
+              </h3>
+              <p className="text-sm text-gray-500">{experience.user.email}</p>
+            </div>
+          </div>
 
           <div className="mb-4 space-y-1 text-sm text-gray-600">
             <p>

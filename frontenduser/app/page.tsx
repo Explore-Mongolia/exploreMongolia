@@ -17,7 +17,10 @@ export default function Home() {
         <TripPlannerForm />
       </div>
       <TripSection />
-      <PostIcon />
+      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 md:left-4 md:translate-x-0 p-4 z-50">
+        {" "}
+        <PostIcon />
+      </div>
     </div>
   );
 }

@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
 import useTrips from "@/hooks/useTrips";
-import { Destination } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { Star } from "lucide-react";
+import Image from "next/image";
 
 export default function TripSection() {
   const { data: destinations, isLoading, error } = useTrips();
@@ -22,74 +22,56 @@ export default function TripSection() {
     );
 
   return (
-    <section id="Travel" className="py-16">
-      <div className="container mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-6">
-          Travel Destinations
-        </h2>
-        <p className="text-center text-lg text-gray-600 max-w-2xl mx-auto">
-          Explore amazing destinations across Mongolia, from the Gobi Desert to
-          Khuvsgul Lake.
-        </p>
+    <section id="Travel" className="py-16 px-4 max-w-7xl mx-auto">
+      <h2 className="text-3xl font-bold mb-8 text-center">Top Destinations</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {destinations?.map((dest: any) => (
+          <div
+            key={dest._id}
+            className="bg-white shadow-lg rounded-2xl overflow-hidden hover:shadow-xl transition-shadow cursor-pointer"
+            onClick={() => router.push(`/destination/${dest._id}`)}
+          >
+            <div className="relative w-full h-60">
+              <Image
+                src={dest.image}
+                alt={dest.name}
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div className="p-4">
+              <h3 className="text-xl font-semibold">{dest.name}</h3>
+              <p className="text-gray-600 mt-1 text-sm line-clamp-2">
+                {dest.description}
+              </p>
 
-        <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
-          {destinations?.map((destination: Destination) => {
-            const averageRating = destination.averageRating;
-
-            return (
-              <div
-                key={destination._id}
-                className="p-6 bg-white dark:bg-neutral-800 rounded-lg shadow cursor-pointer"
-                onClick={() => router.push(`/destination/${destination._id}`)}
-              >
-                <img
-                  src={destination.image}
-                  alt={destination.name}
-                  className="w-full h-48 object-cover rounded mb-4"
-                />
-                <h3 className="text-xl font-semibold mb-2">
-                  {destination.name}
-                </h3>
-
-                {/* ⭐ Rating */}
-                <div className="flex items-center gap-1 mb-2">
-                  {averageRating ? (
-                    <>
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          size={16}
-                          fill={i < Math.round(averageRating) ? "gold" : "none"}
-                          stroke="gold"
-                        />
-                      ))}
-                      <span className="text-sm text-gray-600 ml-2">
-                        {averageRating.toFixed(1)} / 5
-                      </span>
-                    </>
-                  ) : (
-                    <span className="text-sm text-gray-400 italic">
-                      No ratings yet
-                    </span>
-                  )}
-                </div>
-
-                <p className="text-gray-700 dark:text-gray-300 mb-2">
-                  {destination.description}
-                </p>
-                <p className="text-sm text-gray-500">
-                  Cost: <span className="font-bold">${destination.cost}</span>
-                </p>
-                <p className="text-sm text-gray-500">
-                  Vibes Available:{" "}
-                  <span className="italic">
-                    {destination.vibesAvailable.join(", ")}
-                  </span>
-                </p>
+              {/* Rating */}
+              <div className="flex items-center gap-1 mt-2">
+                <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                <span className="text-sm font-medium">
+                  {dest.averageRating.toFixed(1)}
+                </span>
               </div>
-            );
-          })}
-        </div>
+
+              {/* Company */}
+              <div className="mt-4 flex items-center gap-3">
+                <Image
+                  src={dest.company.profileImage}
+                  alt={dest.company.name}
+                  width={40}
+                  height={40}
+                  className="rounded-full object-cover"
+                />
+                <div>
+                  <p className="font-semibold text-sm">{dest.company.name}</p>
+                  <p className="text-xs text-gray-500 line-clamp-1">
+                    {dest.company.description}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );
