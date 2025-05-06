@@ -1,7 +1,12 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { IconMenu2, IconX } from "@tabler/icons-react";
-import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useMotionValueEvent,
+} from "framer-motion";
 import React, { useRef, useState } from "react";
 
 interface NavbarProps {
@@ -67,9 +72,9 @@ export const Navbar = ({ children, className }: NavbarProps) => {
         React.isValidElement(child)
           ? React.cloneElement(
               child as React.ReactElement<{ visible?: boolean }>,
-              { visible },
+              { visible }
             )
-          : child,
+          : child
       )}
     </motion.div>
   );
@@ -94,7 +99,7 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
       className={cn(
         "relative z-[60] mx-auto flex w-full max-w-7xl flex-row items-center justify-between px-4 py-2 lg:flex dark:bg-transparent",
         visible && "bg-white/80 dark:bg-neutral-950/80",
-        className,
+        className
       )}
     >
       {children}
@@ -110,7 +115,7 @@ export const NavItems = ({ items, className }: NavItemsProps) => {
       onMouseLeave={() => setHovered(null)}
       className={cn(
         "hidden flex-1 flex-row items-center justify-center gap-4 text-sm font-medium text-zinc-600 lg:flex",
-        className,
+        className
       )}
     >
       {items.map((item, idx) => (
@@ -146,7 +151,7 @@ export const MobileNav = ({ children, className, visible }: MobileNavProps) => {
       }}
       className={cn(
         "relative z-50 mx-auto flex w-full flex-col items-center justify-between lg:hidden",
-        className,
+        className
       )}
     >
       {children}
@@ -162,7 +167,7 @@ export const MobileNavHeader = ({
     <div
       className={cn(
         "flex w-full flex-row items-center justify-between px-4 py-2",
-        className,
+        className
       )}
     >
       {children}
@@ -185,7 +190,7 @@ export const MobileNavMenu = ({
           exit={{ opacity: 0, y: -20 }}
           className={cn(
             "absolute left-0 right-0 top-full z-50 flex w-full flex-col gap-4 bg-white px-4 py-8 shadow-lg dark:bg-neutral-950",
-            className,
+            className
           )}
         >
           {children}
@@ -205,7 +210,10 @@ export const MobileNavToggle = ({
   return isOpen ? (
     <IconX className="h-6 w-6 text-black dark:text-white" onClick={onClick} />
   ) : (
-    <IconMenu2 className="h-6 w-6 text-black dark:text-white" onClick={onClick} />
+    <IconMenu2
+      className="h-6 w-6 text-black dark:text-white"
+      onClick={onClick}
+    />
   );
 };
 
@@ -215,15 +223,11 @@ export const NavbarLogo = () => {
       href="#"
       className="relative z-20 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black dark:text-white"
     >
-      <img
-        src="https://assets.aceternity.com/logo-dark.png"
-        alt="logo"
-        width={30}
-        height={30}
-      />
+      <img src="/Logo.png" alt="logo" width={50} height={50} />
       <span className="font-medium">Explore Mongolia</span>
     </a>
   );
+  
 };
 
 export const NavbarButton = ({
@@ -240,12 +244,10 @@ export const NavbarButton = ({
     "px-4 py-2 rounded-md text-sm font-bold relative cursor-pointer transition duration-200 inline-block text-center";
 
   const variantStyles = {
-    primary:
-      "bg-white text-black shadow-md hover:-translate-y-0.5",
+    primary: "bg-white text-black shadow-md hover:-translate-y-0.5",
     secondary: "bg-transparent text-black dark:text-white",
     dark: "bg-black text-white shadow-md",
-    gradient:
-      "bg-gradient-to-b from-blue-500 to-blue-700 text-white shadow-md",
+    gradient: "bg-gradient-to-b from-blue-500 to-blue-700 text-white shadow-md",
   };
 
   return (
