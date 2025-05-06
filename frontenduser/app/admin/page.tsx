@@ -10,7 +10,7 @@ import {
   MobileNavHeader,
   MobileNavToggle,
   MobileNavMenu,
-} from "@/components/ui/resizable-navbar";
+} from "@/components/ui/resizable-navbarAdmin";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCompanies } from "@/hooks/useCompanies";
