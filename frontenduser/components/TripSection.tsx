@@ -1,13 +1,22 @@
 "use client";
-import React from "react";
+
+import React, { useState } from "react";
 import useTrips from "@/hooks/useTrips";
 import { useRouter } from "next/navigation";
-import { Star } from "lucide-react";
 import Image from "next/image";
+import { Star } from "lucide-react";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function TripSection() {
   const { data: destinations, isLoading, error } = useTrips();
   const router = useRouter();
+  const [filter, setFilter] = useState<"mostRated" | "lowestCost">("mostRated");
 
   if (isLoading)
     return (
@@ -21,11 +30,48 @@ export default function TripSection() {
       </p>
     );
 
+  const sortedDestinations = [...(destinations || [])].sort((a, b) => {
+    if (filter === "mostRated") {
+      return b.averageRating - a.averageRating;
+    } else {
+      return a.cost - b.cost;
+    }
+  });
+
+  const safeCost = (value: any) => {
+    if (!value) return Infinity;
+    const cleaned = String(value)
+      .replace(/[^0-9.]/g, "")
+      .trim();
+    const num = parseFloat(cleaned);
+    return isNaN(num) ? Infinity : num;
+  };
+
   return (
     <section id="Travel" className="py-16 px-4 max-w-7xl mx-auto">
-      <h2 className="text-3xl font-bold mb-8 text-center">Top Destinations</h2>
+      <div className="flex justify-between items-center mb-8">
+        <h2 className="text-3xl font-bold">Top Destinations</h2>
+
+        <Select
+          value={filter}
+          onValueChange={(value) => {
+            if (value === "mostRated" || value === "lowestCost") {
+              setFilter(value);
+            }
+          }}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="mostRated">Most Rated</SelectItem>
+            <SelectItem value="lowestCost">Lowest Cost</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {destinations?.map((dest: any) => (
+        {sortedDestinations.map((dest: any) => (
           <div
             key={dest._id}
             className="bg-white shadow-lg rounded-2xl overflow-hidden hover:shadow-xl transition-shadow cursor-pointer"
@@ -49,9 +95,14 @@ export default function TripSection() {
               <div className="flex items-center gap-1 mt-2">
                 <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
                 <span className="text-sm font-medium">
-                  {dest.averageRating.toFixed(1)}
+                  {isNaN(dest.averageRating)
+                    ? "N/A"
+                    : dest.averageRating.toFixed(1)}
                 </span>
               </div>
+
+              {/* Cost */}
+              <p className="text-sm text-gray-500 mt-1">${dest.cost}</p>
 
               {/* Company */}
               <div className="mt-4 flex items-center gap-3">

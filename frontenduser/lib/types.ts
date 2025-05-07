@@ -21,6 +21,7 @@ export interface TripPlan {
     images: string[];
     visitedPlaces: string[];
     reactionsCount: number;
+    createdAt: string;
     user: {
       profileImage: string;
       name: string;
