@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 import { SkeletonDes } from "./_components/Skeleton";
 import { Button } from "@/components/ui/button";
-
+import Map from "@/components/Map";
 
 export default function ExperienceList() {
   const { id } = useParams();
@@ -16,7 +16,7 @@ export default function ExperienceList() {
     ? useDestination(destinationId)
     : { data: null, isLoading: false, error: "Invalid destination ID" };
 
-  if (isLoading) return <SkeletonDes/>;
+  if (isLoading) return <SkeletonDes />;
   if (error)
     return (
       <p className="text-center text-red-500 mt-10">
@@ -53,7 +53,7 @@ export default function ExperienceList() {
           </a>
         </Button>
       </div>
-
+      <Map />
       <div>
         <h1 className="text-3xl font-bold text-gray-900">{destination.name}</h1>
         <p className="text-gray-700 mt-2">{destination.description}</p>
