@@ -7,6 +7,8 @@ import { UserProvider } from "@/lib/UserContext";
 import { Providers } from "./providers";
 import { Toaster } from "sonner";
 import AnimatedLayout from "@/components/AnimatedLayout";
+import "leaflet/dist/leaflet.css";  
+
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });

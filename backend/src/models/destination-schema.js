@@ -18,6 +18,17 @@ const destinationSchema = new Schema({
   averageRating: { type: Number, default: 0 },
 
   image: { type: String, required: true },
+
+  location: {
+    type: { type: String, enum: ["Point"], default: "Point" },
+    coordinates: {
+      type: [Number], 
+      required: true,
+    },
+  },
 });
+
+// Create a geospatial index for the coordinates
+destinationSchema.index({ location: "2dsphere" });
 
 export const DestinationModel = model("Destination", destinationSchema);

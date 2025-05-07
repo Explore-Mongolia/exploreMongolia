@@ -1,16 +1,29 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+const nextConfig = {
   images: {
     domains: [
       "res.cloudinary.com",
       "img.clerk.com",
-      "images.unsplash.com"
+      "images.unsplash.com",
+      "example.com"
     ],
   },
-  
-}
+  transpilePackages: ['leaflet', 'react-leaflet'],
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.(png|jpg|jpeg|gif)$/i,
+      use: [
+        {
+          loader: 'file-loader',
+          options: {
+            publicPath: '/_next',
+            name: 'static/media/[name].[hash].[ext]',
+          },
+        },
+      ],
+    });
 
-export default nextConfig;
+    return config;
+  }
+};
 
-
+module.exports = nextConfig;
