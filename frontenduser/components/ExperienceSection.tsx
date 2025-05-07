@@ -3,7 +3,7 @@
 import { useExperiences } from "@/hooks/useExperiences";
 import { Experience } from "@/lib/types";
 import { useRouter } from "next/navigation";
-
+import Image from "next/image";
 
 export default function ExperienceList() {
   const { data: experiences, isLoading, error } = useExperiences();
@@ -36,20 +36,23 @@ export default function ExperienceList() {
               onClick={() => router.push(`/experience/${experience._id}`)}
               className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow overflow-hidden cursor-pointer flex flex-col justify-between"
             >
-              {/* Image */}
               {experience.images.length > 0 ? (
-                <img
-                  src={experience.images[0]}
-                  alt={experience.name}
-                  className="w-full h-48 object-cover"
-                />
+                <div className="relative w-full h-48">
+                  <Image
+                    src={experience.images[0]}
+                    alt={experience.name}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    priority={true}
+                  />
+                </div>
               ) : (
                 <div className="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-400">
                   No Image
                 </div>
               )}
 
-              {/* Content */}
               <div className="p-4 flex flex-col flex-1">
                 <h2 className="text-xl font-semibold text-blue-600 mb-2">
                   {experience.name}
@@ -66,22 +69,23 @@ export default function ExperienceList() {
                   </span>
                 </p>
 
-                {/* Spacer to push reactions + creator to bottom */}
                 <div className="flex-grow" />
 
-                {/* Reactions just above creator */}
                 <div className="flex items-center gap-1 text-sm text-gray-600 mb-2">
                   <span className="text-lg">💬</span>
                   <span>{experience.reactionsCount} reactions</span>
                 </div>
 
-                {/* Created by at the bottom */}
                 <div className="flex items-center border-t pt-2 border-gray-100">
-                  <img
-                    src={experience.user.profileImage}
-                    alt={experience.user.name}
-                    className="w-8 h-8 rounded-full mr-3"
-                  />
+                  <div className="relative w-8 h-8 mr-3">
+                    <Image
+                      src={experience.user.profileImage}
+                      alt={experience.user.name}
+                      fill
+                      className="rounded-full object-cover"
+                      sizes="32px"
+                    />
+                  </div>
                   <h4 className="text-sm font-medium text-gray-800">
                     {experience.user.name}
                   </h4>

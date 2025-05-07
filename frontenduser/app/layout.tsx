@@ -5,17 +5,11 @@ import { ClerkProvider } from "@clerk/nextjs";
 import SyncUserToDB from "@/components/SyncUserToDB";
 import { UserProvider } from "@/lib/UserContext";
 import { Providers } from "./providers";
-import { Toaster, toast } from "sonner";
+import { Toaster } from "sonner";
+import AnimatedLayout from "@/components/AnimatedLayout";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
+const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Explore Mongolia",
@@ -29,15 +23,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ClerkProvider>
           <UserProvider>
             <SyncUserToDB />
             <Toaster
               position="top-center"
-              richColors 
+              richColors
               toastOptions={{
                 classNames: {
                   toast: "rounded-xl shadow-lg px-4 py-3 font-medium",
@@ -51,8 +43,9 @@ export default function RootLayout({
                 duration: 3000,
               }}
             />
-
-            <Providers>{children}</Providers>
+            <Providers>
+              <AnimatedLayout>{children}</AnimatedLayout>
+            </Providers>
           </UserProvider>
         </ClerkProvider>
       </body>
