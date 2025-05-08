@@ -79,8 +79,10 @@ export default function TripSection() {
           >
             <div className="relative w-full h-60">
               <Image
-                src={dest.image}
-                alt={dest.name}
+                src={
+                  dest.image?.startsWith("http") ? dest.image : "/fallback.jpg"
+                }
+                alt={dest.name || "Destination Image"}
                 fill
                 className="object-cover"
               />

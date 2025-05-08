@@ -5,8 +5,7 @@ import RateDestinationDialog from "./_components/RateDestination";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import { SkeletonDes } from "./_components/Skeleton";
-import { Button } from "@/components/ui/button";
-
+import MapDialog from "./_components/MapDialog";
 
 export default function ExperienceList() {
   const { id } = useParams();
@@ -16,7 +15,7 @@ export default function ExperienceList() {
     ? useDestination(destinationId)
     : { data: null, isLoading: false, error: "Invalid destination ID" };
 
-  if (isLoading) return <SkeletonDes/>;
+  if (isLoading) return <SkeletonDes />;
   if (error)
     return (
       <p className="text-center text-red-500 mt-10">
@@ -43,15 +42,11 @@ export default function ExperienceList() {
       </div>
       <div className="mt-4">
         <RateDestinationDialog destinationId={destination._id} />
-        <Button className="ml-4">
-          <a
-            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-              destination?.name || ""
-            )}`}
-          >
-            See on Map
-          </a>
-        </Button>
+        <MapDialog
+          lng={destination.location?.coordinates?.[0] ?? 106.9155}
+          lat={destination.location?.coordinates?.[1] ?? 47.8864}
+          destinationName={destination.name}
+        />
       </div>
 
       <div>

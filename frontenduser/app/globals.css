@@ -112,6 +112,18 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+.mapboxgl-canvas-container {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.mapboxgl-popup-content {
+  background: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
