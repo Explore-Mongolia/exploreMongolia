@@ -88,17 +88,23 @@ export default function ExperienceList() {
               className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow overflow-hidden cursor-pointer flex flex-col justify-between group"
             >
               {experience.images.length > 0 ? (
-                <div className="relative w-full h-64 overflow-hidden">
-                  <Image
-                    src={experience.images[0]}
-                    alt={experience.name}
-                    fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    priority
-                  />
-                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10" />
+                <div className="relative w-full h-60 overflow-hidden group">
+                  {/* Scale wrapper */}
+                  <div className="relative w-full h-full transition-transform duration-300 group-hover:scale-105">
+                    <Image
+                      src={experience.images[0]}
+                      alt={experience.name}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      priority
+                    />
+                  </div>
 
+                  {/* Dark overlay */}
+                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none" />
+
+                  {/* Info overlay */}
                   <div className="absolute bottom-0 w-full px-4 py-3 bg-gradient-to-t from-black/60 to-transparent text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
                     <div className="flex justify-between text-sm font-medium">
                       <span>💬 {experience.reactionsCount} reactions</span>
@@ -109,7 +115,7 @@ export default function ExperienceList() {
                   </div>
                 </div>
               ) : (
-                <div className="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-400">
+                <div className="w-full h-60 bg-gray-200 flex items-center justify-center text-gray-400">
                   No Image
                 </div>
               )}

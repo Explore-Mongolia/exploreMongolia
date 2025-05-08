@@ -1,4 +1,4 @@
-// components/PostIcon.tsx
+
 "use client";
 
 import { useState } from "react";
