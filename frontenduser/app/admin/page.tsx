@@ -17,10 +17,16 @@ import { useCompanies } from "@/hooks/useCompanies";
 import { sendRequest } from "@/lib/SendRequest";
 
 interface Company {
-  id: number;
+  id: string;
   name: string;
   description: string;
-  profileImage: string;
+  profileImage?: string;
+
+  contact: {
+    phoneNumber: string;
+    email: string;
+    website?: string;
+  };
 }
 
 interface Destination {
@@ -161,6 +167,15 @@ const DummyContent = ({
   isLoading: boolean;
   error: string | null;
 }) => {
+  const [copied, setCopied] = useState<string | null>(null);
+
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(text);
+      setTimeout(() => setCopied(null), 2000); 
+    });
+  };
+
   return (
     <div className="container mx-auto p-8 pt-24">
       {isLoading && <p>Loading...</p>}
@@ -172,20 +187,49 @@ const DummyContent = ({
             companies.map((company) => (
               <div
                 key={company.id}
-                className="md:col-span-1 h-60 bg-neutral-100 dark:bg-neutral-800 flex flex-col p-4 rounded-lg shadow-sm relative"
+                className="md:col-span-1 h-auto bg-neutral-100 dark:bg-neutral-800 flex flex-col p-4 rounded-lg shadow-sm relative"
               >
-                {company.profileImage && (
-                  <img
-                    src={company.profileImage}
-                    alt={`${company.name} logo`}
-                    className="w-12 h-12 object-cover rounded-full absolute top-4 left-4 border border-neutral-300"
-                  />
-                )}
+                <img
+                  src={company.profileImage || "/default-avatar.png"}
+                  alt={`${company.name} logo`}
+                  className="w-16 h-16 object-cover rounded-full absolute top-4 left-6 border border-neutral-300"
+                />
                 <div className="mt-16 px-2">
-                  <h2 className="text-xl font-medium">Company: {company.name}</h2>
-                  <p className="text-md text-neutral-600 dark:text-neutral-300 line-clamp-2">
-                    Description: {company.description}
+                  <h2 className="text-xl font-medium">{company.name}</h2>
+                  <p className="text-sm text-neutral-600 dark:text-neutral-300 line-clamp-2">
+                    {company.description}
                   </p>
+                  <div className="mt-2 text-sm text-neutral-700 dark:text-neutral-300">
+
+                    <div className="flex justify-between items-center">
+                      <p>
+                        <strong>Email:</strong> 
+                        <span>{company.contact?.email || "N/A"}</span>
+                      </p>
+                      {company.contact?.email && (
+                        <button
+                          onClick={() => handleCopy(company.contact.email)}
+                          className="bg-neutral-300 dark:bg-neutral-700 px-2 py-1 rounded-lg text-sm"
+                        >
+                          {copied === company.contact.email ? "Copied!" : "Copy"}
+                        </button>
+                      )}
+                    </div>
+                    <div className="flex justify-between items-center mt-2">
+                      <p>
+                        <strong>Phone:</strong> 
+                        <span>{company.contact?.phoneNumber || "N/A"}</span>
+                      </p>
+                      {company.contact?.phoneNumber && (
+                        <button
+                          onClick={() => handleCopy(company.contact.phoneNumber)}
+                          className="bg-neutral-300 dark:bg-neutral-700 px-2 py-1 rounded-lg text-sm"
+                        >
+                          {copied === company.contact.phoneNumber ? "Copied!" : "Copy"}
+                        </button>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             ))
@@ -252,4 +296,3 @@ const DestinationContent = ({
     </div>
   );
 };
-
