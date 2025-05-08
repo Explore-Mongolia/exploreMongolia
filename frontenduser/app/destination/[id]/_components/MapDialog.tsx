@@ -2,7 +2,12 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import dynamic from "next/dynamic";
 
 const Map = dynamic(() => import("@/components/Map"), {
@@ -14,14 +19,17 @@ const Map = dynamic(() => import("@/components/Map"), {
   ),
 });
 
-// Define the MapDialogProps interface
 interface MapDialogProps {
   lng: number;
   lat: number;
   destinationName: string;
 }
 
-export default function MapDialog({ lng, lat, destinationName }: MapDialogProps) {
+export default function MapDialog({
+  lng,
+  lat,
+  destinationName,
+}: MapDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -29,9 +37,15 @@ export default function MapDialog({ lng, lat, destinationName }: MapDialogProps)
       <DialogTrigger asChild>
         <Button className="ml-4">See on Map</Button>
       </DialogTrigger>
-      <DialogContent className="max-w-3xl w-full h-[500px] p-0">
-        <div className="w-full h-full">
-          {isOpen && <Map lng={lng} lat={lat} destinationName={destinationName} />}
+      <DialogContent className="max-w-3xl w-full p-0 ">
+        <DialogTitle className="sr-only">{destinationName}</DialogTitle>
+        <div className="relative w-full h-[500px]">
+          <div className="absolute top-2 left-4 z-10 text-white bg-black/50 px-2 py-1 rounded">
+            {destinationName}
+          </div>
+          {isOpen && (
+            <Map lng={lng} lat={lat} destinationName={destinationName} />
+          )}
         </div>
       </DialogContent>
     </Dialog>
