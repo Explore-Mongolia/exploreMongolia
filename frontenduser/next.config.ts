@@ -4,7 +4,9 @@ const nextConfig = {
       "res.cloudinary.com",
       "img.clerk.com",
       "images.unsplash.com",
-      "example.com"
+      "example.com",
+      "www.escapetomongolia.com",
+      "mongoliaretreats.com",
     ],
   },
   transpilePackages: ['leaflet', 'react-leaflet'],

@@ -11,12 +11,13 @@ const CreateDestination = () => {
   const [cost, setCost] = useState("");
   const [vibesAvailable, setVibesAvailable] = useState<string[]>([]);
   const [image, setImage] = useState<string>("");
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
   const [companies, setCompanies] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [currency, setCurrency] = useState('$');
-
 
   useEffect(() => {
     const fetchCompanies = async () => {
@@ -45,6 +46,10 @@ const CreateDestination = () => {
         cost,
         vibesAvailable,
         image,
+        location: {
+          type: "Point",
+          coordinates: [parseFloat(longitude), parseFloat(latitude)],
+        },
       });
 
       if (response.status === 200 || response.status === 201) {
@@ -55,6 +60,8 @@ const CreateDestination = () => {
         setCost("");
         setVibesAvailable([]);
         setImage("");
+        setLatitude("");
+        setLongitude("");
         window.location.reload();
       }
     } catch (err) {
@@ -88,9 +95,7 @@ const CreateDestination = () => {
             required
             className="w-full border rounded-md px-3 py-2 mt-1 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
           >
-            <option value="" disabled>
-              Select a company...
-            </option>
+            <option value="" disabled>Select a company...</option>
             {companies.map((comp) => (
               <option key={comp._id} value={comp._id}>
                 {comp.name}
@@ -109,6 +114,7 @@ const CreateDestination = () => {
             className="w-full border rounded-md px-3 py-2 mt-1 resize-none text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
           />
         </div>
+
         <div>
           <label className="block text-sm font-semibold text-gray-900">Cost</label>
           <div className="flex items-center space-x-2 mt-1">
@@ -140,7 +146,6 @@ const CreateDestination = () => {
             </div>
           </div>
         </div>
-
 
         <div>
           <label className="block text-sm font-semibold text-gray-900">Vibes Available</label>
@@ -179,6 +184,30 @@ const CreateDestination = () => {
               </div>
             )}
           </CldUploadWidget>
+        </div>
+
+        <div>
+          <label className="block text-sm font-semibold text-gray-900">Location Coordinates *</label>
+          <div className="flex space-x-4 mt-1">
+            <input
+              type="number"
+              step="any"
+              placeholder="Latitude"
+              value={latitude}
+              onChange={(e) => setLatitude(e.target.value)}
+              required
+              className="w-1/2 border rounded-md px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <input
+              type="number"
+              step="any"
+              placeholder="Longitude"
+              value={longitude}
+              onChange={(e) => setLongitude(e.target.value)}
+              required
+              className="w-1/2 border rounded-md px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
         </div>
 
         <div>
