@@ -38,18 +38,9 @@ export default function TripSection() {
     }
   });
 
-  const safeCost = (value: any) => {
-    if (!value) return Infinity;
-    const cleaned = String(value)
-      .replace(/[^0-9.]/g, "")
-      .trim();
-    const num = parseFloat(cleaned);
-    return isNaN(num) ? Infinity : num;
-  };
-
   return (
-    <section id="Travel" className="py-16 px-4 max-w-7xl mx-auto">
-      <div className="flex justify-between items-center mb-8">
+    <section className="max-w-6xl mx-auto px-4 py-8">
+      <div className="flex justify-between items-center mb-6">
         <h2 className="text-3xl font-bold">Top Destinations</h2>
 
         <Select
@@ -74,43 +65,53 @@ export default function TripSection() {
         {sortedDestinations.map((dest: any) => (
           <div
             key={dest._id}
-            className="bg-white shadow-lg rounded-2xl overflow-hidden hover:shadow-xl transition-shadow cursor-pointer"
+            className="group bg-white shadow-lg rounded-2xl overflow-hidden hover:shadow-xl transition-shadow cursor-pointer flex flex-col"
             onClick={() => router.push(`/destination/${dest._id}`)}
           >
-            <div className="relative w-full h-60">
-              <Image
-                src={
-                  dest.image?.startsWith("http") ? dest.image : "/fallback.jpg"
-                }
-                alt={dest.name || "Destination Image"}
-                fill
-                className="object-cover"
-              />
+            <div className="relative w-full h-60 overflow-hidden group">
+              {/* Wrap Image in scale container */}
+              <div className="relative w-full h-full transition-transform duration-300 group-hover:scale-105">
+                <Image
+                  src={
+                    dest.image?.startsWith("http")
+                      ? dest.image
+                      : "/fallback.jpg"
+                  }
+                  alt={dest.name || "Destination Image"}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
+              </div>
+
+              <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none" />
+
+              <div className="absolute bottom-0 w-full px-4 py-3 bg-gradient-to-t from-black/60 to-transparent text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-1">
+                    <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                    <span className="text-sm font-medium">
+                      {isNaN(dest.averageRating)
+                        ? "N/A"
+                        : dest.averageRating.toFixed(1)}
+                    </span>
+                  </div>
+                  <span className="text-sm font-medium">${dest.cost}</span>
+                </div>
+              </div>
             </div>
-            <div className="p-4">
+
+            <div className="p-4 flex flex-col flex-grow">
               <h3 className="text-xl font-semibold">{dest.name}</h3>
               <p className="text-gray-600 mt-1 text-sm line-clamp-2">
                 {dest.description}
               </p>
 
-              {/* Rating */}
-              <div className="flex items-center gap-1 mt-2">
-                <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                <span className="text-sm font-medium">
-                  {isNaN(dest.averageRating)
-                    ? "N/A"
-                    : dest.averageRating.toFixed(1)}
-                </span>
-              </div>
-
-              {/* Cost */}
-              <p className="text-sm text-gray-500 mt-1">${dest.cost}</p>
-
-              {/* Company */}
+              {/* Company info at bottom of card */}
               <div className="mt-4 flex items-center gap-3">
                 <Image
-                  src={dest.company.profileImage}
-                  alt={dest.company.name}
+                  src={dest.company?.profileImage}
+                  alt={dest.company?.name}
                   width={40}
                   height={40}
                   className="rounded-full object-cover"
