@@ -67,11 +67,11 @@ const PostExperienceDialog: React.FC<PostExperienceDialogProps> = ({ open, onClo
     setIsSubmitting(true);
 
     try {
-      const response = await sendRequest.post("/experience/create", {
+      const response = await sendRequest.post(`/experience/create/?userId=${mongoUserId}`, {
         ...data,
-        user: mongoUserId,
         images,
       });
+      
 
       if (response.status === 201) {
         toast.success("Experience submitted successfully");

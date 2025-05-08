@@ -3,7 +3,7 @@ import { Schema, model } from "mongoose";
 
 
 const tripPlanSchema = new Schema({
-  user: { type: Schema.Types.ObjectId, ref: "User", required: true }, // Reference to User model
+  user: { type: Schema.Types.ObjectId, ref: "User", required: true }, 
   title: { type: String, default: "My Trip" },
   destinations: [{ type: String }],
   plan: [
