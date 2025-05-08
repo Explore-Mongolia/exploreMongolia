@@ -16,26 +16,27 @@ import { useRouter } from "next/navigation";
 import { useCompanies } from "@/hooks/useCompanies";
 import { sendRequest } from "@/lib/SendRequest";
 
-interface Company {
+export interface Destination {
+  _id: string;
+  name: string;
+  description: string;
+  cost: number;
+  vibesAvailable: string[];
+  image: string;
+  averageRating?: number;
+}
+
+export interface Company {
   id: string;
   name: string;
   description: string;
   profileImage?: string;
 
-  contact: {
+  contact?: {
     phoneNumber: string;
     email: string;
     website?: string;
   };
-}
-
-interface Destination {
-  _id: string;
-  name: string;
-  description: string;
-  cost: string;
-  vibesAvailable: string[];
-  image: string;
 }
 
 export default function NavbarDemo() {
@@ -49,11 +50,18 @@ export default function NavbarDemo() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [selectedSection, setSelectedSection] = useState<string>("Companies");
 
-  const { data: companies = [], isLoading, error } = useCompanies();
+  const { data: rawCompanies = [], isLoading, error } = useCompanies();
+
+  const companies = rawCompanies.map((c) => ({
+    ...c,
+    id: String(c.id), // Convert id to string
+  }));
 
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [loadingDestinations, setLoadingDestinations] = useState(false);
-  const [destinationsError, setDestinationsError] = useState<string | null>(null);
+  const [destinationsError, setDestinationsError] = useState<string | null>(
+    null
+  );
 
   const fetchDestinations = async () => {
     setLoadingDestinations(true);
@@ -68,13 +76,16 @@ export default function NavbarDemo() {
     }
   };
 
-  const handleNavItemClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+  const handleNavItemClick = (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+  ) => {
     const target = e.currentTarget;
-    const name = target.querySelector('span')?.textContent || target.textContent;
+    const name =
+      target.querySelector("span")?.textContent || target.textContent;
     if (!name) return;
-  
+
     setSelectedSection(name);
-  
+
     if (name === "Destinations") {
       fetchDestinations();
     }
@@ -87,10 +98,16 @@ export default function NavbarDemo() {
           <NavbarLogo />
           <NavItems items={navItems} onItemClick={handleNavItemClick} />
           <div className="flex items-center gap-4">
-            <NavbarButton variant="secondary" onClick={() => router.push("/admin/createDestination")}>
+            <NavbarButton
+              variant="secondary"
+              onClick={() => router.push("/admin/createDestination")}
+            >
               Create Destination
             </NavbarButton>
-            <NavbarButton variant="primary" onClick={() => router.push("/admin/createCompany")}>
+            <NavbarButton
+              variant="primary"
+              onClick={() => router.push("/admin/createCompany")}
+            >
               Create Company
             </NavbarButton>
           </div>
@@ -105,7 +122,10 @@ export default function NavbarDemo() {
             />
           </MobileNavHeader>
 
-          <MobileNavMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)}>
+          <MobileNavMenu
+            isOpen={isMobileMenuOpen}
+            onClose={() => setIsMobileMenuOpen(false)}
+          >
             {navItems.map((item, idx) => (
               <a
                 key={`mobile-link-${idx}`}
@@ -152,7 +172,11 @@ export default function NavbarDemo() {
           error={destinationsError}
         />
       ) : (
-        <DummyContent companies={companies} isLoading={isLoading} error={error?.message || null} />
+        <DummyContent
+          companies={companies}
+          isLoading={isLoading}
+          error={error?.message || null}
+        />
       )}
     </div>
   );
@@ -172,7 +196,7 @@ const DummyContent = ({
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text).then(() => {
       setCopied(text);
-      setTimeout(() => setCopied(null), 2000); 
+      setTimeout(() => setCopied(null), 2000);
     });
   };
 
@@ -200,32 +224,40 @@ const DummyContent = ({
                     {company.description}
                   </p>
                   <div className="mt-2 text-sm text-neutral-700 dark:text-neutral-300">
-
                     <div className="flex justify-between items-center">
                       <p>
-                        <strong>Email:</strong> 
+                        <strong>Email:</strong>
                         <span>{company.contact?.email || "N/A"}</span>
                       </p>
                       {company.contact?.email && (
                         <button
-                          onClick={() => handleCopy(company.contact.email)}
+                          onClick={() => {
+                            if (company.contact?.email)
+                              handleCopy(company.contact.email);
+                          }}
                           className="bg-neutral-300 dark:bg-neutral-700 px-2 py-1 rounded-lg text-sm"
                         >
-                          {copied === company.contact.email ? "Copied!" : "Copy"}
+                          {copied === company.contact.email
+                            ? "Copied!"
+                            : "Copy"}
                         </button>
                       )}
                     </div>
                     <div className="flex justify-between items-center mt-2">
                       <p>
-                        <strong>Phone:</strong> 
+                        <strong>Phone:</strong>
                         <span>{company.contact?.phoneNumber || "N/A"}</span>
                       </p>
                       {company.contact?.phoneNumber && (
                         <button
-                          onClick={() => handleCopy(company.contact.phoneNumber)}
+                          onClick={() =>
+                            company.contact?.phoneNumber && handleCopy(company.contact.phoneNumber)
+                          }
                           className="bg-neutral-300 dark:bg-neutral-700 px-2 py-1 rounded-lg text-sm"
                         >
-                          {copied === company.contact.phoneNumber ? "Copied!" : "Copy"}
+                          {copied === company.contact.phoneNumber
+                            ? "Copied!"
+                            : "Copy"}
                         </button>
                       )}
                     </div>
@@ -234,7 +266,9 @@ const DummyContent = ({
               </div>
             ))
           ) : (
-            <p className="text-center col-span-full text-neutral-500">No companies found.</p>
+            <p className="text-center col-span-full text-neutral-500">
+              No companies found.
+            </p>
           )}
         </div>
       )}
@@ -289,7 +323,9 @@ const DestinationContent = ({
               </div>
             ))
           ) : (
-            <p className="text-center col-span-full text-neutral-500">No destinations found.</p>
+            <p className="text-center col-span-full text-neutral-500">
+              No destinations found.
+            </p>
           )}
         </div>
       )}

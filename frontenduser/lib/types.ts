@@ -40,10 +40,16 @@ export interface TripPlan {
   
 
   
-export interface Company {
-  id: number;
-  name: string;
-  description: string;
-  profileImage: string;
-}
+  export interface Company {
+    id: string;
+    name: string;
+    description: string;
+    profileImage?: string;
+  
+    contact?: {
+      phoneNumber: string;
+      email: string;
+      website?: string;
+    };
+  }
 
