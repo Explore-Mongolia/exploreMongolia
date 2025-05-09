@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
       "example.com",
       "www.escapetomongolia.com",
       "mongoliaretreats.com",
+      "www.globalnationalparks.com"
     ],
   },
   transpilePackages: ['leaflet', 'react-leaflet'],

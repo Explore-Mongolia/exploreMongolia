@@ -4,15 +4,23 @@ import { useUser } from "@clerk/nextjs";
 import { useEffect } from "react";
 import { sendRequest } from "@/lib/SendRequest";
 import { useUserStore } from "@/store/userStore";
+import { useRouter } from "next/navigation";
 
 export default function SyncUserToDB() {
   const { user, isSignedIn, isLoaded } = useUser();
   const { setMongoUserId } = useUserStore();
+  const router = useRouter();
 
   useEffect(() => {
     const syncUser = async () => {
       if (isSignedIn && user && isLoaded) {
         const role = user.publicMetadata?.role;
+
+        if (role === "admin") {
+          console.log("Admin detected. No need to sync to DB.");
+          router.push("/admin"); 
+        }
+        
 
 
         if (role !== "admin") {

@@ -22,11 +22,8 @@ export default function ProfilePage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      {/* Profile Header */}
       <div className="bg-white rounded-xl shadow-md overflow-hidden mb-8">
-        <div className="relative h-48 bg-gradient-to-r from-blue-500 to-purple-600">
-          {/* Cover photo placeholder */}
-        </div>
+        <div className="relative h-48 bg-gradient-to-r from-blue-500 to-purple-600"></div>
 
         <div className="px-6 pb-6 relative">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between -mt-16">

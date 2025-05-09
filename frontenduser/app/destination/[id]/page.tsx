@@ -6,10 +6,15 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 import { SkeletonDes } from "./_components/Skeleton";
 import MapDialog from "./_components/MapDialog";
+import { useRouter } from "next/navigation";
+import { useUserStore } from "@/store/userStore";
 
 export default function ExperienceList() {
   const { id } = useParams();
   const destinationId = Array.isArray(id) ? id[0] : id;
+  const router = useRouter();
+  const { mongoUserId } = useUserStore();
+  const userId = mongoUserId;
 
   const { data, isLoading, error } = destinationId
     ? useDestination(destinationId)
@@ -25,47 +30,75 @@ export default function ExperienceList() {
 
   const destination = data?.destination;
 
+  const hasRated = destination.ratings?.some(
+    (r: { user: string }) => r.user === userId
+  );
+  const userRating = destination.ratings?.find(
+    (r: { user: string }) => r.user === userId
+  )?.rating;
+
   if (!destination)
     return <p className="text-center mt-10">No destination found</p>;
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded-xl shadow-md space-y-6 mt-10">
-      <div className="relative w-full h-64 rounded-lg overflow-hidden">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 space-y-10">
+      <div className="relative w-full h-72 rounded-2xl overflow-hidden shadow-md">
         <Image
           src={destination.image}
           alt={destination.name}
           fill
           className="object-cover"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 50vw"
+          sizes="100vw"
           priority
         />
       </div>
-      <div className="mt-4">
-        <RateDestinationDialog destinationId={destination._id} />
+
+      {/* Destination Details */}
+      <div className="space-y-4">
+        <h1 className="text-4xl font-bold text-gray-900">{destination.name}</h1>
+        <p className="text-gray-700 text-base leading-relaxed">
+          {destination.description}
+        </p>
+        <p className="text-lg font-medium text-green-600">
+          Cost: ${destination.cost}
+        </p>
+      </div>
+      <div className="flex gap-4 flex-wrap">
+        <RateDestinationDialog
+          destinationId={destination._id}
+          alreadyRated={hasRated}
+          initialRating={userRating}
+        />
+
         <MapDialog
           lng={destination.location?.coordinates?.[0] ?? 106.9155}
           lat={destination.location?.coordinates?.[1] ?? 47.8864}
           destinationName={destination.name}
         />
       </div>
-
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">{destination.name}</h1>
-        <p className="text-gray-700 mt-2">{destination.description}</p>
-        <p className="text-lg font-semibold text-green-600 mt-4">
-          Cost: {destination.cost}
-        </p>
-      </div>
-
-      <div>
-        <h2 className="text-xl font-semibold text-gray-800 mb-2">
+      <div
+        className="bg-white p-6 rounded-2xl shadow-md cursor-pointer transition hover:shadow-lg"
+        onClick={() => router.push(`/company/${destination.company._id}`)}
+      >
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
           Company Info
         </h2>
-        <div className="space-y-1 text-gray-700">
-          <p>
-            <span className="font-medium">Name:</span>{" "}
-            {destination.company.name}
-          </p>
+        <div className="flex items-center space-x-4 mb-4">
+          <Image
+            src={destination.company?.profileImage}
+            alt={destination.company?.name}
+            width={64}
+            height={64}
+            className="rounded-full object-cover border border-gray-300"
+          />
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900">
+              {destination.company.name}
+            </h3>
+            <p className="text-sm text-gray-500">Trusted travel partner</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 text-sm text-gray-700">
           <p>
             <span className="font-medium">Email:</span>{" "}
             {destination.company.contact.email}
@@ -76,13 +109,19 @@ export default function ExperienceList() {
           </p>
           <p>
             <span className="font-medium">Website:</span>{" "}
-            {destination.company.contact.website}
+            <a
+              href={destination.company.contact.website}
+              className="text-blue-600 hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {destination.company.contact.website}
+            </a>
           </p>
         </div>
       </div>
-
       <div>
-        <h2 className="text-xl font-semibold text-gray-800 mb-2">Vibes</h2>
+        <h2 className="text-2xl font-semibold text-gray-800 mb-2">Vibes</h2>
         <div className="flex flex-wrap gap-2">
           {destination.vibesAvailable.map((vibe: string) => (
             <span
