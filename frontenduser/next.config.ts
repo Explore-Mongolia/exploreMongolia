@@ -6,7 +6,8 @@ const nextConfig = {
       "images.unsplash.com",
       "example.com",
        "www.escapetomongolia.com",
-       "mongoliaretreats.com"
+       "mongoliaretreats.com",
+       "www.globalnationalparks.com"
     ],
   },
   transpilePackages: ['leaflet', 'react-leaflet'],

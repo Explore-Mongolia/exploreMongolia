@@ -165,7 +165,7 @@ const handleDownloadPDF = async () => {
           </button>
           <button
             onClick={handleSaveToAccount}
-            className="bg-green-600 text-white px-4 py-2 rounded-xl cursor-pointer hover:bg-green-700 transition"
+            className="bg-green-600 ml-3 text-white px-4 py-2 rounded-xl cursor-pointer hover:bg-green-700 transition"
           >
             Save to Account
           </button>
