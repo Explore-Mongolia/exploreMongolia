@@ -4,7 +4,6 @@ import ExperienceList from "@/components/ExperienceSection";
 import TripSection from "@/components/TripSection";
 import PostIcon from "@/components/PostIcon";
 import Hero from "@/components/Hero";
-import 'leaflet/dist/leaflet.css';
 
 export default function Home() {
   return (
