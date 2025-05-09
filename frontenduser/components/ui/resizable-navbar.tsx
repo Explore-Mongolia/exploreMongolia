@@ -97,10 +97,12 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
         damping: 50,
       }}
       className={cn(
-        "relative z-[60] mx-auto flex w-full max-w-7xl flex-row items-center justify-between px-4 py-2 lg:flex dark:bg-transparent",
+        "relative z-[60] mx-auto w-full max-w-7xl items-center justify-between px-4 py-2",
+        "hidden lg:flex", 
         visible && "bg-white/80 dark:bg-neutral-950/80",
         className
       )}
+      
     >
       {children}
     </motion.div>
@@ -223,7 +225,12 @@ export const NavbarLogo = () => {
       href="#"
       className="relative z-20 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black dark:text-white"
     >
-      <img src="/Logo.png" alt="logo" width={50} height={50} />
+       <img
+        src="https://assets.aceternity.com/logo-dark.png"
+        alt="logo"
+        width={30}
+        height={30}
+      />
       <span className="font-medium">Explore Mongolia</span>
     </a>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import HomeSection from "@/components/HomeSection";
 import ExperienceSection from "@/components/ExperienceSection";
@@ -61,7 +61,7 @@ export function NavbarDemo() {
                 setActiveSection(key);
               },
             }))}
-            className="cursor-pointer" 
+            className="cursor-pointer"
           />
 
           <div className="flex items-center gap-4">
@@ -118,8 +118,11 @@ export function NavbarDemo() {
                   </NavbarButton>
                 </SignUpButton>
               </SignedOut>
+
               <SignedIn>
-                <div className="w-full flex justify-center"></div>
+                <div className="w-full flex justify-center">
+                  <UserButton afterSignOutUrl="/" />
+                </div>
               </SignedIn>
             </div>
           </MobileNavMenu>
