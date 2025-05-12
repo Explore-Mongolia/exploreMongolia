@@ -8,6 +8,8 @@ import { TripPlan } from "@/lib/types";
 import { sendRequest } from "@/lib/SendRequest";
 import { useUserStore } from "@/store/userStore";
 import { toast } from "sonner";
+import MapDialog from "@/app/destination/[id]/_components/MapDialog";
+import RouteMap from "./RouteMap";
 
 const travelTypes = [
   "Nature & Scenery",
@@ -25,39 +27,38 @@ const TripPlannerForm = () => {
   const userId = useUserStore((state) => state.mongoUserId);
   const [isDownloading, setIsDownloading] = useState(false);
 
-const handleDownloadPDF = async () => {
-  if (!tripRef.current) {
-    toast.error("Trip plan is not ready to download.");
-    return;
-  }
+  const handleDownloadPDF = async () => {
+    if (!tripRef.current) {
+      toast.error("Trip plan is not ready to download.");
+      return;
+    }
 
-  try {
-    setIsDownloading(true); 
+    try {
+      setIsDownloading(true);
 
-    const canvas = await html2canvas(tripRef.current, {
-      scale: 2,
-      useCORS: true,
-      backgroundColor: "#ffffff",
-    });
+      const canvas = await html2canvas(tripRef.current, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+      });
 
-    const imgData = canvas.toDataURL("image/png");
-    const pdf = new jsPDF("p", "mm", "a4");
-    const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
-    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save("trip-plan.pdf");
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save("trip-plan.pdf");
 
-    toast.success("Trip PDF downloaded successfully!");
-  } catch (err) {
-    console.error("PDF download error:", err);
-    toast.error("Failed to download PDF. Please try again.");
-  } finally {
-    setIsDownloading(false); // reset loading
-  }
-};
-
+      toast.success("Trip PDF downloaded successfully!");
+    } catch (err) {
+      console.error("PDF download error:", err);
+      toast.error("Failed to download PDF. Please try again.");
+    } finally {
+      setIsDownloading(false); // reset loading
+    }
+  };
 
   const handleSaveToAccount = async () => {
     if (!userId) {
@@ -67,7 +68,6 @@ const handleDownloadPDF = async () => {
 
     try {
       const res = await sendRequest.post(`/ai/save-trip/${userId}`, tripPlan);
-
 
       if (res.status !== 201 && res.status !== 200) {
         throw new Error(res.data.error || "Something went wrong");
@@ -169,6 +169,17 @@ const handleDownloadPDF = async () => {
           >
             Save to Account
           </button>
+          <button className="mt-4 bg-blue-600 ml-3 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition cursor-pointer">
+            Show route on map
+          </button>
+          {/* <div className="mt-4">
+            <RateDestinationDialog destinationId={destination._id} />
+            <MapDialog
+              lng={destination.location?.coordinates?.[0] ?? 106.9155}
+              lat={destination.location?.coordinates?.[1] ?? 47.8864}
+              destinationName={destination.name}
+            />
+          </div> */}
         </>
       )}
     </div>
