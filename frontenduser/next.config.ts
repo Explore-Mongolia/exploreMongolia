@@ -1,4 +1,4 @@
-import { NextConfig } from 'next';
+import { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
@@ -7,34 +7,28 @@ const nextConfig: NextConfig = {
       "img.clerk.com",
       "images.unsplash.com",
       "example.com",
-
-       "www.escapetomongolia.com",
-       "mongoliaretreats.com",
-       "www.globalnationalparks.com"
-
       "www.escapetomongolia.com",
       "mongoliaretreats.com",
-      "www.globalnationalparks.com"
-
+      "www.globalnationalparks.com",
     ],
   },
-  transpilePackages: ['leaflet', 'react-leaflet'],
+  transpilePackages: ["leaflet", "react-leaflet"],
   webpack: (config) => {
     config.module.rules.push({
       test: /\.(png|jpg|jpeg|gif)$/i,
       use: [
         {
-          loader: 'file-loader',
+          loader: "file-loader",
           options: {
-            publicPath: '/_next',
-            name: 'static/media/[name].[hash].[ext]',
+            publicPath: "/_next",
+            name: "static/media/[name].[hash].[ext]",
           },
         },
       ],
     });
 
     return config;
-  }
+  },
 };
 
 module.exports = nextConfig;
