@@ -1,13 +1,21 @@
-const nextConfig = {
+import { NextConfig } from 'next';
+
+const nextConfig: NextConfig = {
   images: {
     domains: [
       "res.cloudinary.com",
       "img.clerk.com",
       "images.unsplash.com",
       "example.com",
+
        "www.escapetomongolia.com",
        "mongoliaretreats.com",
        "www.globalnationalparks.com"
+
+      "www.escapetomongolia.com",
+      "mongoliaretreats.com",
+      "www.globalnationalparks.com"
+
     ],
   },
   transpilePackages: ['leaflet', 'react-leaflet'],

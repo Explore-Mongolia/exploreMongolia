@@ -1,12 +1,11 @@
 import { sendRequest } from '@/lib/SendRequest';
 import { useQuery } from '@tanstack/react-query';
 
-
 interface Company {
-  id: number;
+  id: string;
   name: string;
   description: string;
-  profileImage: string;
+  profileImage?: string;
 }
 
 const fetchCompanies = async (): Promise<Company[]> => {

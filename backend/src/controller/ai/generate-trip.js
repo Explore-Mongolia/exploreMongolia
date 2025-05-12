@@ -1,26 +1,44 @@
 import openai from "../../openAi.js";
 
+let isGenerating = false; 
+
 export  async function generateTrip(req, res) {
-  const { groupType, budget, type } = req.body;
+
+  if (isGenerating) {
+    return res
+      .status(429)
+      .json({ error: "Another trip is being generated. Please wait a moment." });
+  }
+
+  isGenerating = true;
+
+  const timeout = setTimeout(() => {
+    isGenerating = false;
+  }, 20000); 
+
+
+  const { budget, type } = req.body; 
+
 
   const prompt = `
-You are a travel assistant. Generate trip plan in Mongolia for a ${groupType} with a budget of ${budget} USD with the ${type}. 
-
-Return only valid JSON in the following format:
-{
-  "title": "Trip to Mongolia",
-  "destinations": ["Ulaanbaatar", "Terelj National Park"],
-  "plan": [
-    {
-      "day": 1,
-      "activities": ["Activity 1", "Activity 2"]
-    }
-  ],
-  "transportation": "Transport type",
-  "accommodations": [{"name": "Hotel Name", "address": "Hotel Address"}],
-  "notes": "Important notes"
-}
-`;
+  You are a travel assistant. Create a 3–7 day trip plan in Mongolia with a total budget of ${budget} USD focused on ${type}.
+  
+  Return only valid JSON in the format:
+  {
+    "title": "Trip to Mongolia",
+    "destinations": ["Ulaanbaatar", "Terelj National Park"],
+    "plan": [
+      {
+        "day": 1,
+        "activities": ["Activity 1", "Activity 2"]
+      }
+    ],
+    "transportation": "Transport type",
+    "accommodations": [{"name": "Hotel Name", "address": "Hotel Address"}],
+    "notes": "Important notes"
+  }
+  `;
+  
 
   try {
     const completion = await openai.chat.completions.create({
@@ -42,5 +60,8 @@ Return only valid JSON in the following format:
   } catch (error) {
     console.error("GPT Error:", error);
     res.status(500).json({ error: "Failed to generate trip plan" });
+  } finally {
+    clearTimeout(timeout);
+    isGenerating = false;
   }
 }

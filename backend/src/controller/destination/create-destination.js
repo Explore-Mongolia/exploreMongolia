@@ -1,15 +1,13 @@
 import { DestinationModel } from "../../models/destination-schema.js";
+import { CompanyModel } from "../../models/company-schema.js"; 
 
 export const createDestination = async (req, res) => {
   try {
     const { name, company, description, cost, vibesAvailable, image, location } = req.body;
-
-  
     if (!location || !Array.isArray(location.coordinates) || location.coordinates.length !== 2) {
       return res.status(400).json({ message: "Invalid location format. Coordinates must be an array of [longitude, latitude]." });
     }
 
-    
     const newDestination = await DestinationModel.create({
       name,
       company,
@@ -17,8 +15,15 @@ export const createDestination = async (req, res) => {
       cost,
       vibesAvailable,
       image,
-      location,  
+      location,
     });
+
+
+    await CompanyModel.findByIdAndUpdate(
+      company,
+      { $push: { destinations: newDestination._id } }, 
+      { new: true } 
+    );
 
     res.status(201).json({
       message: "Destination created successfully",
