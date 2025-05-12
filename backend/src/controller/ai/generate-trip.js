@@ -13,8 +13,8 @@ export  async function generateTrip(req, res) {
   isGenerating = true;
 
   const timeout = setTimeout(() => {
-    isGenerating = false; // Safety release in case of a crash
-  }, 20000); // 20 seconds safety net
+    isGenerating = false;
+  }, 20000); 
 
 
   const { budget, type } = req.body; 
@@ -42,7 +42,7 @@ export  async function generateTrip(req, res) {
 
   try {
     const completion = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-3.5-turbo",
       messages: [{ role: "user", content: prompt }],
       max_tokens: 800,
     });
