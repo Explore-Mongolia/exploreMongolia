@@ -8,6 +8,8 @@ import { TripPlan } from "@/lib/types";
 import { sendRequest } from "@/lib/SendRequest";
 import { useUserStore } from "@/store/userStore";
 import { toast } from "sonner";
+import MapDialog from "@/app/destination/[id]/_components/MapDialog";
+import RouteMap from "./RouteMap";
 
 const travelTypes = [
   "Nature & Scenery",
@@ -40,11 +42,21 @@ const TripPlannerForm = () => {
         backgroundColor: "#ffffff",
       });
 
+
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("p", "mm", "a4");
       const imgProps = pdf.getImageProperties(imgData);
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+
+
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
 
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
       pdf.save("trip-plan.pdf");
@@ -54,7 +66,11 @@ const TripPlannerForm = () => {
       console.error("PDF download error:", err);
       toast.error("Failed to download PDF. Please try again.");
     } finally {
+
+      setIsDownloading(false); // reset loading
+
       setIsDownloading(false);
+
     }
   };
 
@@ -65,10 +81,14 @@ const TripPlannerForm = () => {
     }
 
     try {
+
+      const res = await sendRequest.post(`/ai/save-trip/${userId}`, tripPlan);
+
       const res = await sendRequest.post(
         `/ai/save-trip?userId=${userId}`,
         tripPlan
       );
+
 
       if (res.status !== 201 && res.status !== 200) {
         throw new Error(res.data.error || "Something went wrong");
@@ -166,10 +186,21 @@ const TripPlannerForm = () => {
           </button>
           <button
             onClick={handleSaveToAccount}
-            className="bg-green-600 text-white px-4 py-2 rounded-xl cursor-pointer hover:bg-green-700 transition"
+            className="bg-green-600 ml-3 text-white px-4 py-2 rounded-xl cursor-pointer hover:bg-green-700 transition"
           >
             Save to Account
           </button>
+          <button className="mt-4 bg-blue-600 ml-3 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition cursor-pointer">
+            Show route on map
+          </button>
+          {/* <div className="mt-4">
+            <RateDestinationDialog destinationId={destination._id} />
+            <MapDialog
+              lng={destination.location?.coordinates?.[0] ?? 106.9155}
+              lat={destination.location?.coordinates?.[1] ?? 47.8864}
+              destinationName={destination.name}
+            />
+          </div> */}
         </>
       )}
     </div>

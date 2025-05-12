@@ -7,9 +7,15 @@ const nextConfig: NextConfig = {
       "img.clerk.com",
       "images.unsplash.com",
       "example.com",
+
+       "www.escapetomongolia.com",
+       "mongoliaretreats.com",
+       "www.globalnationalparks.com"
+
       "www.escapetomongolia.com",
       "mongoliaretreats.com",
       "www.globalnationalparks.com"
+
     ],
   },
   transpilePackages: ['leaflet', 'react-leaflet'],
