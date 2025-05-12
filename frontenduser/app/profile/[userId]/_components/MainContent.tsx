@@ -7,6 +7,7 @@ interface MainContentProps {
     experiences: Experience[];
     tripPlans: TripPlan[];
   };
+  editable: boolean;
 }
 
 const MainContent: React.FC<MainContentProps> = ({ user }) => {
@@ -34,11 +35,15 @@ const MainContent: React.FC<MainContentProps> = ({ user }) => {
         <Tab.Panels className="mt-2">
           <Tab.Panel>
             <div className="bg-white rounded-xl shadow-md p-6">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">Experiences</h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">
+                Experiences
+              </h2>
               {user.experiences && user.experiences.length > 0 ? (
                 user.experiences.map((exp, index) => (
                   <div key={index} className="border-b py-4">
-                    <h3 className="text-lg font-semibold text-gray-800">{exp.name}</h3>
+                    <h3 className="text-lg font-semibold text-gray-800">
+                      {exp.name}
+                    </h3>
                     <p className="text-sm text-gray-600">{exp.description}</p>
                   </div>
                 ))
@@ -49,18 +54,26 @@ const MainContent: React.FC<MainContentProps> = ({ user }) => {
           </Tab.Panel>
           <Tab.Panel>
             <div className="bg-white rounded-xl shadow-md p-6">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">Trip Plans</h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">
+                Trip Plans
+              </h2>
               {user.tripPlans && user.tripPlans.length > 0 ? (
                 user.tripPlans.map((plan, index) => (
                   <div key={index} className="border-b py-4">
-                    <h3 className="text-lg font-semibold text-gray-800">{plan.title}</h3>
+                    <h3 className="text-lg font-semibold text-gray-800">
+                      {plan.title}
+                    </h3>
                     <p className="text-sm text-gray-600">
                       Destinations: {plan.destinations.join(", ")}
                     </p>
-                    <p className="text-sm text-gray-600">Transportation: {plan.transportation}</p>
+                    <p className="text-sm text-gray-600">
+                      Transportation: {plan.transportation}
+                    </p>
                     <p className="text-sm text-gray-600">
                       Accommodation:{" "}
-                      {plan.accommodations.map((accom) => accom.name).join(", ")}
+                      {plan.accommodations
+                        .map((accom) => accom.name)
+                        .join(", ")}
                     </p>
                   </div>
                 ))
