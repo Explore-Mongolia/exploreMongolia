@@ -17,7 +17,7 @@ export default function Hero() {
   const confidenceWords = ["Confidence", "Adventure", "Ease", "Excitement"];
 
   return (
-    <section className="w-full bg-white py-20">
+    <section className="w-full bg-white">
       <div className="container mx-auto flex flex-col-reverse md:flex-row items-center px-6 md:px-12 lg:px-24 gap-10">
         {/* Left side */}
         <div className="flex-1 text-center md:text-left">
@@ -28,7 +28,8 @@ export default function Hero() {
             </span>
           </h1>
           <p className="mt-4 text-gray-600 text-lg">
-            Discover hidden gems, plan meaningful trips, and share real travel experiences.
+            Discover hidden gems, plan meaningful trips, and share real travel
+            experiences.
           </p>
           <div className="mt-6 flex justify-center md:justify-start gap-4">
             <button
@@ -49,9 +50,9 @@ export default function Hero() {
           <Image
             src="https://images.unsplash.com/photo-1571821807771-62cf66ac3f14?w=800&auto=format&fit=crop&q=60"
             alt="Mongolia hero"
-            width={600}
-            height={200}
-            className="rounded-xl shadow-lg object-cover w-full h-auto"
+            width={600} 
+            height={150} 
+            className="rounded-xl shadow-lg object-cover"
             priority
           />
         </div>
