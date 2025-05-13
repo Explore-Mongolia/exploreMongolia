@@ -5,6 +5,8 @@ import { useCompany } from "@/hooks/useCompany";
 import Image from "next/image";
 import CompanySkeleton from "./_components/Skeleton";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
 
 export default function CompanyPage() {
   const { companyId } = useParams();
@@ -26,22 +28,16 @@ export default function CompanyPage() {
 
   return (
     <div className="p-4 sm:p-6 mt-6">
-      <button
+      <Button
+        variant="default"
+        size="sm"
         onClick={() => router.push("/")}
-        className="flex items-center gap-2 text-white bg-blue-600 hover:bg-blue-700 transition-colors px-4 py-2 rounded-md text-sm font-medium shadow"
+        className="flex items-center gap-2"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-4 w-4"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={2}
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-        </svg>
+        <ArrowLeft className="w-4 h-4" />
         Back to Home
-      </button>
+      </Button>
+
       <div className="max-w-4xl mx-auto p-6 sm:p-10 space-y-8">
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
           <Image
