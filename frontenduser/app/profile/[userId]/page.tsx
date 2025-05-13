@@ -7,8 +7,8 @@ import MainContent from "./_components/MainContent";
 import SideBar from "./_components/SideBar";
 import { useUserStore } from "@/store/userStore";
 import { Pencil } from "lucide-react";
-import { useState } from "react";
-import EditProfileDialog from "./_components/EditProfileDialog"
+import { useEffect, useState } from "react";
+import EditProfileDialog from "./_components/EditProfileDialog";
 
 export default function ProfilePage() {
   const { userId } = useParams();
@@ -17,10 +17,18 @@ export default function ProfilePage() {
   const isOwner = mongoUserId === userId;
 
   const [openDialog, setOpenDialog] = useState(false);
+  const [userData, setUserData] = useState(user);
 
-  if (isLoading) return <ProfileSkeleton />;
+  
+  useEffect(() => {
+    if (user) {
+      setUserData(user);
+    }
+  }, [user]);
 
-  if (error || !user) {
+  if (isLoading || !userData) return <ProfileSkeleton />;
+
+  if (error) {
     return (
       <div className="text-center text-red-500 mt-10">
         Failed to load user data.
@@ -38,7 +46,7 @@ export default function ProfilePage() {
             <div className="flex items-end space-x-4">
               <div className="relative">
                 <img
-                  src={user.profileImage || "/default-profile.png"}
+                  src={userData.profileImage || "/default-profile.png"}
                   alt="Profile"
                   className="w-32 h-32 rounded-full border-4 border-white object-cover shadow-lg"
                 />
@@ -52,10 +60,12 @@ export default function ProfilePage() {
                 )}
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-800">{user.name}</h1>
+                <h1 className="text-2xl font-bold text-gray-800">
+                  {userData.name}
+                </h1>
                 <p className="text-gray-600">
                   Member since{" "}
-                  {new Date(user.accountCreated).toLocaleDateString()}
+                  {new Date(userData.accountCreated).toLocaleDateString()}
                 </p>
               </div>
             </div>
@@ -63,16 +73,16 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        <SideBar user={user} editable={isOwner} />
-        <MainContent user={user} editable={isOwner} />
+        <SideBar user={userData} editable={isOwner} />
+        <MainContent user={userData} editable={isOwner} />
       </div>
 
       <EditProfileDialog
         open={openDialog}
         onClose={() => setOpenDialog(false)}
-        user={user}
+        user={userData}
+        // onUpdateUser={(updatedUser) => setUserData(updatedUser)} 
       />
     </div>
   );
