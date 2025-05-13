@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
       "www.escapetomongolia.com",
       "mongoliaretreats.com",
       "www.globalnationalparks.com",
+      "mongoliantours.com",
+      "plus.unsplash.com",
+      "assets.bucketlistly.blog"
     ],
   },
   transpilePackages: ["leaflet", "react-leaflet"],
