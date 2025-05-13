@@ -19,82 +19,103 @@ export default function ExperienceList() {
     );
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
-      <div
-        key={experience._id}
-        className="border rounded-2xl overflow-hidden shadow-md"
+    <div className="p-4 sm:p-6 mt-6">
+      <button
+        onClick={() => router.push("/")}
+        className="flex items-center gap-2 text-white bg-blue-600 hover:bg-blue-700 transition-colors px-4 py-2 rounded-md text-sm font-medium shadow"
       >
-        <div className="relative w-full h-64">
-          <Image
-            src={experience.images?.[0] || "/placeholder.jpg"}
-            alt={experience.name}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 50vw"
-            priority
-          />
-        </div>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-4 w-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+        Back to Home
+      </button>
 
-        <div className="p-6">
-          <h2 className="text-2xl font-semibold mb-2">{experience.name}</h2>
-          <p className="text-gray-700 mb-4">{experience.description}</p>
-
-          <div
-            className="flex items-center mb-6 cursor-pointer"
-            onClick={() => router.push(`/profile/${experience.user._id}`)}
-          >
-            <div className="relative w-10 h-10 mr-3">
-              <Image
-                src={experience.user.profileImage || "/default-profile.png"}
-                alt={experience.user.name}
-                fill
-                className="rounded-full object-cover"
-                sizes="40px"
-              />
-            </div>
-            <div>
-              <h3 className="font-medium text-gray-800">
-                {experience.user.name}
-              </h3>
-              <p className="text-sm text-gray-500">{experience.user.email}</p>
-            </div>
+      <div className="max-w-3xl mx-auto px-4 py-8">
+        <div
+          key={experience._id}
+          className="border rounded-2xl overflow-hidden shadow-md"
+        >
+          <div className="relative w-full h-64">
+            <Image
+              src={experience.images?.[0] || "/placeholder.jpg"}
+              alt={experience.name}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 50vw"
+              priority
+            />
           </div>
 
-          <div className="mb-4 space-y-1 text-sm text-gray-600">
-            <p>
-              <strong>Visited Places:</strong>{" "}
-              {experience.visitedPlaces.join(", ")}
-            </p>
-            <p>
-              <strong>Highlights:</strong> {experience.highlights}
-            </p>
-            <p>
-              <strong>Tips:</strong> {experience.tips}
-            </p>
-            <p>
-              <strong>Total Cost:</strong> ${experience.totalCost}
-            </p>
-          </div>
+          <div className="p-6">
+            <h2 className="text-2xl font-semibold mb-2">{experience.name}</h2>
+            <p className="text-gray-700 mb-4">{experience.description}</p>
 
-          {experience.vibes.length > 0 && (
-            <div className="mb-4 flex flex-wrap gap-2">
-              {experience.vibes.map((vibe: string) => (
-                <span
-                  key={vibe}
-                  className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full"
-                >
-                  #{vibe}
-                </span>
-              ))}
+            <div
+              className="flex items-center mb-6 cursor-pointer"
+              onClick={() => router.push(`/profile/${experience.user._id}`)}
+            >
+              <div className="relative w-10 h-10 mr-3">
+                <Image
+                  src={experience.user.profileImage || "/default-profile.png"}
+                  alt={experience.user.name}
+                  fill
+                  className="rounded-full object-cover"
+                  sizes="40px"
+                />
+              </div>
+              <div>
+                <h3 className="font-medium text-gray-800">
+                  {experience.user.name}
+                </h3>
+                <p className="text-sm text-gray-500">{experience.user.email}</p>
+              </div>
             </div>
-          )}
 
-          <InlineEmojiRating
-            experienceId={experience._id}
-            reactions={experience.reactions}
-          />
+            <div className="mb-4 space-y-1 text-sm text-gray-600">
+              <p>
+                <strong>Visited Places:</strong>{" "}
+                {experience.visitedPlaces.join(", ")}
+              </p>
+              <p>
+                <strong>Highlights:</strong> {experience.highlights}
+              </p>
+              <p>
+                <strong>Tips:</strong> {experience.tips}
+              </p>
+              <p>
+                <strong>Total Cost:</strong> ${experience.totalCost}
+              </p>
+            </div>
+
+            {experience.vibes.length > 0 && (
+              <div className="mb-4 flex flex-wrap gap-2">
+                {experience.vibes.map((vibe: string) => (
+                  <span
+                    key={vibe}
+                    className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full"
+                  >
+                    #{vibe}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            <InlineEmojiRating
+              experienceId={experience._id}
+              reactions={experience.reactions}
+            />
+          </div>
         </div>
       </div>
+
     </div>
+
   );
 }
