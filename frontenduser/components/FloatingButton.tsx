@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import PostExperienceDialog from "./PostExperience";
 import { useUserStore } from "@/store/userStore";
+import { IconLayoutGrid } from "@tabler/icons-react";
 
 export default function FloatingHoverActions() {
   const [hovered, setHovered] = useState(false);
@@ -21,7 +22,7 @@ export default function FloatingHoverActions() {
       onMouseLeave={() => setHovered(false)}
     >
       <Button className="rounded-full px-6 py-3 bg-blue-600 text-white hover:bg-blue-700">
-        +
+        <IconLayoutGrid/>
       </Button>
 
       <AnimatePresence>
@@ -43,7 +44,7 @@ export default function FloatingHoverActions() {
               onClick={() => setDialogOpen(true)}
               className="bg-white text-black hover:bg-gray-100 rounded-full"
             >
-              Write Experience
+              Post Experience
             </Button>
           </motion.div>
         )}

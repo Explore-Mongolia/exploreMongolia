@@ -9,7 +9,6 @@ import { useUserStore } from "@/store/userStore";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
-
 const schema = yup.object().shape({
   name: yup.string().required("Experience name is required"),
   visitedPlaces: yup.string().required("Visited places are required"),
@@ -17,8 +16,8 @@ const schema = yup.object().shape({
   tips: yup.string().required("Travel tips are required"),
   totalCost: yup.number().positive().required("Total cost is required"),
   highlights: yup.string().required("Trip highlights are required"),
-  vibes: yup.string().required("Vibes are required"), 
-  tripDates: yup.string().optional(), 
+  vibes: yup.string().required("Vibes are required"),
+  tripDates: yup.string().optional(),
 });
 
 interface PostExperienceDialogProps {
@@ -31,8 +30,11 @@ const PostExperienceDialog: React.FC<PostExperienceDialogProps> = ({ open, onClo
   const [images, setImages] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // React Hook Form setup with validation
-  const { control, handleSubmit, formState: { errors }, setValue } = useForm({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     resolver: yupResolver(schema),
   });
 
@@ -64,6 +66,11 @@ const PostExperienceDialog: React.FC<PostExperienceDialogProps> = ({ open, onClo
   };
 
   const onSubmit = async (data: any) => {
+    if (images.length === 0) {
+      toast.error("Please upload at least one image before submitting.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -71,14 +78,13 @@ const PostExperienceDialog: React.FC<PostExperienceDialogProps> = ({ open, onClo
         ...data,
         images,
       });
-      
 
       if (response.status === 201) {
         toast.success("Experience submitted successfully");
+        onClose();
       } else {
         toast.error("Failed to submit experience");
       }
-      onClose();
     } catch (error) {
       toast.error("Error submitting experience");
     } finally {
@@ -103,6 +109,9 @@ const PostExperienceDialog: React.FC<PostExperienceDialogProps> = ({ open, onClo
            file:rounded-full file:border-0 file:text-sm file:font-semibold
            file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
         />
+        {images.length === 0 && (
+          <p className="text-sm text-red-500 mt-1">* At least one image is required</p>
+        )}
         <div className="flex gap-2 mt-2 flex-wrap">
           {images.map((url, index) => (
             <img
@@ -122,7 +131,7 @@ const PostExperienceDialog: React.FC<PostExperienceDialogProps> = ({ open, onClo
           <TextareaField label="Travel Tips" name="tips" control={control} error={errors.tips?.message} />
           <InputField label="Total Cost (USD)" name="totalCost" control={control} error={errors.totalCost?.message} />
           <InputField label="Trip Highlights" name="highlights" control={control} error={errors.highlights?.message} />
-          
+
           {/* Vibes Select */}
           <div>
             <label className="block text-sm font-medium mb-1">Overall Vibe</label>
@@ -146,10 +155,9 @@ const PostExperienceDialog: React.FC<PostExperienceDialogProps> = ({ open, onClo
             {errors.vibes && <p className="text-sm text-red-500 mt-1">{errors.vibes.message}</p>}
           </div>
 
-          {/* Trip Dates */}
           <InputField label="Trip Dates (optional)" name="tripDates" control={control} error={errors.tripDates?.message} />
 
-          {/* Submit */}
+          {/* Submit Buttons */}
           <div className="mt-6 flex justify-end gap-4">
             <button
               type="button"
@@ -161,8 +169,12 @@ const PostExperienceDialog: React.FC<PostExperienceDialogProps> = ({ open, onClo
 
             <button
               type="submit"
-              disabled={isSubmitting}
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400"
+              disabled={isSubmitting || images.length === 0}
+              className={`px-4 py-2 text-white rounded ${
+                images.length === 0
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-blue-600 hover:bg-blue-700"
+              }`}
             >
               {isSubmitting ? "Submitting..." : "Submit"}
             </button>

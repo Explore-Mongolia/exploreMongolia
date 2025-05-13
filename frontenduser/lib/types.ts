@@ -1,4 +1,5 @@
 export interface TripPlan {
+  _id: string;
     title: string;
     destinations: string[];
     transportation: string;
@@ -11,6 +12,7 @@ export interface TripPlan {
       day: number;
       activities: string[];
     }[];
+    isPublic?: boolean;
   }
 
 
@@ -26,6 +28,11 @@ export interface TripPlan {
       profileImage: string;
       name: string;
     };
+    tripDates?: string;
+    highlights?: string;
+    vibes?: string;
+    totalCost?: string;
+    tips?: string;
   }
 
   export interface Destination {

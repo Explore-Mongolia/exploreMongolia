@@ -17,6 +17,7 @@ const tripPlanSchema = new Schema({
   notes: { type: String },
   createdByAI: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now },
+  isPublic: { type: Boolean, default: false },
 });
 
 export const TripPlanModel = model("TripPlan", tripPlanSchema);
