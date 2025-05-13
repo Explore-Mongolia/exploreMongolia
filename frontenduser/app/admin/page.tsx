@@ -17,14 +17,11 @@ export default function AdminDashboard() {
   const navItems = [
     { name: "Companies", link: "#companies" },
     { name: "Destinations", link: "#destinations" },
-    { name: "Users", link: "#users" }, 
+    { name: "Users", link: "#users" },
   ];
 
   const [selectedSection, setSelectedSection] = useState("Companies");
-
   const { data: rawCompanies = [], isLoading, error } = useCompanies();
-
-  // Map backend _id to frontend id
   const companies: Company[] = rawCompanies.map((c: any) => ({
     id: c._id,
     name: c.name,
