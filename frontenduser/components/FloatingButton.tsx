@@ -21,8 +21,18 @@ export default function FloatingHoverActions() {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <Button className="rounded-full px-6 py-3 bg-blue-600 text-white hover:bg-blue-700">
-        <IconLayoutGrid/>
+      <Button
+        className="
+    rounded-full 
+    px-5 py-2.5 text-sm
+    md:px-6 md:py-3 md:text-base
+    lg:px-7 lg:py-3.5 lg:text-lg
+    bg-blue-600 text-white 
+    hover:bg-blue-700
+    flex items-center justify-center
+"
+      >
+        <IconLayoutGrid className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" />
       </Button>
 
       <AnimatePresence>
@@ -44,7 +54,7 @@ export default function FloatingHoverActions() {
               onClick={() => setDialogOpen(true)}
               className="bg-white text-black hover:bg-gray-100 rounded-full"
             >
-              Post Experience
+              Experience
             </Button>
           </motion.div>
         )}

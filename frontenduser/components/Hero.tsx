@@ -5,18 +5,14 @@ import Image from "next/image";
 import { FlipWords } from "./ui/flip-words";
 
 const images = [
-    "https://images.unsplash.com/photo-1571821807771-62cf66ac3f14?w=1920&q=100",
-    // "https://assets.bucketlistly.blog/...hd-op.jpg", // already HD
-    "https://images.unsplash.com/photo-1535219241072-7d3c28a49a5c?w=1920&q=100",
-    "https://images.unsplash.com/photo-1708873395735-dcad0140e3a2?w=1920&q=100"
-
-  
+  "https://images.unsplash.com/photo-1571821807771-62cf66ac3f14?w=1920&q=100",
+  "https://images.unsplash.com/photo-1535219241072-7d3c28a49a5c?w=1920&q=100",
+  "https://images.unsplash.com/photo-1708873395735-dcad0140e3a2?w=1920&q=100",
 ];
 
 export default function Hero() {
   const [currentImage, setCurrentImage] = useState(0);
 
-  
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImage((prev) => (prev + 1) % images.length);
@@ -35,7 +31,6 @@ export default function Hero() {
 
   return (
     <section className="relative w-full h-screen overflow-hidden">
-      
       {images.map((src, idx) => (
         <Image
           key={idx}
@@ -49,19 +44,19 @@ export default function Hero() {
         />
       ))}
 
-      
       <div className="absolute inset-0 bg-black/50 z-10" />
 
       {/* Hero content */}
-      <div className="relative z-20 h-full flex flex-col items-center justify-center text-center px-6 text-white">
-        <h1 className="text-4xl md:text-6xl font-extrabold leading-tight drop-shadow-md">
-          Explore Mongolia with <br />
-          <FlipWords words={confidenceWords} />
+      <div className="relative z-20 h-full flex flex-col items-center justify-start pt-28 md:pt-36 text-center px-6 text-white">
+        <h1 className="text-4xl md:text-6xl font-bold leading-tight drop-shadow-md">
+          Journey through Mongolia with <br />
+          <FlipWords
+            words={confidenceWords}
+            className="text-white font-semibold"
+          />
         </h1>
-        <p className="mt-4 text-lg md:text-xl max-w-2xl drop-shadow-md">
-          Discover hidden gems, plan meaningful trips, and share real travel experiences.
-        </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-4">
+
+        <div className="mt-10 flex flex-wrap justify-center gap-4">
           <button
             onClick={() => scrollToSection("planner")}
             className="px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
