@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import HomeSection from "@/components/HomeSection";
 import ExperienceSection from "@/components/ExperienceSection";
 import TripSection from "@/components/TripSection";
 import {
@@ -37,8 +36,8 @@ export function NavbarDemo() {
 
   const renderSection = () => {
     switch (activeSection) {
-      case "home":
-        return <HomeSection />;
+      // case "home":
+      //   return <HomeSection />;
       case "experience":
         return <ExperienceSection />;
       case "trip":
@@ -129,7 +128,7 @@ export function NavbarDemo() {
         </MobileNav>
       </Navbar>
 
-      <div className="pt-24">
+      <div className="pt-8">
         <AnimatePresence mode="wait">
           {activeSection && (
             <motion.div

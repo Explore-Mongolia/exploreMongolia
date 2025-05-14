@@ -1,17 +1,17 @@
-import { SignIn } from "@clerk/nextjs";
+import { SignUp } from "@clerk/nextjs";
 
 export default function Page() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
         <h1 className="text-3xl font-semibold text-center text-gray-800 mb-6">
-          Sign In
+          Sign Up
         </h1>
-        <SignIn 
-          path="/sign-in"
+        <SignUp 
+          path="/sign-up"
           routing="path"
-          signUpUrl="/sign-up"
-          afterSignInUrl="/home" 
+          signInUrl="/sign-in"
+          afterSignUpUrl="/home"
         />
       </div>
     </div>
