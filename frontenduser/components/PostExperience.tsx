@@ -8,6 +8,7 @@ import { sendRequest } from "@/lib/SendRequest";
 import { useUserStore } from "@/store/userStore";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Loader2 } from "lucide-react";
 
 const schema = yup.object().shape({
   name: yup.string().required("Experience name is required"),
@@ -29,6 +30,7 @@ const PostExperienceDialog: React.FC<PostExperienceDialogProps> = ({ open, onClo
   const { mongoUserId } = useUserStore();
   const [images, setImages] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const {
     control,
@@ -46,6 +48,8 @@ const PostExperienceDialog: React.FC<PostExperienceDialogProps> = ({ open, onClo
     formData.append("file", file);
     formData.append("upload_preset", "ml_default");
 
+    setLoading(true);
+
     try {
       const res = await fetch("https://api.cloudinary.com/v1_1/dkaymkcly/image/upload", {
         method: "POST",
@@ -62,6 +66,8 @@ const PostExperienceDialog: React.FC<PostExperienceDialogProps> = ({ open, onClo
     } catch (err) {
       console.error(err);
       toast.error("Error uploading image");
+    }{
+    setLoading(false);
     }
   };
 
@@ -109,7 +115,15 @@ const PostExperienceDialog: React.FC<PostExperienceDialogProps> = ({ open, onClo
            file:rounded-full file:border-0 file:text-sm file:font-semibold
            file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
         />
-        {images.length === 0 && (
+         {loading ? (
+          <>
+            <Loader2 className="animate-spin w-5 h-5" />
+            Uploading Image
+          </>
+        ) : (
+          "Upload Image"
+        )}
+        {images.length === 0 && !loading &&(
           <p className="text-sm text-red-500 mt-1">* At least one image is required</p>
         )}
         <div className="flex gap-2 mt-2 flex-wrap">
