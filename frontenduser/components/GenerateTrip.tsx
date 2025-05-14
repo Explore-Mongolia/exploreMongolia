@@ -8,6 +8,9 @@ import { TripPlan } from "@/lib/types";
 import { sendRequest } from "@/lib/SendRequest";
 import { useUserStore } from "@/store/userStore";
 import { toast } from "sonner";
+import MapRoute from "./MapRoute";
+import { useParams } from "next/navigation";
+import { useDestination } from "@/hooks/useDestination";
 
 const travelTypes = [
   "Nature & Scenery",
@@ -59,6 +62,14 @@ const TripPlannerForm = () => {
       setIsDownloading(false);
     }
   };
+
+   const { id } = useParams();
+    const destinationId = Array.isArray(id) ? id[0] : id;
+
+   const { data, isLoading, error } = destinationId
+      ? useDestination(destinationId)
+      : { data: null, isLoading: false, error: "Invalid destination ID" };
+  const destination = data?.destination;
 
   const handleSaveToAccount = async () => {
     if (!userId) {
@@ -172,17 +183,14 @@ const TripPlannerForm = () => {
           >
             Save to Account
           </button>
-          <button className="mt-4 bg-blue-600 ml-3 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition cursor-pointer">
-            Show route on map
-          </button>
-          {/* <div className="mt-4">
-            <RateDestinationDialog destinationId={destination._id} />
-            <MapDialog
-              lng={destination.location?.coordinates?.[0] ?? 106.9155}
-              lat={destination.location?.coordinates?.[1] ?? 47.8864}
-              destinationName={destination.name}
-            />
-          </div> */}
+        
+          <MapRoute
+            lng={106.9177016}
+            lat={47.9184676}
+            destinationName={"Destination Name"}
+            markers={[]}
+          />
+          
         </>
       )}
     </div>
