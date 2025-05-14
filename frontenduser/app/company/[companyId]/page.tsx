@@ -29,13 +29,13 @@ export default function CompanyPage() {
   return (
     <div className="p-4 sm:p-6 mt-6">
       <Button
-        variant="default"
+        variant="ghost"
         size="sm"
-        onClick={() => router.push("/")}
-        className="flex items-center gap-2"
+        onClick={() => router.back()}
+        className="flex items-center gap-2 group transition-all"
       >
-        <ArrowLeft className="w-4 h-4" />
-        Back to Home
+        <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+        <span className="text-sm font-medium">Back</span>
       </Button>
 
       <div className="max-w-4xl mx-auto p-6 sm:p-10 space-y-8">
@@ -49,7 +49,9 @@ export default function CompanyPage() {
           />
           <div>
             <h1 className="text-3xl font-bold text-gray-900">{company.name}</h1>
-            <p className="text-gray-600 text-sm mt-1">Trusted travel provider</p>
+            <p className="text-gray-600 text-sm mt-1">
+              Trusted travel provider
+            </p>
           </div>
         </div>
 

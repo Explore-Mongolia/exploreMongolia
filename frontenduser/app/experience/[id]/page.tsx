@@ -23,13 +23,13 @@ export default function ExperienceList() {
   return (
     <div className="p-4 sm:p-6 mt-6">
       <Button
-        variant="default"
+        variant="ghost"
         size="sm"
-        onClick={() => router.push("/")}
-        className="flex items-center gap-2"
+        onClick={() => router.back()}
+        className="flex items-center gap-2 group transition-all"
       >
-        <ArrowLeft className="w-4 h-4" />
-        Back to Home
+        <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+        <span className="text-sm font-medium">Back</span>
       </Button>
 
       <div className="max-w-3xl mx-auto px-4 py-8">
@@ -109,8 +109,6 @@ export default function ExperienceList() {
           </div>
         </div>
       </div>
-
     </div>
-
   );
 }

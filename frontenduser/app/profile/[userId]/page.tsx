@@ -20,10 +20,8 @@ export default function ProfilePage() {
   const isOwner = mongoUserId === userId;
   const router = useRouter();
 
-
   const [openDialog, setOpenDialog] = useState(false);
   const [userData, setUserData] = useState(user);
-
 
   useEffect(() => {
     if (user) {
@@ -44,13 +42,13 @@ export default function ProfilePage() {
   return (
     <div className="p-4 sm:p-6 mt-6">
       <Button
-        variant="default"
+        variant="ghost"
         size="sm"
-        onClick={() => router.push("/")}
-        className="flex items-center gap-2"
+        onClick={() => router.back()}
+        className="flex items-center gap-2 group transition-all"
       >
-        <ArrowLeft className="w-4 h-4" />
-        Back to Home
+        <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+        <span className="text-sm font-medium">Back</span>
       </Button>
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="bg-white rounded-xl shadow-md overflow-hidden mb-8">
@@ -97,9 +95,9 @@ export default function ProfilePage() {
           open={openDialog}
           onClose={() => setOpenDialog(false)}
           user={userData}
-        // onUpdateUser={(updatedUser) => setUserData(updatedUser)} 
+          // onUpdateUser={(updatedUser) => setUserData(updatedUser)}
         />
-      </div></div>
-
+      </div>
+    </div>
   );
 }

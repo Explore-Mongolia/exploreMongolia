@@ -45,13 +45,13 @@ export default function ExperienceList() {
   return (
     <div className="p-4 sm:p-6 mt-6">
       <Button
-        variant="default"
+        variant="ghost"
         size="sm"
-        onClick={() => router.push("/")}
-        className="flex items-center gap-2"
+        onClick={() => router.back()}
+        className="flex items-center gap-2 group transition-all"
       >
-        <ArrowLeft className="w-4 h-4" />
-        Back to Home
+        <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+        <span className="text-sm font-medium">Back</span>
       </Button>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 space-y-10">
         <div className="relative w-full h-72 rounded-2xl overflow-hidden shadow-md">
@@ -67,7 +67,9 @@ export default function ExperienceList() {
 
         {/* Destination Details */}
         <div className="space-y-4">
-          <h1 className="text-4xl font-bold text-gray-900">{destination.name}</h1>
+          <h1 className="text-4xl font-bold text-gray-900">
+            {destination.name}
+          </h1>
           <p className="text-gray-700 text-base leading-relaxed">
             {destination.description}
           </p>
@@ -147,6 +149,5 @@ export default function ExperienceList() {
         </div>
       </div>
     </div>
-
   );
 }
