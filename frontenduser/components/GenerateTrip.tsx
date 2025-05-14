@@ -63,12 +63,12 @@ const TripPlannerForm = () => {
     }
   };
 
-   const { id } = useParams();
-    const destinationId = Array.isArray(id) ? id[0] : id;
+  const { id } = useParams();
+  const destinationId = Array.isArray(id) ? id[0] : id;
 
-   const { data, isLoading, error } = destinationId
-      ? useDestination(destinationId)
-      : { data: null, isLoading: false, error: "Invalid destination ID" };
+  const { data, isLoading, error } = destinationId
+    ? useDestination(destinationId)
+    : { data: null, isLoading: false, error: "Invalid destination ID" };
   const destination = data?.destination;
 
   const handleSaveToAccount = async () => {
@@ -170,27 +170,29 @@ const TripPlannerForm = () => {
               </ul>
             </div>
           </div>
-
-          <button
-            onClick={handleDownloadPDF}
-            className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition cursor-pointer"
-          >
-            Download PDF
-          </button>
-          <button
-            onClick={handleSaveToAccount}
-            className="bg-green-600 ml-3 text-white px-4 py-2 rounded-xl cursor-pointer hover:bg-green-700 transition"
-          >
-            Save to Account
-          </button>
-        
-          <MapRoute
-            lng={106.9177016}
-            lat={47.9184676}
-            destinationName={"Destination Name"}
-            markers={[]}
-          />
-          
+          <div className="p-4">
+            <div className="flex flex-col gap-6 w-full max-w-md mx-auto">
+              {/* <button
+                onClick={handleDownloadPDF}
+                className="bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition"
+              >
+                Download PDF
+              </button> */}
+              <button
+                onClick={handleSaveToAccount}
+                className="w-full bg-green-600 text-white px-4 py-2 rounded-xl hover:bg-green-700 transition"
+              >
+                Save to Account
+              </button>
+              <MapRoute
+              lng={106.9177016}
+              lat={47.9184676}
+              destinationName="Destination Name"
+              markers={[]}
+            />
+              </div>
+            
+          </div>
         </>
       )}
     </div>

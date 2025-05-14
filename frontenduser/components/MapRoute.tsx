@@ -88,7 +88,7 @@ export default function MapRoute({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className="ml-4 h-10 -my-4 bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition cursor-pointer">
+        <Button className=" h-10 -my-4 bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition cursor-pointer ">
           Show route on map
         </Button>
       </DialogTrigger>
