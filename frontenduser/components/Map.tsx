@@ -11,6 +11,8 @@ interface MapProps {
   lat: number;
   zoom?: number;
   destinationName?: string;
+  
+  
 }
 
 const Map = ({ lng, lat, zoom = 14, destinationName }: MapProps) => {

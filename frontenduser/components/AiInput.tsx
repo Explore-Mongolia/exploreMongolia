@@ -26,12 +26,16 @@ export const AiInput = ({
       });
 
       setTripPlan(res.data.tripPlan);
-
+      console.log("Trip plan generated:", res.data.tripPlan);
+      localStorage.setItem("tripPlan", JSON.stringify(res.data.tripPlan.destinations));
       
+
       toast.success("Trip generated successfully!");
     } catch (err: any) {
       if (err.response?.status === 429) {
-        toast.warning("Another trip is being generated. Please wait and try again.");
+        toast.warning(
+          "Another trip is being generated. Please wait and try again."
+        );
       } else {
         toast.error("Failed to generate trip. Try again later.");
         console.error("Trip generation failed:", err);
@@ -60,7 +64,7 @@ export const AiInput = ({
 
       <button
         type="submit"
-        disabled={loading || !travelType || !budget} 
+        disabled={loading || !travelType || !budget}
         className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition disabled:opacity-50"
       >
         {loading ? (
