@@ -1,7 +1,6 @@
 import axios from "axios"
 
-const backendUrl = "https://backend-five-lyart-36.vercel.app"
-// const backendUrl = "http://localhost:9000"
 
+const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export const sendRequest = axios.create({ baseURL: backendUrl });
