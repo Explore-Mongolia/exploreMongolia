@@ -3,64 +3,14 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
-  RocketIcon,
-  MapPinnedIcon,
-  StarIcon,
-  UsersIcon,
   ChevronRightIcon,
 } from "lucide-react";
-import { AnimatedTestimonials } from "@/components/ui/animated-testimonials";
 import { motion } from "framer-motion";
+import Features from "./_components/Features";
+import Testimonials from "./_components/Testimonials";
+import Stats from "./_components/Stats";
 
 export default function LandingPage() {
-  const features = [
-    {
-      icon: RocketIcon,
-      title: "AI Trip Generator",
-      description:
-        "Instantly create custom travel plans based on your interests.",
-    },
-    {
-      icon: MapPinnedIcon,
-      title: "Local Destination Guide",
-      description: "Explore authentic Mongolian places curated by locals.",
-    },
-    {
-      icon: StarIcon,
-      title: "Community Reviews",
-      description: "Read honest reviews and ratings from fellow travelers.",
-    },
-    {
-      icon: UsersIcon,
-      title: "Share Experiences",
-      description: "Post your adventures and inspire the travel community.",
-    },
-  ];
-
-  const testimonials = [
-    {
-      quote:
-        "Planning my Gobi trip used to be overwhelming. The AI planner gave me a full itinerary in minutes. It was actually fun!",
-      name: "Alex M.",
-      designation: "Adventure Seeker from Canada",
-      src: "https://images.unsplash.com/photo-1632812452083-72d3c8abe533?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHRyYXZlbGVyfGVufDB8fDB8fHww",
-    },
-    {
-      quote:
-        "Seeing reviews and real experiences from other travelers helped me choose the right places and avoid tourist traps.",
-      name: "Alex Kim",
-      designation: "Traveler & Photographer, Seoul",
-      src: "https://plus.unsplash.com/premium_photo-1677442691772-99df9fdc076e?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8dHJhdmVsZXJ8ZW58MHx8MHx8fDA%3D",
-    },
-    {
-      quote:
-        "There's finally a modern travel tool for Mongolia. It helped me find a local company I'd never have discovered on Google.",
-      name: "David Stern",
-      designation: "Nomadic Spirit, Germany",
-      src: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cGVyc29ufGVufDB8fDB8fHww",
-    },
-  ];
-
   return (
     <div className="bg-white text-gray-900">
       {/* Hero */}
@@ -129,115 +79,13 @@ export default function LandingPage() {
       </section>
 
       {/* Features */}
-      <section className="py-24 px-6 max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <span className="inline-block px-3 py-1 text-sm font-medium bg-blue-100 text-blue-700 rounded-full mb-4">
-            Why Choose Us
-          </span>
-          <h2 className="text-4xl font-bold text-gray-900">
-            Your Complete Mongolia Travel Companion
-          </h2>
-          <p className="text-lg text-gray-600 mt-4 max-w-2xl mx-auto">
-            Everything you need to plan, experience, and share your Mongolian
-            adventure
-          </p>
-        </motion.div>
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {features.map((feature, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.1, duration: 0.5 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -8 }}
-              className="text-center bg-white rounded-xl p-8 border border-gray-100 hover:shadow-lg transition-all"
-            >
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-50 rounded-full mb-6">
-                <feature.icon className="h-8 w-8 text-blue-600" />
-              </div>
-              <h3 className="font-bold text-xl mb-3 text-gray-900">
-                {feature.title}
-              </h3>
-              <p className="text-gray-600">{feature.description}</p>
-            </motion.div>
-          ))}
-        </div>
-      </section>
+      <Features />
 
       {/* Testimonials */}
-      <section className="py-24 px-6 max-w-6xl mx-auto bg-gray-50 rounded-3xl">
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <span className="inline-block px-3 py-1 text-sm font-medium bg-yellow-100 text-yellow-700 rounded-full mb-4">
-            Traveler Stories
-          </span>
-          <h2 className="text-4xl font-bold text-gray-900">
-            Loved by Adventurers Worldwide
-          </h2>
-        </motion.div>
-        <AnimatedTestimonials testimonials={testimonials} autoplay />
-      </section>
+      <Testimonials />
 
       {/* Stats */}
-      <section className="py-16 px-6 max-w-6xl mx-auto">
-        <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl p-8 text-white">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              className="text-center"
-            >
-              <div className="text-4xl font-bold mb-2">10K+</div>
-              <div className="text-blue-100">Happy Travelers</div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.6 }}
-              viewport={{ once: true }}
-              className="text-center"
-            >
-              <div className="text-4xl font-bold mb-2">500+</div>
-              <div className="text-blue-100">Local Guides</div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.6 }}
-              viewport={{ once: true }}
-              className="text-center"
-            >
-              <div className="text-4xl font-bold mb-2">1.2K</div>
-              <div className="text-blue-100">Authentic Destinations</div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.6 }}
-              viewport={{ once: true }}
-              className="text-center"
-            >
-              <div className="text-4xl font-bold mb-2">98%</div>
-              <div className="text-blue-100">Positive Reviews</div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
+      <Stats />
       {/* Call to Action */}
       <section className="py-28 px-6 text-center bg-gradient-to-br from-blue-50 to-yellow-50">
         <div className="max-w-3xl mx-auto">

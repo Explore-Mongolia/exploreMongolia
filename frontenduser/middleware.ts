@@ -1,28 +1,29 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
 export default clerkMiddleware(async (auth, req) => {
   const { pathname } = req.nextUrl;
-  const { userId } = await auth();
+  const { userId, sessionClaims } = await auth();
 
-  
   const publicPaths = ["/", "/sign-in", "/sign-up"];
+  const isPublic = publicPaths.includes(pathname) || pathname.startsWith("/_next");
 
-  if (!userId && !publicPaths.includes(pathname)) {
+  if (!userId && !isPublic) {
     const signInUrl = new URL("/sign-in", req.url);
-    signInUrl.searchParams.set("redirect", pathname);
-    signInUrl.searchParams.set("message", "Please log in to access this page.");
     return NextResponse.redirect(signInUrl);
+  }
+
+  // Admin-only route protection
+  if (pathname.startsWith("/admin")) {
+    const role = (sessionClaims?.publicMetadata as { role?: string })?.role;
+    if (role !== "admin") {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
   }
 
   return NextResponse.next();
 });
 
-
 export const config = {
-  matcher: [
-    "/((?!_next|.*\\.(?:.*)|sign-in(?:/.*)?|sign-up(?:/.*)?|api/auth|favicon.ico).*)",
-    "/(api|trpc)(.*)",
-  ],
+  matcher: ["/((?!api|_next|static|favicon.ico).*)"],
 };
-

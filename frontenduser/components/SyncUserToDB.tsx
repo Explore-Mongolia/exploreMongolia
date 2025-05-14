@@ -17,18 +17,15 @@ export default function SyncUserToDB() {
         const role = user.publicMetadata?.role;
 
         if (role === "admin") {
-          console.log("Admin detected. No need to sync to DB.");
-          router.push("/admin"); 
+          router.push("/admin");
         }
-        
-
 
         if (role !== "admin") {
           const name =
             user.username ??
             `${user.firstName || ""} ${user.lastName || ""}`.trim();
 
-          const profileImage = user.imageUrl || "/default-profile.png"; 
+          const profileImage = user.imageUrl || "/default-profile.png";
           const email = user.primaryEmailAddress?.emailAddress;
           if (!email) {
             console.error("No email found for the user");
@@ -44,8 +41,6 @@ export default function SyncUserToDB() {
 
             const mongoUserId = response.data.userId;
             setMongoUserId(mongoUserId);
-
-            console.log("User synced to DB successfully. MongoDB User ID:", mongoUserId);
           } catch (error) {
             console.error("Failed to sync user to DB", error);
           }
@@ -58,5 +53,5 @@ export default function SyncUserToDB() {
     syncUser();
   }, [isSignedIn, user, isLoaded, setMongoUserId]);
 
-  return null; 
+  return null;
 }
