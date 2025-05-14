@@ -8,6 +8,13 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 export default function ExperienceList() {
   const { id } = useParams();
@@ -37,16 +44,41 @@ export default function ExperienceList() {
           key={experience._id}
           className="border rounded-2xl overflow-hidden shadow-md"
         >
-          <div className="relative w-full h-64">
-            <Image
-              src={experience.images?.[0] || "/placeholder.jpg"}
-              alt={experience.name}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 50vw"
-              priority
-            />
-          </div>
+          {experience.images?.length > 0 ? (
+            <div className="relative">
+              <Carousel className="w-full">
+                <CarouselContent>
+                  {experience.images.map((img: string, index: number) => (
+                    <CarouselItem key={index}>
+                      <div className="relative w-full h-64">
+                        <Image
+                          src={img}
+                          alt={`Experience Image ${index + 1}`}
+                          fill
+                          className="object-cover"
+                          sizes="100vw"
+                          priority={index === 0}
+                        />
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-10" />
+                <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-10" />
+              </Carousel>
+            </div>
+          ) : (
+            <div className="relative w-full h-64">
+              <Image
+                src="/placeholder.jpg"
+                alt="Placeholder"
+                fill
+                className="object-cover"
+                sizes="100vw"
+                priority
+              />
+            </div>
+          )}
 
           <div className="p-6">
             <h2 className="text-2xl font-semibold mb-2">{experience.name}</h2>
