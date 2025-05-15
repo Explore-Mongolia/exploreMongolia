@@ -7,12 +7,14 @@ export default function Page() {
         <h1 className="text-3xl font-semibold text-center text-gray-800 mb-6">
           Sign Up
         </h1>
-        <SignUp 
-          path="/sign-up"
-          routing="path"
-          signInUrl="/sign-in"
-          afterSignUpUrl="/home"
-        />
+        <div className="flex justify-center">
+          <SignUp
+            path="/sign-up"
+            routing="path"
+            signInUrl="/sign-in"
+            afterSignUpUrl="/home"
+          />
+        </div>
       </div>
     </div>
   );
