@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import CompanySelect from '../../../admin/createDestination/_components/CompanySelect';
-import CostInput from '../../../admin/createDestination/_components/CostInput';
-import VibesInput from './VibesInput';
-import LocationInput from './LocationInput';
-import ImageUpload from './ImageUpload';
+import CompanySelect from "../../../admin/createDestination/_components/CompanySelect";
+import CostInput from "../../../admin/createDestination/_components/CostInput";
+import VibesInput from "./VibesInput";
+import LocationInput from "./LocationInput";
+import ImageUpload from "./ImageUpload";
+import { sendRequest } from "@/lib/SendRequest";
+import { toast } from "sonner";
 
 interface DestinationFormProps {
   companies: any[];
@@ -12,7 +14,12 @@ interface DestinationFormProps {
   success: string | null;
 }
 
-const DestinationForm: React.FC<DestinationFormProps> = ({ companies, loading, error, success }) => {
+const DestinationForm: React.FC<DestinationFormProps> = ({
+  companies,
+  loading,
+  error,
+  success,
+}) => {
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
   const [description, setDescription] = useState("");
@@ -21,36 +28,45 @@ const DestinationForm: React.FC<DestinationFormProps> = ({ companies, loading, e
   const [image, setImage] = useState<string>("");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
-  const [currency, setCurrency] = useState('$');
+  const [currency, setCurrency] = useState("$");
 
-  const handleCreateDestination = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+const handleCreateDestination = async (
+  e: React.FormEvent<HTMLFormElement>
+) => {
+  e.preventDefault();
 
-    try {
-      console.log("Creating destination with data:", {
-        name,
-        company,
-        description,
-        cost,
-        vibesAvailable,
-        image,
-        location: {
-          type: "Point",
-          coordinates: [parseFloat(longitude), parseFloat(latitude)],
-        },
-      });
+  try {
+    const res = await sendRequest.post("/destination/create", {
+      name,
+      company,
+      description,
+      cost,
+      vibesAvailable,
+      image,
+      location: {
+        type: "Point",
+        coordinates: [parseFloat(longitude), parseFloat(latitude)],
+      },
+    });
 
-
-      console.log("Destination created successfully!");
-    } catch (err) {
-      console.error("Failed to create destination:", err);
+    if (res.status === 201) {
+      toast.success("Destination created successfully!");
+    } else {
+      toast.error("Failed to create destination");
     }
-  };
+  } catch (err) {
+    console.error("Failed to create destination:", err);
+    toast.error("An error occurred while creating the destination.");
+  }
+};
+
 
   return (
     <form onSubmit={handleCreateDestination} className="space-y-5">
       <div>
-        <label className="block text-sm font-semibold text-gray-900">Destination Name *</label>
+        <label className="block text-sm font-semibold text-gray-900">
+          Destination Name *
+        </label>
         <input
           type="text"
           placeholder="Enter destination name"
@@ -68,7 +84,9 @@ const DestinationForm: React.FC<DestinationFormProps> = ({ companies, loading, e
       />
 
       <div>
-        <label className="block text-sm font-semibold text-gray-900">Description</label>
+        <label className="block text-sm font-semibold text-gray-900">
+          Description
+        </label>
         <textarea
           placeholder="Add a short description"
           value={description}
@@ -85,11 +103,19 @@ const DestinationForm: React.FC<DestinationFormProps> = ({ companies, loading, e
         setCurrency={setCurrency}
       />
 
-      <VibesInput vibesAvailable={vibesAvailable} setVibesAvailable={setVibesAvailable} />
+      <VibesInput
+        vibesAvailable={vibesAvailable}
+        setVibesAvailable={setVibesAvailable}
+      />
 
       <ImageUpload image={image} setImage={setImage} />
 
-      <LocationInput latitude={latitude} longitude={longitude} setLatitude={setLatitude} setLongitude={setLongitude} />
+      <LocationInput
+        latitude={latitude}
+        longitude={longitude}
+        setLatitude={setLatitude}
+        setLongitude={setLongitude}
+      />
 
       <div>
         <button
