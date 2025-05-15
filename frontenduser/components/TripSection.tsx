@@ -135,7 +135,7 @@ export default function TripSection() {
             ))}
           </div>
           {sortedDestinations.length > 6 && (
-            <div className="flex justify-center mt-8">
+            <div className="flex justify-end mt-8">
               <Button variant="outline" onClick={() => router.push("/destination")}>
                 See More
               </Button>

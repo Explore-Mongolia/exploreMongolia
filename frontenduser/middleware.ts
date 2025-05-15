@@ -14,12 +14,12 @@ export default clerkMiddleware(async (auth, req) => {
   }
 
   // Admin-only route protection
-  if (pathname.startsWith("/admin")) {
-    const role = (sessionClaims?.publicMetadata as { role?: string })?.role;
-    if (role !== "admin") {
-      return NextResponse.redirect(new URL("/", req.url));
-    }
-  }
+  // if (pathname.startsWith("/admin")) {
+  //   const role = (sessionClaims?.publicMetadata as { role?: string })?.role;
+  //   if (role !== "admin") {
+  //     return NextResponse.redirect(new URL("/", req.url));
+  //   }
+  // }
 
   return NextResponse.next();
 });
