@@ -12,7 +12,8 @@ const nextConfig: NextConfig = {
       "www.globalnationalparks.com",
       "mongoliantours.com",
       "plus.unsplash.com",
-      "assets.bucketlistly.blog"
+      "assets.bucketlistly.blog",
+        // minimumCacheTTL: 86400,
     ],
   },
   transpilePackages: ["leaflet", "react-leaflet"],
