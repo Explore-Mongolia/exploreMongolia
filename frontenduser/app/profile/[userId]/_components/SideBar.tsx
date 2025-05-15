@@ -9,7 +9,7 @@ import {
 
 interface MainContentProps {
   user: {
-    bio: String;
+    bio: string;
     location?: string;
     interests?: string[];
     website?: string;
@@ -27,17 +27,22 @@ const SideBar: React.FC<MainContentProps> = ({ user, editable }) => {
   return (
     <div className="lg:col-span-1">
       <div className="bg-white rounded-xl shadow-md p-6 sticky top-6">
-        {user.bio && <p className="text-gray-700 mb-6">{user.bio}</p>}
+        {/* BIO */}
+        {user.bio && (
+          <p className="text-gray-700 mb-6 break-words whitespace-pre-wrap">
+            {user.bio}
+          </p>
+        )}
 
         <div className="space-y-4 mb-6">
           {user.location && (
-            <div className="flex items-center space-x-2 text-gray-700">
+            <div className="flex items-center space-x-2 text-gray-700 break-words">
               <FiMapPin />
               <span>{user.location}</span>
             </div>
           )}
           {user.website && (
-            <div className="flex items-center space-x-2 text-blue-600">
+            <div className="flex items-center space-x-2 text-blue-600 break-all max-w-full">
               <FiLink />
               <a
                 href={
@@ -47,6 +52,7 @@ const SideBar: React.FC<MainContentProps> = ({ user, editable }) => {
                 }
                 target="_blank"
                 rel="noopener noreferrer"
+                className="break-all"
               >
                 {user.website.replace(/^https?:\/\//, "")}
               </a>
@@ -71,7 +77,7 @@ const SideBar: React.FC<MainContentProps> = ({ user, editable }) => {
           <div className="mb-6">
             <h3 className="font-medium text-gray-800 mb-2">Interests</h3>
             <div className="flex flex-wrap gap-2">
-              {(user.interests ?? []).map((interest: string, index: number) => (
+              {user.interests?.map((interest, index) => (
                 <span
                   key={index}
                   className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full"
@@ -111,7 +117,11 @@ const SideBar: React.FC<MainContentProps> = ({ user, editable }) => {
               )}
               {user.socialLinks?.linkedin && (
                 <a
-                  href={user.socialLinks.linkedin}
+                  href={
+                    user.socialLinks.linkedin.startsWith("http")
+                      ? user.socialLinks.linkedin
+                      : `https://${user.socialLinks.linkedin}`
+                  }
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-600 hover:text-blue-700 transition"

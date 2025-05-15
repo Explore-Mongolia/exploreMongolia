@@ -24,6 +24,11 @@ const MainContent: React.FC<MainContentProps> = ({ user, editable }) => {
     setOpenDialog(true);
   };
 
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+    setSelectedPlan(null);
+  };
+
   return (
     <div className="lg:col-span-3">
       <Tab.Group>
@@ -47,14 +52,13 @@ const MainContent: React.FC<MainContentProps> = ({ user, editable }) => {
         </Tab.List>
 
         <Tab.Panels className="mt-2">
-          {/* Experiences Tab */}
           <Tab.Panel>
             <div className="bg-white rounded-xl shadow-md p-6">
               <h2 className="text-2xl font-bold text-gray-800 mb-6">
                 Experiences
               </h2>
 
-              {user.experiences && user.experiences.length > 0 ? (
+              {user.experiences?.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {user.experiences.map((exp, index) => (
                     <div
@@ -120,14 +124,13 @@ const MainContent: React.FC<MainContentProps> = ({ user, editable }) => {
             </div>
           </Tab.Panel>
 
-          {/* Trip Plans Tab */}
           <Tab.Panel>
             <div className="bg-white rounded-xl shadow-md p-6 space-y-6">
               <h2 className="text-2xl font-bold text-gray-800">Trip Plans</h2>
               {tripPlans.length > 0 ? (
                 tripPlans.map((plan, index) => (
                   <div
-                    key={index}
+                    key={plan._id || index}
                     className="rounded-lg border border-gray-200 p-4 shadow-sm bg-gray-50"
                   >
                     <div className="flex justify-between items-center mb-2">
@@ -154,7 +157,9 @@ const MainContent: React.FC<MainContentProps> = ({ user, editable }) => {
                     </p>
                     <p className="text-sm text-gray-600 mb-4">
                       <strong>Accommodations:</strong>{" "}
-                      {plan.accommodations.map((a) => a.name).join(", ")}
+                      {plan.accommodations
+                        .map((a) => a?.name || "Unnamed")
+                        .join(", ")}
                     </p>
 
                     <div className="space-y-3">
@@ -162,17 +167,17 @@ const MainContent: React.FC<MainContentProps> = ({ user, editable }) => {
                         Daily Plan:
                       </h4>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {plan.plan.map((day) => (
+                        {plan.plan.map((day, i) => (
                           <div
-                            key={`day-${index}`}
+                            key={`day-${plan._id}-${day.day}-${i}`}
                             className="p-3 border rounded-md bg-white shadow-sm"
                           >
                             <h5 className="font-semibold text-blue-700 mb-1">
                               Day {day.day}
                             </h5>
                             <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
-                              {day.activities.map((act, i) => (
-                                <li key={i}>{act}</li>
+                              {day.activities.map((act, j) => (
+                                <li key={j}>{act}</li>
                               ))}
                             </ul>
                           </div>
@@ -195,18 +200,20 @@ const MainContent: React.FC<MainContentProps> = ({ user, editable }) => {
         </Tab.Panels>
       </Tab.Group>
 
-      <EditTripPlanDialog
-        open={openDialog}
-        onClose={() => setOpenDialog(false)}
-        tripPlan={selectedPlan}
-        onUpdate={(updatedPlan) => {
-          const updatedPlans = tripPlans.map((p) =>
-            p._id === updatedPlan._id ? updatedPlan : p
-          );
-          setTripPlans(updatedPlans);
-          setOpenDialog(false);
-        }}
-      />
+      {selectedPlan && (
+        <EditTripPlanDialog
+          open={openDialog}
+          onClose={handleDialogClose}
+          tripPlan={selectedPlan}
+          onUpdate={(updatedPlan) => {
+            const updatedPlans = tripPlans.map((p) =>
+              p._id === updatedPlan._id ? updatedPlan : p
+            );
+            setTripPlans(updatedPlans);
+            handleDialogClose();
+          }}
+        />
+      )}
     </div>
   );
 };

@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { sendRequest } from "@/lib/SendRequest";
 
@@ -32,13 +32,22 @@ export default function EditProfileDialog({
   onClose,
   user,
 }: EditProfileDialogProps) {
-  const [bio, setBio] = useState(user.bio || "");
-  const [location, setLocation] = useState(user.location || "");
-  const [website, setWebsite] = useState(user.website || "");
-  const [twitter, setTwitter] = useState(user.socialLinks?.twitter || "");
-  const [instagram, setInstagram] = useState(user.socialLinks?.instagram || "");
-  const [linkedin, setLinkedin] = useState(user.socialLinks?.linkedin || "");
+  const [bio, setBio] = useState("");
+  const [location, setLocation] = useState("");
+  const [website, setWebsite] = useState("");
+  const [twitter, setTwitter] = useState("");
+  const [instagram, setInstagram] = useState("");
+  const [linkedin, setLinkedin] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    setBio(user.bio || "");
+    setLocation(user.location || "");
+    setWebsite(user.website || "");
+    setTwitter(user.socialLinks?.twitter || "");
+    setInstagram(user.socialLinks?.instagram || "");
+    setLinkedin(user.socialLinks?.linkedin || "");
+  }, [user]);
 
   const handleSave = async () => {
     if (isSaving) return;
@@ -58,7 +67,8 @@ export default function EditProfileDialog({
 
       if (res.status === 200) {
         toast.success("Profile updated successfully");
-        onClose(); 
+        onClose();
+        return;
       }
 
       throw new Error("Update failed");
@@ -89,36 +99,42 @@ export default function EditProfileDialog({
             value={bio}
             onChange={(e) => setBio(e.target.value)}
             placeholder="Your bio"
+            disabled={isSaving}
           />
           <input
             className="w-full border p-2 rounded"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             placeholder="Your location"
+            disabled={isSaving}
           />
           <input
             className="w-full border p-2 rounded"
             value={website}
             onChange={(e) => setWebsite(e.target.value)}
             placeholder="Your website"
+            disabled={isSaving}
           />
           <input
             className="w-full border p-2 rounded"
             value={twitter}
             onChange={(e) => setTwitter(e.target.value)}
             placeholder="Twitter URL"
+            disabled={isSaving}
           />
           <input
             className="w-full border p-2 rounded"
             value={instagram}
             onChange={(e) => setInstagram(e.target.value)}
             placeholder="Instagram URL"
+            disabled={isSaving}
           />
           <input
             className="w-full border p-2 rounded"
             value={linkedin}
             onChange={(e) => setLinkedin(e.target.value)}
             placeholder="LinkedIn URL"
+            disabled={isSaving}
           />
           <Button className="w-full" onClick={handleSave} disabled={isSaving}>
             {isSaving ? "Saving..." : "Save"}
