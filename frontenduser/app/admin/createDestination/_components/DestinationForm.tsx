@@ -9,17 +9,10 @@ import { toast } from "sonner";
 
 interface DestinationFormProps {
   companies: any[];
-  loading: boolean;
-  error: string | null;
-  success: string | null;
 }
 
-const DestinationForm: React.FC<DestinationFormProps> = ({
-  companies,
-  loading,
-  error,
-  success,
-}) => {
+const DestinationForm: React.FC<DestinationFormProps> = ({ companies }) => {
+
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
   const [description, setDescription] = useState("");
@@ -28,15 +21,31 @@ const DestinationForm: React.FC<DestinationFormProps> = ({
   const [image, setImage] = useState<string>("");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
-  const [currency, setCurrency] = useState("$");
+  const [currency, setCurrency] = useState('$');
 
-const handleCreateDestination = async (
-  e: React.FormEvent<HTMLFormElement>
-) => {
-  e.preventDefault();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
-  try {
-    const res = await sendRequest.post("/destination/create", {
+  const resetForm = () => {
+    setName("");
+    setCompany("");
+    setDescription("");
+    setCost("");
+    setVibesAvailable([]);
+    setImage("");
+    setLatitude("");
+    setLongitude("");
+    setCurrency("$");
+  };
+
+  const handleCreateDestination = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+
+    const destinationData = {
       name,
       company,
       description,
@@ -45,14 +54,35 @@ const handleCreateDestination = async (
       image,
       location: {
         type: "Point",
-        coordinates: [parseFloat(longitude), parseFloat(latitude)],
+        coordinates: [parseFloat(longitude), parseFloat(latitude)], 
       },
-    });
+    };
 
-    if (res.status === 201) {
-      toast.success("Destination created successfully!");
-    } else {
-      toast.error("Failed to create destination");
+    try {
+      const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/destination/create`;
+
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(destinationData),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result?.error || "Failed to create destination");
+      }
+
+      console.log("Destination created successfully!", result);
+      setSuccess("Destination created successfully!");
+      resetForm();
+    } catch (err: any) {
+      console.error("Failed to create destination:", err);
+      setError(err.message || "Something went wrong.");
+    } finally {
+      setLoading(false);
     }
   } catch (err) {
     console.error("Failed to create destination:", err);
@@ -77,11 +107,7 @@ const handleCreateDestination = async (
         />
       </div>
 
-      <CompanySelect
-        company={company}
-        companies={companies}
-        setCompany={setCompany}
-      />
+      <CompanySelect company={company} companies={companies} setCompany={setCompany} />
 
       <div>
         <label className="block text-sm font-semibold text-gray-900">
@@ -96,26 +122,12 @@ const handleCreateDestination = async (
         />
       </div>
 
-      <CostInput
-        cost={cost}
-        currency={currency}
-        setCost={setCost}
-        setCurrency={setCurrency}
-      />
 
-      <VibesInput
-        vibesAvailable={vibesAvailable}
-        setVibesAvailable={setVibesAvailable}
-      />
-
+      <CostInput cost={cost} currency={currency} setCost={setCost} setCurrency={setCurrency} />
+      <VibesInput vibesAvailable={vibesAvailable} setVibesAvailable={setVibesAvailable} />
       <ImageUpload image={image} setImage={setImage} />
+      <LocationInput latitude={latitude} longitude={longitude} setLatitude={setLatitude} setLongitude={setLongitude} />
 
-      <LocationInput
-        latitude={latitude}
-        longitude={longitude}
-        setLatitude={setLatitude}
-        setLongitude={setLongitude}
-      />
 
       <div>
         <button
