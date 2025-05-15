@@ -15,6 +15,7 @@ import Stats from "./_components/Stats";
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 
+
 export default function LandingPage() {
   const slides = [
     {
@@ -30,7 +31,7 @@ export default function LandingPage() {
         "https://images.unsplash.com/photo-1602747619526-8cbb70eb7e8f?q=80&w=1600",
     },
     {
-      title: "Lake Khövsgöl",
+      title: "Lake Khuvsgul",
       description: "Experience Mongolia's deepest freshwater lake.",
       image:
         "https://images.unsplash.com/photo-1623435565795-6ea5c3ea7805?q=80&w=1600",
@@ -47,7 +48,7 @@ export default function LandingPage() {
         "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAABwAgCdASoQABAAAgA0JbACdLoA/u4AAA==", // Tiny placeholder
     },
     {
-      title: "Khövsgöl Lake",
+      title: "Khuvsgul Lake",
       description:
         "Crystal clear waters of Mongolia's largest freshwater lake.",
       image:

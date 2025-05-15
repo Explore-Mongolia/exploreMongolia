@@ -42,7 +42,7 @@ const Footer = () => {
       <div className="pt-20 sm:pt-30 pb-8 mt-20 border-t-2 border-primary-light dark:border-secondary-dark">
         {/* Footer social links */}
         <div className="font-general-regular flex flex-col sm:flex-row items-center sm:justify-between gap-6 sm:gap-0 mb-12 sm:mb-28 text-center sm:text-left">
-          <p className="text-xl text-[#71717A] dark:text-primary-light">
+          <p className="text-sm sm:text-xl text-[#71717A] dark:text-primary-light">
             Copyright 2025 © pinecone2c.teamfour
           </p>
           <ul className="flex flex-wrap justify-center sm:justify-end gap-4 sm:gap-8">
