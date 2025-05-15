@@ -12,7 +12,6 @@ interface DestinationFormProps {
 }
 
 const DestinationForm: React.FC<DestinationFormProps> = ({ companies }) => {
-
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
   const [description, setDescription] = useState("");
@@ -21,7 +20,7 @@ const DestinationForm: React.FC<DestinationFormProps> = ({ companies }) => {
   const [image, setImage] = useState<string>("");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
-  const [currency, setCurrency] = useState('$');
+  const [currency, setCurrency] = useState("$");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -39,7 +38,9 @@ const DestinationForm: React.FC<DestinationFormProps> = ({ companies }) => {
     setCurrency("$");
   };
 
-  const handleCreateDestination = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleCreateDestination = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
@@ -54,7 +55,7 @@ const DestinationForm: React.FC<DestinationFormProps> = ({ companies }) => {
       image,
       location: {
         type: "Point",
-        coordinates: [parseFloat(longitude), parseFloat(latitude)], 
+        coordinates: [parseFloat(longitude), parseFloat(latitude)],
       },
     };
 
@@ -80,16 +81,12 @@ const DestinationForm: React.FC<DestinationFormProps> = ({ companies }) => {
       resetForm();
     } catch (err: any) {
       console.error("Failed to create destination:", err);
+      toast.error("An error occurred while creating the destination.");
       setError(err.message || "Something went wrong.");
     } finally {
       setLoading(false);
     }
-  } catch (err) {
-    console.error("Failed to create destination:", err);
-    toast.error("An error occurred while creating the destination.");
-  }
-};
-
+  };
 
   return (
     <form onSubmit={handleCreateDestination} className="space-y-5">
@@ -107,7 +104,11 @@ const DestinationForm: React.FC<DestinationFormProps> = ({ companies }) => {
         />
       </div>
 
-      <CompanySelect company={company} companies={companies} setCompany={setCompany} />
+      <CompanySelect
+        company={company}
+        companies={companies}
+        setCompany={setCompany}
+      />
 
       <div>
         <label className="block text-sm font-semibold text-gray-900">
@@ -122,12 +123,23 @@ const DestinationForm: React.FC<DestinationFormProps> = ({ companies }) => {
         />
       </div>
 
-
-      <CostInput cost={cost} currency={currency} setCost={setCost} setCurrency={setCurrency} />
-      <VibesInput vibesAvailable={vibesAvailable} setVibesAvailable={setVibesAvailable} />
+      <CostInput
+        cost={cost}
+        currency={currency}
+        setCost={setCost}
+        setCurrency={setCurrency}
+      />
+      <VibesInput
+        vibesAvailable={vibesAvailable}
+        setVibesAvailable={setVibesAvailable}
+      />
       <ImageUpload image={image} setImage={setImage} />
-      <LocationInput latitude={latitude} longitude={longitude} setLatitude={setLatitude} setLongitude={setLongitude} />
-
+      <LocationInput
+        latitude={latitude}
+        longitude={longitude}
+        setLatitude={setLatitude}
+        setLongitude={setLongitude}
+      />
 
       <div>
         <button
