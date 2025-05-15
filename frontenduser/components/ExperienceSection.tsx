@@ -15,6 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { timeAgo } from "@/lib/CalculateTime";
 import { ExperienceCardSkeleton } from "./ExperienceSkeleton";
+import { ArrowRight } from "lucide-react";
 
 export default function ExperienceList() {
   const { data: experiences, isLoading, error } = useExperiences();
@@ -159,8 +160,13 @@ export default function ExperienceList() {
           </div>
           {sortedExperiences && sortedExperiences.length > 6 && (
             <div className="flex justify-end  mt-8">
-              <Button variant="outline" onClick={() => router.push("/experience")}>
+              <Button
+                variant="default"
+                onClick={() => router.push("/destinations")}
+                className="cursor-pointer flex items-center gap-2"
+              >
                 See More
+                <ArrowRight className="w-4 h-4" />
               </Button>
             </div>
           )}

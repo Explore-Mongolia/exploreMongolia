@@ -7,11 +7,14 @@ import { UserProvider } from "@/lib/UserContext";
 import { Providers } from "./providers";
 import { Toaster } from "sonner";
 import AnimatedLayout from "@/components/AnimatedLayout";
-import "leaflet/dist/leaflet.css";  
-
+import "leaflet/dist/leaflet.css";
+import Footer from "@/components/Footer";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: "Explore Mongolia",
@@ -25,7 +28,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
         <ClerkProvider>
           <UserProvider>
             <SyncUserToDB />
@@ -50,6 +55,7 @@ export default function RootLayout({
             </Providers>
           </UserProvider>
         </ClerkProvider>
+        <Footer />
       </body>
     </html>
   );

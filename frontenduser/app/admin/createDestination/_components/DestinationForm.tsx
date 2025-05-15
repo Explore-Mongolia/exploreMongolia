@@ -1,15 +1,18 @@
 import React, { useState } from "react";
-import CompanySelect from '../../../admin/createDestination/_components/CompanySelect';
-import CostInput from '../../../admin/createDestination/_components/CostInput';
-import VibesInput from './VibesInput';
-import LocationInput from './LocationInput';
-import ImageUpload from './ImageUpload';
+import CompanySelect from "../../../admin/createDestination/_components/CompanySelect";
+import CostInput from "../../../admin/createDestination/_components/CostInput";
+import VibesInput from "./VibesInput";
+import LocationInput from "./LocationInput";
+import ImageUpload from "./ImageUpload";
+import { sendRequest } from "@/lib/SendRequest";
+import { toast } from "sonner";
 
 interface DestinationFormProps {
   companies: any[];
 }
 
 const DestinationForm: React.FC<DestinationFormProps> = ({ companies }) => {
+
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
   const [description, setDescription] = useState("");
@@ -81,12 +84,19 @@ const DestinationForm: React.FC<DestinationFormProps> = ({ companies }) => {
     } finally {
       setLoading(false);
     }
-  };
+  } catch (err) {
+    console.error("Failed to create destination:", err);
+    toast.error("An error occurred while creating the destination.");
+  }
+};
+
 
   return (
     <form onSubmit={handleCreateDestination} className="space-y-5">
       <div>
-        <label className="block text-sm font-semibold text-gray-900">Destination Name *</label>
+        <label className="block text-sm font-semibold text-gray-900">
+          Destination Name *
+        </label>
         <input
           type="text"
           placeholder="Enter destination name"
@@ -100,7 +110,9 @@ const DestinationForm: React.FC<DestinationFormProps> = ({ companies }) => {
       <CompanySelect company={company} companies={companies} setCompany={setCompany} />
 
       <div>
-        <label className="block text-sm font-semibold text-gray-900">Description</label>
+        <label className="block text-sm font-semibold text-gray-900">
+          Description
+        </label>
         <textarea
           placeholder="Add a short description"
           value={description}
@@ -110,10 +122,12 @@ const DestinationForm: React.FC<DestinationFormProps> = ({ companies }) => {
         />
       </div>
 
+
       <CostInput cost={cost} currency={currency} setCost={setCost} setCurrency={setCurrency} />
       <VibesInput vibesAvailable={vibesAvailable} setVibesAvailable={setVibesAvailable} />
       <ImageUpload image={image} setImage={setImage} />
       <LocationInput latitude={latitude} longitude={longitude} setLatitude={setLatitude} setLongitude={setLongitude} />
+
 
       <div>
         <button
