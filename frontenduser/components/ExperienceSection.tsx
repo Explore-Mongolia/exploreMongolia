@@ -162,7 +162,7 @@ export default function ExperienceList() {
             <div className="flex justify-end  mt-8">
               <Button
                 variant="default"
-                onClick={() => router.push("/destinations")}
+                onClick={() => router.push("/experiences")}
                 className="cursor-pointer flex items-center gap-2"
               >
                 See More

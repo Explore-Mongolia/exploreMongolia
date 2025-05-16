@@ -54,7 +54,7 @@ export default function FloatingHoverActions() {
               onClick={() => setDialogOpen(true)}
               className="bg-white text-black hover:bg-gray-100 rounded-full"
             >
-              Experience
+              Post Experience
             </Button>
           </motion.div>
         )}

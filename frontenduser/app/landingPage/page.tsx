@@ -17,8 +17,6 @@ import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
 
-
-
 export default function LandingPage() {
   const slides = [
     {
@@ -46,10 +44,11 @@ export default function LandingPage() {
       title: "Gobi Desert",
       description: "Explore the vast golden dunes of the Gobi Desert.",
       image:
-        "https://plus.unsplash.com/premium_photo-1673415819365-3a074887b666?w=2400&auto=format&fit=crop&q=85&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Z29iaSUyMGRlc2VydHxlbnwwfHwwfHx8MA%3D%3D",
+        "https://images.unsplash.com/photo-1571821807771-62cf66ac3f14?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       blurDataURL:
-        "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAABwAgCdASoQABAAAgA0JbACdLoA/u4AAA==", // Tiny placeholder
+        "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAABwAgCdASoQABAAAgA0JbACdLoA/u4AAA==", // You can keep this or replace with a matching placeholder
     },
+
     {
       title: "Khuvsgul Lake",
       description:
@@ -87,94 +86,96 @@ export default function LandingPage() {
         >
           <CarouselContent>
             {mongolianSlides.map((slide, index) => {
-  const [isLoaded, setIsLoaded] = useState(false);
+              const [isLoaded, setIsLoaded] = useState(false);
 
-  return (
-    <CarouselItem key={index} className="w-full h-screen">
-      <div className="relative h-full w-full overflow-hidden">
-        {/* Background image */}
-        <Image
-          src={slide.image}
-          alt={slide.title}
-          fill
-          priority={index < 2}
-          quality={85}
-          placeholder="blur"
-          blurDataURL={slide.blurDataURL}
-          onLoad={() => setIsLoaded(true)}
-          className={`object-cover transition-opacity duration-500 ${
-            isLoaded ? "opacity-100" : "opacity-0"
-          }`}
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 2000px"
-        />
-        <div className="absolute inset-0 bg-black/40" />
+              return (
+                <CarouselItem key={index} className="w-full h-screen">
+                  <div className="relative h-full w-full overflow-hidden">
+                    {/* Background image */}
+                    <Image
+                      src={slide.image}
+                      alt={slide.title}
+                      fill
+                      priority={index < 2}
+                      quality={85}
+                      placeholder="blur"
+                      blurDataURL={slide.blurDataURL}
+                      onLoad={() => setIsLoaded(true)}
+                      className={`object-cover transition-opacity duration-500 ${
+                        isLoaded ? "opacity-100" : "opacity-0"
+                      }`}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 2000px"
+                    />
+                    <div className="absolute inset-0 bg-black/40" />
 
-        {/* Content */}
-        <div className="relative z-10 h-full flex flex-col justify-center items-center text-center text-white px-4">
-          {!isLoaded ? (
-            <div className="flex flex-col items-center gap-4 max-w-xl w-full">
-              {/* Skeleton title */}
-              <Skeleton className="h-12 w-3/4 sm:h-16 sm:w-2/3 rounded-lg" />
-              {/* Skeleton description */}
-              <Skeleton className="h-6 w-5/6 sm:h-8 sm:w-3/4 rounded-lg" />
-              <Skeleton className="h-6 w-4/6 sm:h-8 sm:w-2/3 rounded-lg" />
-              {/* Skeleton buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 mt-6 w-full justify-center">
-                <Skeleton className="h-12 w-48 rounded-lg" />
-                <Skeleton className="h-12 w-48 rounded-lg" />
-              </div>
-            </div>
-          ) : (
-            <>
-              <motion.h1
-                initial={{ opacity: 0, y: -30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="text-4xl sm:text-6xl font-bold mb-4"
-              >
-                {slide.title}
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.6 }}
-                className="text-lg sm:text-xl mb-8 max-w-2xl"
-              >
-                {slide.description}
-              </motion.p>
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.4 }}
-                className="flex flex-col sm:flex-row gap-4"
-              >
-                <Button
-                  asChild
-                  size="lg"
-                  className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg"
-                >
-                  <Link href="/sign-up" className="flex items-center">
-                    Start Your Journey
-                    <ChevronRightIcon className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  size="lg"
-                  variant="outline"
-                  className="bg-transparent text-white hover:bg-white hover:text-gray-900 border-white"
-                >
-                  <Link href="/sign-in">Log in</Link>
-                </Button>
-              </motion.div>
-            </>
-          )}
-        </div>
-      </div>
-    </CarouselItem>
-  );
-})}
-
+                    {/* Content */}
+                    <div className="relative z-10 h-full flex flex-col justify-center items-center text-center text-white px-4">
+                      {!isLoaded ? (
+                        <div className="flex flex-col items-center gap-4 max-w-xl w-full">
+                          {/* Skeleton title */}
+                          <Skeleton className="h-12 w-3/4 sm:h-16 sm:w-2/3 rounded-lg" />
+                          {/* Skeleton description */}
+                          <Skeleton className="h-6 w-5/6 sm:h-8 sm:w-3/4 rounded-lg" />
+                          <Skeleton className="h-6 w-4/6 sm:h-8 sm:w-2/3 rounded-lg" />
+                          {/* Skeleton buttons */}
+                          <div className="flex flex-col sm:flex-row gap-4 mt-6 w-full justify-center">
+                            <Skeleton className="h-12 w-48 rounded-lg" />
+                            <Skeleton className="h-12 w-48 rounded-lg" />
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <motion.h1
+                            initial={{ opacity: 0, y: -30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6 }}
+                            className="text-4xl sm:text-6xl font-bold mb-4"
+                          >
+                            {slide.title}
+                          </motion.h1>
+                          <motion.p
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2, duration: 0.6 }}
+                            className="text-lg sm:text-xl mb-8 max-w-2xl"
+                          >
+                            {slide.description}
+                          </motion.p>
+                          <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.4 }}
+                            className="flex flex-col sm:flex-row gap-4"
+                          >
+                            <Button
+                              asChild
+                              size="lg"
+                              className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg"
+                            >
+                              <Link
+                                href="/sign-up"
+                                className="flex items-center"
+                              >
+                                Start Your Journey
+                                <ChevronRightIcon className="ml-2 h-4 w-4" />
+                              </Link>
+                            </Button>
+                            <Button
+                              asChild
+                              size="lg"
+                              variant="outline"
+                              className="bg-transparent text-white hover:bg-white hover:text-gray-900 border-white"
+                            >
+                              <Link href="/sign-in">Log in</Link>
+                            </Button>
+                          </motion.div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </CarouselItem>
+              );
+            })}
           </CarouselContent>
         </Carousel>
       </section>
