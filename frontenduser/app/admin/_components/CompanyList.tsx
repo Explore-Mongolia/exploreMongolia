@@ -10,7 +10,7 @@ export default function CompanyList({
   isLoading: boolean;
   error: string | null;
 }) {
-  console.log("Companies:", companies);
+  
 
   return (
     <div className="container mx-auto p-8 pt-24">
