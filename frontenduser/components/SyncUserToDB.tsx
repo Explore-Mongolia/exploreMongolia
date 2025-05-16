@@ -19,9 +19,6 @@ export default function SyncUserToDB() {
         if (role === "admin") {
           router.push("/admin");
           console.log("admin detected push to admin");
-          console.log("Session Claims:", sessionClaims);
-
-          
         }
 
         if (role !== "admin") {
